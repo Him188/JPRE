@@ -5,11 +5,11 @@
 
 ### 目录
 <a href="#第一章-JPRE原理">一.JPRE原理</a>  
-<a href="#plugin">二.JPRE插件结构</a>  
+<a href="#第二章-JPRE插件结构">二.JPRE插件结构</a>  
 <a href="#develop">三.如何开发JPRE插件</a>
 
 
-### <span id="jpre" name="jpre">第一章 JPRE原理</span>
+## <span id="jpre" name="jpre">第一章 JPRE原理</span>
 **简述**  
 - JPRE依赖于易语言版酷Q运行, 而不含有独立的机器人系统.  
 本项目有 2 个部分, 一个部分就是你现在看到的——JPRE. 还有一个部分是酷Q插件.   
@@ -49,7 +49,7 @@ JPREMain 中的大部分静态方法都是提供给酷Q插件调用的.
 `enablePlugin(Ljava/lang/String;)Z`  
 `disablePlugin(Ljava/lang/String;)Z`
 
-### <span id="plugin" name="plugin">第二章 JPRE插件结构</span>
+## <span id="plugin" name="plugin">第二章 JPRE插件结构</span>
 **简述**  
 - JPRE插件都是 Jar 包
 - Jar 包根目录必须有一个声明插件信息的文件. 它的名字可以是: 
@@ -93,5 +93,5 @@ JPRE拥有自由度高, 支持动态监听, 拦截, 取消的事件系统
   - 注意, 插件未启用时不可以注册事件. 即onLoad时不可以注册事件, onEnable时可以.
 
 
-### <span id="develop" name="develop">第三章 如何开发一个JPRE插件</span>
+## <span id="develop" name="develop">第三章 如何开发一个JPRE插件</span>
 - 待补充
