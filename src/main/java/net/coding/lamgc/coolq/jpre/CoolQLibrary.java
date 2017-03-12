@@ -112,11 +112,11 @@ public class CoolQLibrary {
 
 	@Deprecated
 	public static int CQ_setGroupAddRequest(int authCode, String requestId, int requestType, int resultType) {
-		return CommandManager.runCommand(new Command(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, requestId, resultType, resultType), int.class);
+		return CommandManager.runCommand(new Command(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, requestId, requestType, resultType), int.class);
 	}
 
 	public static int CQ_setGroupAddRequestV2(int authCode, String requestId, int requestType, int resultType, String reason) {
-		return CommandManager.runCommand(new Command(CommandId.SET_GROUP_ADD_REQUEST_V2, false, authCode, requestId, resultType, resultType, reason), int.class);
+		return CommandManager.runCommand(new Command(CommandId.SET_GROUP_ADD_REQUEST_V2, false, authCode, requestId, requestType, resultType, reason), int.class);
 	}
 
 	public static int CQ_addLog(int authCode, int priority, String type, String message) {
