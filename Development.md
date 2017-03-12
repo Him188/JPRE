@@ -4,7 +4,7 @@
 学习这些之前, 你需要先学会使用 <a href="http://baike.baidu.com/link?url=L539lkl2QvxL7HhJtoI2-37bkolNAFZAB1N0ZNJwUqgnOkHWTIUhxtQejilQ11OdNEUWgTshT5kw-zFFhwofv_">Java</a>.
 
 ### 目录
-<a href="#jpre">一.JPRE原理</a>  
+<a href="#第一章-JPRE原理">一.JPRE原理</a>  
 <a href="#plugin">二.JPRE插件结构</a>  
 <a href="#develop">三.如何开发JPRE插件</a>
 
