@@ -1,0 +1,43 @@
+{
+    "ret":1,
+    "apiver":9,
+    "name":"状态监控",
+    "version":"1.0.5",
+    "version_id":6,
+    "author":"Example",
+    "description":"显示酷Q运行状态",
+    "event":[
+        {
+			"id":1001,
+            "type":1001,
+            "name":"酷Q启动事件",
+            "priority":30000,
+            "function":"_eventStartup"
+        }
+    ],
+    "status":[		// 悬浮窗状态（将应用运行状态等显示在酷Q悬浮窗）
+        {
+            "id":1,							// 悬浮窗ID
+            "name":"运行时间",				// 名称
+            "title":"UPTIME",				// 英文名称
+            "function":"_statusUptime",		// 数据更新对应函数
+            "period":"1000"					// 更新间隔（单位ms（毫秒），目前仅支持1000ms（1秒））
+        },
+        {
+            "id":2,
+            "name":"CPU使用率",
+            "title":"CPU",
+            "function":"_statusCPU",
+            "period":"1000"
+        },
+        {
+            "id":3,
+            "name":"当前账号",
+            "title":"ACCOUNT",
+            "function":"_statusAccount",
+            "period":"1000"
+        }
+    ],
+	"auth":[
+	]
+}
