@@ -75,7 +75,7 @@ JPRE拥有自由度高, 支持动态监听, 拦截, 取消的事件系统
 - 事件监听器  
     - 一个事件监听器可以监听一个事件.
     - 事件监听器可以是一个方法. 该方法需要包含以下特性:
-      - 带有注解 `@EventHandler`, 详细请查看源码 `net.coding.lamgc.coolq.jpre.event.EventHandler`  
+      - 带有注解 `@EventHandler`, 详细请查看源码 `EventHandler`  
       - 有且只有一个参数, 参数类型为任何一个 `Event` (继承 `Event`, 例如 `GroupMessageEvent`)  
       - 返回值不限. 可为 void 也可为其他任意类型  
       - 是否静态不限 

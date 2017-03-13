@@ -1,4 +1,4 @@
-import net.coding.lamgc.coolq.jpre.JPREMain;
+import com.him188.jpre.JPREMain;
 
 public class TestLoad {
 	private static boolean running = true;
