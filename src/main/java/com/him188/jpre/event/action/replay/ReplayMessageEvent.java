@@ -12,3 +12,6 @@ abstract public class ReplayMessageEvent extends ActionEvent {
 
 	abstract public String getRepeat();
 }
+
+
+

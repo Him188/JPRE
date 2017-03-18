@@ -16,3 +16,4 @@ public class PluginLoadException extends PluginException {
 		e.printStackTrace();
 	}
 }
+

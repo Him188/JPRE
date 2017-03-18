@@ -9,11 +9,8 @@ import java.util.Vector;
  * @author Him188
  */
 public class CommandManager {
-	protected static final List<Command> commands = new Vector<>();
-
 	public static void addCommand(Command command) {
-		System.out.println("Command sent: " + command.toString());
-		commands.add(command);
+
 	}
 
 	@SuppressWarnings("unchecked")
