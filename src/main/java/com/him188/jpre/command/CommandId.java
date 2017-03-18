@@ -36,18 +36,18 @@ public enum CommandId {
 	SET_GROUP_ANONYMOUS(29, int.class, long.class, boolean.class),;
 
 	private final int id;
-	private final Class[] args;
+	private final Class<?>[] args;
 
-	CommandId(int id, Class... args) {
+	CommandId(int id, Class<?>... args) {
 		this.id = id;
 		this.args = args;
 	}
 
 	CommandId(int id) {
-		this(id, new Class[]{});
+		this(id, new Class<?>[]{});
 	}
 
-	public Class[] getArgs() {
+	public Class<?>[] getArgs() {
 		return args;
 	}
 
