@@ -1,8 +1,6 @@
-package com.him188.jpre.network;
+package com.him188.jpre.network.packet;
 
 import com.him188.jpre.binary.Unpack;
-import com.him188.jpre.network.packet.Packet;
-import com.him188.jpre.network.packet.PacketIds;
 
 /**
  * @author Him188
@@ -18,5 +16,10 @@ public class InvalidIdPacket extends Packet {
 	@Override
 	public void decode(Unpack unpack) {
 
+	}
+
+	@Override
+	public byte getNetworkId() {
+		return NETWORK_ID;
 	}
 }
