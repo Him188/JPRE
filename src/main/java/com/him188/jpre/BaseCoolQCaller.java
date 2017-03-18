@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import static com.him188.jpre.CoolQCaller.*;
+
 /**
  * 酷 Q API 调用器
  *
@@ -28,6 +29,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param QQ      QQ号码
 	 * @param message 消息内容
+	 *
 	 * @return 是否成功
 	 */
 	public boolean sendPrivateMessage(long QQ, String message) {
@@ -41,6 +43,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param group   群号码
 	 * @param message 消息内容
+	 *
 	 * @return 是否成功
 	 */
 	public boolean sendGroupMessage(long group, String message) {
@@ -54,6 +57,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param discuss 讨论组号码
 	 * @param message 消息内容
+	 *
 	 * @return 是否成功
 	 */
 	public boolean sendDiscussMessage(long discuss, String message) {
@@ -66,6 +70,7 @@ abstract public class BaseCoolQCaller {
 	 * 发送名片赞 (1次)
 	 *
 	 * @param QQ QQ号码
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean sendLike(long QQ) {
@@ -77,6 +82,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param QQ    QQ号码
 	 * @param times 次数 (0~10)
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean sendLike(long QQ, int times) {
@@ -97,6 +103,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param fileName  接受消息的文件名
 	 * @param outFormat 应用所需格式, 目前支持 mp3,amr,wma,m4a,spx,ogg,wav,flac
+	 *
 	 * @return ? 似乎会直接返回 file
 	 */
 	public final String getRecord(String fileName, String outFormat) {
@@ -108,6 +115,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param fileName  接受消息的文件名
 	 * @param outFormat 应用所需格式, 目前支持 mp3,amr,wma,m4a,spx,ogg,wav,flac
+	 *
 	 * @return 语音文件内容
 	 */
 	public final byte[] getRecordBytes(String fileName, String outFormat) {
@@ -178,6 +186,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group 群号码
 	 * @param QQ    QQ号码
 	 * @param block 是否禁止再次加入
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupKick(long group, long QQ, boolean block) {
@@ -190,6 +199,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group 群号码
 	 * @param QQ    QQ号码
 	 * @param time  时间. 单位为秒, 范围 60-2592000
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupBanMember(long group, long QQ, long time) {
@@ -202,6 +212,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group 群号码
 	 * @param QQ    QQ号码
 	 * @param admin 是否管理员
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAdmin(long group, long QQ, boolean admin) {
@@ -215,6 +226,7 @@ abstract public class BaseCoolQCaller {
 	 * @param QQ        QQ号码
 	 * @param title     头衔
 	 * @param timeLimit 时间限制. 单位为秒, 永久为 -1
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetTitleOfMember(long group, long QQ, String title, long timeLimit) {
@@ -226,6 +238,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param group 群号码
 	 * @param ban   是否开启
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetWholeBan(long group, boolean ban) {
@@ -238,6 +251,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group       群号码
 	 * @param anonymousId 匿名昵称
 	 * @param time        时间. 单位为秒, 范围 60-2592000
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAnonymousBan(long group, String anonymousId, long time) {
@@ -250,6 +264,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param group   群号码
 	 * @param enabled 是否开启
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAnonymousEnabled(long group, boolean enabled) {
@@ -262,6 +277,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group 群号码
 	 * @param QQ    QQ号码
 	 * @param card  名片
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupSetCard(long group, long QQ, String card) {
@@ -273,6 +289,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param group    群号
 	 * @param dissolve true: 解散(群主), false: 离开(成员, 管理员)
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean groupLeave(long group, boolean dissolve) {
@@ -283,6 +300,7 @@ abstract public class BaseCoolQCaller {
 	 * 离开讨论组
 	 *
 	 * @param discuss 讨论组号码
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean discussLeave(long discuss) {
@@ -294,6 +312,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param requestFlag 请求 Id
 	 * @param accept      是否接受请求
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean friendAnswerAddRequest(String requestFlag, boolean accept) {
@@ -306,6 +325,7 @@ abstract public class BaseCoolQCaller {
 	 * @param requestFlag  请求 Id
 	 * @param accept       是否接受请求
 	 * @param nickIfAccept 接受后的好友备注
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean friendAnswerAddRequest(String requestFlag, boolean accept, String nickIfAccept) {
@@ -318,7 +338,9 @@ abstract public class BaseCoolQCaller {
 	 * @param requestFlag 请求 Id
 	 * @param requestType 请求类型
 	 * @param accept      是否同意请求
+	 *
 	 * @return 是否成功
+	 *
 	 * @see CoolQCaller#REQUEST_TYPE_ACTIVE_JOIN
 	 * @see CoolQCaller#REQUEST_TYPE_INVITE
 	 */
@@ -333,7 +355,9 @@ abstract public class BaseCoolQCaller {
 	 * @param requestType 请求类型 ({@link AddGroupRequestEvent#TYPE_JOIN}或{@link AddGroupRequestEvent#TYPE_INVITE})
 	 * @param accept      是否同意请求
 	 * @param reason      拒绝原因 (同意时填入空字符串)
+	 *
 	 * @return 是否成功
+	 *
 	 * @see CoolQCaller#REQUEST_TYPE_ACTIVE_JOIN
 	 * @see CoolQCaller#REQUEST_TYPE_INVITE
 	 */
@@ -357,6 +381,7 @@ abstract public class BaseCoolQCaller {
 	 * 记录致命错误
 	 *
 	 * @param message 错误内容
+	 *
 	 * @return 是否成功
 	 */
 	public final boolean error(String message) {
@@ -369,6 +394,7 @@ abstract public class BaseCoolQCaller {
 	 * @param group   群号
 	 * @param QQ      QQ
 	 * @param noCache 是否不使用缓存
+	 *
 	 * @return 群成员资料
 	 */
 	public final Member groupGetMemberInfo(long group, long QQ, boolean noCache) {
@@ -380,6 +406,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param group 群号
 	 * @param QQ    QQ
+	 *
 	 * @return 群成员资料
 	 */
 	public final Member groupGetMemberInfo(long group, long QQ) {
@@ -391,6 +418,7 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @param QQ      QQ
 	 * @param noCache 是否不使用缓存
+	 *
 	 * @return 陌生人资料
 	 */
 	public final User strangerGetInfo(long QQ, boolean noCache) {
@@ -401,6 +429,7 @@ abstract public class BaseCoolQCaller {
 	 * 获取陌生人资料 (使用缓存)
 	 *
 	 * @param QQ QQ
+	 *
 	 * @return 陌生人资料
 	 */
 	public final User strangerGetInfo(long QQ) {

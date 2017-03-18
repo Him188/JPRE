@@ -22,12 +22,21 @@ public class PluginDescription {
 	private String fileName;
 
 	public PluginDescription(String name, String main, String version, int api, String author, String description, String fileName, String config) {
+		setValues(name, main, version, api, author, description, fileName, config);
+	}
+
+	public void setValues(String name, String main, String version, int api, String author, String description, String fileName, String config) {
+		this.name = name;
 		this.main = main;
 		this.version = version;
 		this.api = api;
 		this.author = author;
 		this.description = description == null ? "" : description;
 		this.config = config;
+	}
+
+	public void setValues(PluginDescription description) {
+		setValues(description.name, description.main, description.version, description.api, description.author, description.description, description.getFileName(), description.config);
 	}
 
 	@Override

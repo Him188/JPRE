@@ -22,14 +22,14 @@ public interface Plugin {
 	 *
 	 * @return 插件信息
 	 */
-	PluginDescription getDescription();
+	PluginDescription getPluginDescription();
 
 	/**
 	 * 设置插件信息
 	 *
 	 * @param description 插件信息
 	 */
-	void setDescription(PluginDescription description);
+	void setPluginDescription(PluginDescription description);
 
 	/**
 	 * 在酷Q启动时调用本方法. 即只会被调用 1 次
@@ -97,7 +97,7 @@ public interface Plugin {
 	 *
 	 * @return API version
 	 */
-	int getApi();
+	int getAPIVersion();
 
 	/**
 	 * 获取插件文件名

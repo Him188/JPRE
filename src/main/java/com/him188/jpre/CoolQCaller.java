@@ -8,6 +8,11 @@ import com.him188.jpre.network.packet.PacketIds;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * 酷 Q通讯类
+ *
+ * @see BaseCoolQCaller
+ */
 public final class CoolQCaller {
 	public static final int RESULT_TYPE_ACCEPT = 1;
 	public static final int RESULT_TYPE_DENIED = 2;

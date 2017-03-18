@@ -1,9 +1,8 @@
 package com.him188.jpre.plugin;
 
 import com.him188.jpre.JPREMain;
-import com.him188.jpre.log.logger.Logger;
-import com.him188.jpre.CoolQCaller;
 import com.him188.jpre.PluginManager;
+import com.him188.jpre.log.logger.Logger;
 import com.him188.jpre.log.logger.PluginLogger;
 
 import java.io.*;
@@ -17,20 +16,27 @@ import java.util.jar.JarFile;
  *
  * @author Him188
  */
-abstract public class JavaPlugin extends CoolQCaller implements Plugin {
+@SuppressWarnings("ResultOfMethodCallIgnored")
+public class JavaPlugin extends PluginDescription implements Plugin {
 	private final Logger logger;
-	public PluginDescription description;
 	private boolean enabled;
 	private int authCode;
+	private PluginCoolQCaller cq;
+
+	public PluginCoolQCaller getCq() {
+		return cq;
+	}
 
 	public JavaPlugin() {
 		this(null);
 	}
 
 	public JavaPlugin(PluginDescription description) {
-		this.description = description;
+		super(description.name, description.main, description.version, description.api, description.author, description.description, description.getFileName(), description.config);
+
 		logger = new PluginLogger();
-		new File(getDataFolder() + "/").mkdir();
+		new File(getDataFolder() + File.pathSeparator).mkdir();
+		cq = new PluginCoolQCaller(this);
 	}
 
 	/**
@@ -44,7 +50,7 @@ abstract public class JavaPlugin extends CoolQCaller implements Plugin {
 	 */
 	public boolean saveResource(String resourceFile, String savingFile, boolean forceReplace) {
 		try {
-			InputStream resource = PluginManager.getResourceFile(new JarFile(description.getFileName()), resourceFile);
+			InputStream resource = PluginManager.getResourceFile(new JarFile(getFileName()), resourceFile);
 			if (resource == null) {
 				return false;
 			}
@@ -95,18 +101,13 @@ abstract public class JavaPlugin extends CoolQCaller implements Plugin {
 	}
 
 	@Override
-	public PluginDescription getDescription() {
-		return description;
+	public PluginDescription getPluginDescription() {
+		return this;
 	}
 
 	@Override
-	public void setDescription(PluginDescription d) {
-		this.description = d;
-	}
-
-	@Override
-	public int getApi() {
-		return description.getAPIVersion();
+	public void setPluginDescription(PluginDescription d) {
+		setValues(d);
 	}
 
 	@Override
@@ -156,21 +157,6 @@ abstract public class JavaPlugin extends CoolQCaller implements Plugin {
 	@Override
 	public int getAuthCode() {
 		return authCode;
-	}
-
-	@Override
-	public String getName() {
-		return description.getName();
-	}
-
-	@Override
-	public String getFileName() {
-		return description.getFileName();
-	}
-
-	@Override
-	public String getMainClass() {
-		return description.getMainClass();
 	}
 
 	@Override

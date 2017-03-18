@@ -130,7 +130,7 @@ public final class PluginManager {
 			Constructor<?> constructor = mainClass.getDeclaredConstructor();
 			constructor.setAccessible(true);
 			Plugin plugin = (Plugin) constructor.newInstance();
-			plugin.setDescription(description);
+			plugin.setPluginDescription(description);
 			plugin.onLoad();
 			plugins.add(plugin);
 			return true;
