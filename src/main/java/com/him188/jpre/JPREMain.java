@@ -1,12 +1,11 @@
 package com.him188.jpre;
 
-import com.him188.jpre.event.action.replay.ReplayGroupMessageEvent;
-import com.him188.jpre.event.action.replay.ReplayPrivateMessageEvent;
-import com.him188.jpre.plugin.Plugin;
 import com.him188.jpre.command.CommandManager;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
+import com.him188.jpre.event.action.replay.ReplayGroupMessageEvent;
+import com.him188.jpre.event.action.replay.ReplayPrivateMessageEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
@@ -15,11 +14,18 @@ import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
 import com.him188.jpre.log.LogManager;
 import com.him188.jpre.log.logger.SystemLogger;
+import com.him188.jpre.network.Network;
 import com.him188.jpre.plugin.JavaPlugin;
+import com.him188.jpre.plugin.Plugin;
+import org.apache.commons.cli.*;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Vector;
+
+import static com.him188.jpre.Utils.md5Encode;
 
 /**
  * Java 插件加载器主类
@@ -42,15 +48,64 @@ public final class JPREMain {
 	public static SystemLogger logger;
 	private static boolean running = true;
 
-	public static void main(String[] args) {
+	public static final int DEFAULT_PORT = 6158;
+	private static String PASSWORD; //加密过
+
+	public static String getPASSWORD() {
+		return PASSWORD;
+	}
+
+	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, NoSuchAlgorithmException {
+		printAbout();
+
+		CommandLineParser parser = new DefaultParser();
+		Options options = new Options();
+		options.addOption("h", "help", false, "Print the usage information");
+		options.addOption("p", "port", false, "Set the server port number");
+		options.addOption("pwd", "password", true, "Set the password that client must verify after connecting to server");
+
+		CommandLine commandLine = parser.parse(options, args);
+
+		if (commandLine.hasOption("h")) {
+			System.out.println("Help Message");
+			System.exit(0);
+		}
+
+		int port = DEFAULT_PORT;
+		if (commandLine.hasOption("p")) {
+			try {
+				port = Integer.parseInt(commandLine.getOptionValue("p"));
+			} catch (NumberFormatException e) {
+				System.out.println("The port you set is invalid. It must be a number in 1~65535");
+				System.exit(0);
+			}
+		}
+		System.out.println("Server port: " + port);
+
+		if (commandLine.hasOption("pwd")) {
+			PASSWORD = md5Encode(commandLine.getOptionValue("pwd"));
+		}
+
+		System.out.println("\n");
+		startServer(port);
+	}
+
+	public static void printAbout() {
 		System.out.println("CoolQ JavaPluginRuntimeEnvironment");
 		System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);
 		System.out.println("Author: Him188 & LamGC");
-		System.out.println();
-		System.out.println("Welcome to use JPRE, you can put this jar into CoolQ\\app\\net.coding.lamgc.coolq.jpre\\bin");
-		//System.out.println();
-		//System.out.println("Starting tests...");
-		//test();
+		System.out.println("GitHub: https://github.com/Him188/CQ-JPRE\n");
+	}
+
+	private static void startServer(int port) {
+		System.out.println("Starting server...");
+		try {
+			Network.start(port);
+		} catch (InterruptedException e) {
+			System.out.println("Starting server failed. Could not open port" + port);
+			System.exit(0);
+		}
+		System.out.println("JPRE server is listening 0.0.0.0:");
 	}
 
 	public static void test() {

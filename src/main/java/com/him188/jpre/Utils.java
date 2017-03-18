@@ -1,9 +1,12 @@
 package com.him188.jpre;
 
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public final class Utils {
 	public static void writeFile(String fileName, String content) throws IOException {
@@ -81,5 +84,11 @@ public final class Utils {
 		} catch (IOException e) {
 			return new byte[0];
 		}
+	}
+
+	public static String md5Encode(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		MessageDigest md5 = MessageDigest.getInstance("MD5");
+		BASE64Encoder base64en = new BASE64Encoder();
+		return base64en.encode(md5.digest(str.getBytes("utf-8")));
 	}
 }

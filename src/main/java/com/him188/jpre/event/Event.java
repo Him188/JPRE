@@ -9,7 +9,7 @@ import com.him188.jpre.plugin.Plugin;
 import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
 import com.him188.jpre.event.action.send.SendDiscussMessageEvent;
 import com.him188.jpre.event.action.send.SendPrivateMessageEvent;
-import com.him188.jpre.event.coolq.CoolQExitEvent;
+import com.him188.jpre.event.jpre.CoolQExitEvent;
 import com.him188.jpre.event.friend.FriendAddEvent;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
  * @author Him188
  */
 abstract public class Event {
-	private static final Class[] REGISTERED_EVENTS = new Class[64];
+	private static final Class<?>[] REGISTERED_EVENTS = new Class<?>[64];
 	private static final int[] REGISTERED_TYPES = new int[64];
 	private static int COUNT = 0;
 
@@ -65,12 +65,21 @@ abstract public class Event {
 
 	private boolean intercepted = false;
 
-	public static Class[] getRegisteredEvents() {
+	public static Class<?>[] getRegisteredEvents() {
 		return REGISTERED_EVENTS;
 	}
 
 	public static int[] getRegisteredTypes() {
 		return REGISTERED_TYPES;
+	}
+
+	public static Class<?> matchEvent(int type){
+		for (int i = 0; i < REGISTERED_TYPES.length; i++) {
+			if (REGISTERED_TYPES[i] == type) {
+				return REGISTERED_EVENTS[i];
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")

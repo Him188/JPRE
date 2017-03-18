@@ -25,7 +25,7 @@ public class Pack {
 		setData(data);
 	}
 
-	public void setData(byte[] data) {
+	public Pack setData(byte[] data) {
 		this.data = new ArrayList<Byte>() {
 			{
 				for (byte datum : data) {
@@ -33,6 +33,7 @@ public class Pack {
 				}
 			}
 		};
+		return this;
 	}
 
 	public byte[] getData() {
@@ -43,46 +44,56 @@ public class Pack {
 		return result;
 	}
 
-	public void clear() {
+	public Pack clear() {
 		this.data.clear();
+		return this;
 	}
 
-	public void putInt(int value) {
+	public Pack putInt(int value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putLong(long value) {
+	public Pack putLong(long value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putShort(short value) {
+	public Pack putShort(short value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putBoolean(boolean value) {
+	public Pack putBoolean(boolean value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putFloat(float value) {
+	public Pack putFloat(float value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putDouble(double value) {
+	public Pack putDouble(double value) {
 		putBytes(toBytes(value));
+		return this;
 	}
 
-	public void putByte(byte value) {
+	public Pack putByte(byte value) {
 		this.data.set(position++, value);
+		return this;
 	}
 
-	public void putString(String value) {
+	public Pack putString(String value) {
 		putInt(value.length());
 		putBytes(value.getBytes());
+		return this;
 	}
 
-	public void putBytes(byte[] value) {
+	public Pack putBytes(byte[] value) {
 		for (byte aValue : value) {
 			putByte(aValue);
 		}
+		return this;
 	}
 }
