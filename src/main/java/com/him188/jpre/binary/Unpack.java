@@ -1,6 +1,7 @@
 package com.him188.jpre.binary;
 
 import static com.him188.jpre.binary.Binary.*;
+
 /**
  * @author Him188
  */

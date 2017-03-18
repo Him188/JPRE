@@ -20,13 +20,7 @@ public final class Binary {
 	}
 
 	public static byte[] toBytes(float value) {
-		byte[] data = new byte[4];
-		int intBits = Float.floatToIntBits(value);
-		data[0] = (byte) (intBits >> 24);
-		data[1] = (byte) (intBits >> 16);
-		data[2] = (byte) (intBits >> 8);
-		data[3] = (byte) (intBits);
-		return reverse(data);
+		return toBytes(Float.floatToIntBits(value));
 	}
 
 	public static byte[] toBytes(long value) {
@@ -47,6 +41,10 @@ public final class Binary {
 		data[2] = (byte) (value >> 8);
 		data[3] = (byte) (value);
 		return reverse(data);
+	}
+
+	public static byte[] toBytes(double value){
+		return toBytes(Double.doubleToLongBits(value));
 	}
 
 
