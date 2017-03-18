@@ -43,10 +43,6 @@ public enum CommandId {
 		this.args = args;
 	}
 
-	CommandId(int id) {
-		this(id, new Class<?>[]{});
-	}
-
 	public Class<?>[] getArgs() {
 		return args;
 	}
