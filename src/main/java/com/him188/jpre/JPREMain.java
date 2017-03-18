@@ -98,7 +98,7 @@ public final class JPREMain {
 		try {
 			Network.start(port);
 		} catch (InterruptedException e) {
-			System.out.println("Starting server failed. Could not open port" + port);
+			System.out.println("Starting server failed. Could not open port " + port);
 			System.exit(0);
 		}
 		System.out.println("JPRE server is listening 0.0.0.0:");
