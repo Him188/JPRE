@@ -9,7 +9,7 @@ public class Unpack {
 	private byte[] data;
 	private int location = 0;
 
-	public Unpack(Pack pack){
+	public Unpack(Pack pack) {
 		this(pack.getData());
 	}
 
@@ -71,6 +71,10 @@ public class Unpack {
 
 	public String getString() {
 		return new String(getBytes(getShort()));
+	}
+
+	public boolean getBoolean() {
+		return (int) getByte() == 1;
 	}
 
 	public byte[] getToken() {

@@ -16,15 +16,12 @@ public class NetworkChannelHandler extends ChannelInitializer<SocketChannel> {
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 
-		// 以("\n")为结尾分割的 解码器
 		pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
 
-		// 字符串解码 和 编码
 		pipeline.addLast("decoder", new ByteArrayDecoder());
 		pipeline.addLast("encoder", new ByteArrayEncoder());
 
-		// 自己的逻辑Handler
-		pipeline.addLast("handler", new NetworkChannelHandler());
+		pipeline.addLast("handler", new NetworkPacketHandler());
 	}
 
 }

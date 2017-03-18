@@ -1,6 +1,5 @@
 package com.him188.jpre;
 
-import com.him188.jpre.command.CommandManager;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
@@ -12,24 +11,21 @@ import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
-import com.him188.jpre.log.LogManager;
 import com.him188.jpre.log.logger.SystemLogger;
 import com.him188.jpre.network.Network;
 import com.him188.jpre.plugin.JavaPlugin;
 import com.him188.jpre.plugin.Plugin;
 import org.apache.commons.cli.*;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.Vector;
 
 import static com.him188.jpre.Utils.md5Encode;
 
 /**
  * Java 插件加载器主类
- * 基本上全是给酷Q的接口
  * <p>
  * 如果你想开发插件. 请查看 {@link Plugin}
  *
@@ -41,17 +37,15 @@ public final class JPREMain {
 	public static final String VERSION = "1.0.0";
 
 	// TODO: 2017/3/4  现在只能单线程执行, 更新支持多线程
-	protected static final List<Object> commandResults = new Vector<>();
 	public static int CQ_API;
 	public static String dataFolder;
 	public static SystemCoolQCaller caller;
 	public static SystemLogger logger;
-	private static boolean running = true;
 
 	public static final int DEFAULT_PORT = 6158;
 	private static String PASSWORD; //加密过
 
-	public static String getPASSWORD() {
+	public static String getPassword() {
 		return PASSWORD;
 	}
 
@@ -88,6 +82,8 @@ public final class JPREMain {
 
 		System.out.println("\n");
 		startServer(port);
+		System.out.println("\n");
+		init(System.getProperty("usr.dir"));
 	}
 
 	public static void printAbout() {
@@ -108,58 +104,21 @@ public final class JPREMain {
 		System.out.println("JPRE server is listening 0.0.0.0:");
 	}
 
-	public static void test() {
-		JPREMain.init(9, "E:\\MEGA\\IDEAPojects\\CQ-JPRE\\out\\test\\CQ-JPRE");
-
-		new Thread(() -> {
-			while (running) {
-				System.out.println(JPREMain.getLog());
-			}
-		}).start();
-
-		new Thread(() -> {
-			while (running) {
-				System.out.println(JPREMain.getCommand());
-				JPREMain.setCommandResult("1");
-			}
-		}).start();
-
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		JPREMain.setAuthCode(97);
-
-		JPREMain.getLogger().info("test", "this is a message");
-		JPREMain.getCaller().sendLike(1040400290L, 10);
-
-		//System.out.println(JPREMain.loadPluginDescription(PLUGIN_NAME));
-		//System.out.println(PluginManager.matchPluginDescription(PLUGIN_NAME).getMainClass());
-
-		//JPREMain.loadPlugin(PLUGIN_NAME);
-		//JPREMain.enablePlugin(PLUGIN_NAME);
-
-		//GroupMessageEvent event = new GroupMessageEvent(GroupMessageEvent.TYPE_GROUP, 0, 0, 1040400290L, "", "!添加黑名单", 0);
-		//System.out.println(JPREMain.callEvent(event));
-
-		running = false;
-		System.exit(0); //succeed
-	}
-
 	/**
 	 * 初始化插件环境
 	 *
-	 * @param CQ_API     酷 Q API版本
 	 * @param dataFolder 配置目录
 	 */
-	@SuppressWarnings("SameParameterValue")
-	public static void init(int CQ_API, String dataFolder) {
-		JPREMain.CQ_API = CQ_API;
+	@SuppressWarnings({"SameParameterValue", "ResultOfMethodCallIgnored"})
+	private static void init(String dataFolder) {
 		JPREMain.dataFolder = dataFolder;
 		caller = new SystemCoolQCaller();
 		logger = new SystemLogger();
+		new File(System.getProperty("usr.dir") + File.pathSeparator + "plugins" + File.pathSeparator).mkdir();
+	}
+
+	public static void setCqApi(int cqApi) {
+		CQ_API = cqApi;
 	}
 
 	public static SystemLogger getLogger() {
@@ -181,88 +140,6 @@ public final class JPREMain {
 	 */
 	public static SystemCoolQCaller getCaller() {
 		return caller;
-	}
-
-	protected static List<Object> getCommandResults() {
-		return commandResults;
-	}
-
-	/**
-	 * 获取酷Q执行完方法后的返回值
-	 *
-	 * @return 返回值
-	 */
-	@SuppressWarnings("StatementWithEmptyBody")
-	public static Object getCommandResult() {
-		while (getCommandResults().isEmpty()) ;
-		return getCommandResults().remove(0);
-	}
-
-	/**
-	 * 酷Q传回返回值
-	 *
-	 * @param s 方法返回值
-	 */
-	public static void setCommandResult(String s) {
-		commandResults.add(s);
-	}
-
-	/**
-	 * 酷Q传回返回值
-	 *
-	 * @param s 方法返回值
-	 */
-	public static void setCommandResult(int s) {
-		commandResults.add(s);
-	}
-
-	/**
-	 * 酷Q获取方法
-	 */
-	public static String getCommand() {
-		synchronized (CommandManager.class) {//当正在等待指令返回值时, 指令不传达
-			return CommandManager.getCommand().toString();
-		}
-	}
-
-	@SuppressWarnings({"ConstantConditions"})
-	public static String getLog() {
-		try {
-			return LogManager.getFirst().toString();
-		} catch (NullPointerException e) {
-			return "";
-		}
-	}
-
-	public static boolean callEvent(Object... args) {
-		if (args.length == 0) {
-			return false;
-		}
-
-		try {
-			Object[] newArgs = new Object[args.length - 1];
-			System.arraycopy(args, 1, newArgs, 0, args.length - 1);
-			return callEvent(Integer.parseInt(args[0].toString()), newArgs);
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * 触发事件.
-	 *
-	 * @param type 事件 type
-	 * @param args 参数
-	 */
-	public static boolean callEvent(int type, Object... args) {
-		if (type == EventTypes.DISABLE) {
-			PluginManager.disablePlugins();
-			System.exit(0);
-			return false;
-		}
-
-		Event event = Event.matchEvent(type, args);
-		return event != null && callEvent(event);
 	}
 
 	/**
@@ -349,53 +226,6 @@ public final class JPREMain {
 		return false;
 	}
 
-	/*
-	//0
-	public static boolean callEvent(int type) {
-		return callEvent(type, new Object[]{});
-	}
-
-	//1
-	public static boolean callEvent(int type, Object arg1) {
-		return callEvent(type, new Object[]{arg1});
-	}
-
-	//2
-	public static boolean callEvent(int type, Object arg1, Object arg2) {
-		return callEvent(type, new Object[]{arg1, arg2});
-	}
-
-	//3
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3});
-	}
-
-	//4
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3, Object arg4) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3, arg4});
-	}
-
-	//5
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3, arg4, arg5});
-	}
-
-	//6
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3, arg4, arg5, arg6});
-	}
-
-	//7
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Object arg7) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3, arg4, arg5, arg6, arg7});
-	}
-
-	//8
-	public static boolean callEvent(int type, Object arg1, Object arg2, Object arg3, Object arg4, Object arg5, Object arg6, Object arg7, Object arg8) {
-		return callEvent(type, new Object[]{arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8});
-	}
-	*/
-
 	public static String[] getLoadedPluginList() {
 		String[] names = new String[PluginManager.getPlugins().size()];
 		int i = 0;
@@ -414,26 +244,6 @@ public final class JPREMain {
 			JPREMain.getLogger().exception(e);
 			return false;
 		}
-	}
-
-	public static String getPluginName(String fileName) {
-		return PluginManager.matchPluginDescription(fileName).getName();
-	}
-
-	public static int getPluginAPI(String fileName) {
-		return PluginManager.matchPluginDescription(fileName).getAPIVersion();
-	}
-
-	public static String getPluginVersion(String fileName) {
-		return PluginManager.matchPluginDescription(fileName).getVersion();
-	}
-
-	public static String getPluginAuthor(String fileName) {
-		return PluginManager.matchPluginDescription(fileName).getAuthor();
-	}
-
-	public static String getPluginDescription(String fileName) {
-		return PluginManager.matchPluginDescription(fileName).getDescription();
 	}
 
 	public static boolean loadPlugin(String fileName) throws PluginLoadException {

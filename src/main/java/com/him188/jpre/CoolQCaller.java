@@ -1,408 +1,212 @@
 package com.him188.jpre;
 
-import com.him188.jpre.event.action.send.SendDiscussMessageEvent;
-import com.him188.jpre.event.action.send.SendGroupMessageEvent;
-import com.him188.jpre.event.action.send.SendPrivateMessageEvent;
-import com.him188.jpre.event.request.AddGroupRequestEvent;
-import com.him188.jpre.infomation.Member;
-import com.him188.jpre.infomation.User;
-import com.him188.jpre.plugin.JavaPlugin;
+import com.him188.jpre.binary.Pack;
+import com.him188.jpre.network.ConnectedClient;
+import com.him188.jpre.network.NetworkPacketHandler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 
-/**
- * 酷 Q API 调用器
- *
- * @author Him188
- */
-@SuppressWarnings("SameParameterValue")
-abstract public class CoolQCaller extends CoolQLibrary {
-	abstract public int getAuthCode();
+public final class CoolQCaller {
+	public static final int RESULT_TYPE_ACCEPT = 1;
+	public static final int RESULT_TYPE_DENIED = 2;
+	public static final int REQUEST_TYPE_ACTIVE_JOIN = 1; //主动加入
+	public static final int REQUEST_TYPE_INVITE = 2; //被邀请
 
-	/**
-	 * 发送私聊消息
-	 *
-	 * @param QQ      QQ号码
-	 * @param message 消息内容
-	 * @return 是否成功
-	 */
-	public boolean sendPrivateMessage(long QQ, String message) {
-		SendPrivateMessageEvent ev = new SendPrivateMessageEvent(QQ, message);
-		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CQ_sendPrivateMsg(getAuthCode(), QQ, ev.getMessage()) == 1;
+	private static List<Object> results = new Vector<>();
+
+	private static int waitForIntResult(){
+		return Integer.parseInt(waitForStringResult());
 	}
 
-	/**
-	 * 发送群消息
-	 *
-	 * @param group   群号码
-	 * @param message 消息内容
-	 * @return 是否成功
-	 */
-	public boolean sendGroupMessage(long group, String message) {
-		SendGroupMessageEvent ev = new SendGroupMessageEvent(group, message);
-		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CQ_sendGroupMsg(getAuthCode(), group, ev.getMessage()) == 1;
+	private static long waitForLongResult(){
+		return Long.parseLong(waitForStringResult());
 	}
 
-	/**
-	 * 发送讨论组消息
-	 *
-	 * @param discuss 讨论组号码
-	 * @param message 消息内容
-	 * @return 是否成功
-	 */
-	public boolean sendDiscussMessage(long discuss, String message) {
-		SendDiscussMessageEvent ev = new SendDiscussMessageEvent(discuss, message);
-		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CQ_sendDiscussMsg(getAuthCode(), discuss, ev.getMessage()) == 1;
+	@SuppressWarnings("StatementWithEmptyBody")
+	private static String waitForStringResult() {
+		synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
+			while (results.isEmpty()) ;
+			return String.valueOf(results.remove(0));
+		}
 	}
 
-	/**
-	 * 发送名片赞 (1次)
-	 *
-	 * @param QQ QQ号码
-	 * @return 是否成功
-	 */
-	public final boolean sendLike(long QQ) {
-		return sendLike(QQ, 1);
+	private static void runCommand(CommandId id, Object... args){
+		synchronized (CoolQCaller.class) {
+			for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
+				connectedClient.getLastCtx().writeAndFlush(new Pack()
+						.putByte(id.getId())
+						.putRaw(args)
+						.getData()
+				);
+			}
+		}
 	}
 
-	/**
-	 * 发送名片赞
-	 *
-	 * @param QQ    QQ号码
-	 * @param times 次数 (0~10)
-	 * @return 是否成功
-	 */
-	public final boolean sendLike(long QQ, int times) {
-		return CQ_sendLikeV2(getAuthCode(), QQ, Math.min(Math.max(times, 1), 10)) == 1;
+	public static void addResult(Object result){
+		results.add(result);
 	}
 
-	/**
-	 * 获取 Cookies
-	 *
-	 * @return Cookies
-	 */
-	public final int getCookies() {
-		return CQ_getCookies(getAuthCode());
+	public static int CQ_sendPrivateMsg(int authCode, long QQ, String message) {
+		runCommand(CommandId.SEND_PRIVATE_MESSAGE, false, authCode, QQ, message);
+		return waitForIntResult();
+	}
+
+	public static int CQ_sendGroupMsg(int authCode, long group, String message) {
+		runCommand(CommandId.SEND_GROUP_MESSAGE, false, authCode, group, message);
+		return waitForIntResult();
+	}
+
+	public static int CQ_sendDiscussMsg(int authCode, long discuss, String message) {
+		runCommand(CommandId.SEND_DISCUSS_MESSAGE, false, authCode, discuss, message, int.class);
+		return waitForIntResult();
+	}
+
+	public static int CQ_sendLike(int authCode, long QQ) {
+		runCommand(CommandId.SEND_LIKE, false, authCode, QQ);
+		return waitForIntResult();
+	}
+
+	//新版QQ的10次赞
+	public static int CQ_sendLikeV2(int authCode, long QQ, int times) {
+		runCommand(CommandId.SEND_LIKE_V2, false, authCode, QQ, times);
+		return waitForIntResult();
+	}
+
+	public static int CQ_getCookies(int authCode) {
+		runCommand(CommandId.GET_COOKIES, true, authCode);
+		return waitForIntResult();
 	}
 
 	/**
 	 * 接受语音
 	 *
-	 * @param fileName  接受消息的文件名
-	 * @param outFormat 应用所需格式, 目前支持 mp3,amr,wma,m4a,spx,ogg,wav,flac
+	 * @param authCode  authCode
+	 * @param file      接受消息的文件名
+	 * @param outFormat 应用所需格式
+	 *
 	 * @return ? 似乎会直接返回 file
 	 */
-	public final String getRecord(String fileName, String outFormat) {
-		return CQ_getRecord(getAuthCode(), fileName, outFormat);
+	public static String CQ_getRecord(int authCode, String file, String outFormat) {
+		runCommand(CommandId.GET_RECORD, true, authCode, file, outFormat);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 接受并读取语音文件
-	 *
-	 * @param fileName  接受消息的文件名
-	 * @param outFormat 应用所需格式, 目前支持 mp3,amr,wma,m4a,spx,ogg,wav,flac
-	 * @return 语音文件内容
-	 */
-	public final byte[] getRecordBytes(String fileName, String outFormat) {
-		getRecord(fileName, outFormat);
-
-		String result = "";
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new FileReader(new File(fileName)));
-			String tempString;
-			while ((tempString = reader.readLine()) != null) {
-				result += tempString + "\n";
-			}
-			reader.close();
-		} catch (Exception e) {
-			return new byte[]{};
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException ignored) {
-				}
-			}
-		}
-
-		return result.getBytes();
+	public static int CQ_getCsrfToken(int authCode) {
+		runCommand(CommandId.GET_CSRF_TOKEN, true, authCode);
+		return waitForIntResult();
 	}
 
-	/**
-	 * CsrfToken, 即 QQ 网页用到的 bkn/g_tk 等
-	 *
-	 * @return CsrfToken
-	 */
-	public final int getCsrfToken() {
-		return CQ_getCsrfToken(getAuthCode());
+	public static String CQ_getAppDirectory(int authCode) {
+		runCommand(CommandId.GET_APP_DIRECTORY, true, authCode);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 获取应用配置目录
-	 *
-	 * @return 应用配置目录
-	 */
-	public final String getAppDirectory() {
-		return CQ_getAppDirectory(getAuthCode());
+	public static long CQ_getLoginQQ(int authCode) {
+		runCommand(CommandId.GET_APP_DIRECTORY, true, authCode);
+		return waitForLongResult();
 	}
 
-	/**
-	 * 获取酷Q登录的QQ号码
-	 *
-	 * @return 酷Q登录的QQ号码
-	 */
-	public final long getLoginQQ() {
-		return CQ_getLoginQQ(getAuthCode());
+	public static String CQ_getLoginNick(int authCode) {
+		runCommand(CommandId.GET_LOGIN_NICK, true, authCode);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 获取酷Q登录的QQ号码的昵称
-	 *
-	 * @return 酷Q登录的QQ号码的昵称
-	 */
-	public final String getNickOfLoginedQQ() {
-		return CQ_getLoginNick(getAuthCode());
+	public static int CQ_setGroupKick(int authCode, long group, long QQ, boolean block) {
+		runCommand(CommandId.SET_GROUP_KICK, false, authCode, group, QQ, block);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 踢出群成员
-	 *
-	 * @param group 群号码
-	 * @param QQ    QQ号码
-	 * @param block 是否禁止再次加入
-	 * @return 是否成功
-	 */
-	public final boolean groupKick(long group, long QQ, boolean block) {
-		return CQ_setGroupKick(getAuthCode(), group, QQ, block) == 1;
+	//time: s. 解禁0
+	public static int CQ_setGroupBan(int authCode, long group, long QQ, long time) {
+		runCommand(CommandId.SET_GROUP_BAN, false, authCode, group, QQ, time);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 禁言群成员
-	 *
-	 * @param group 群号码
-	 * @param QQ    QQ号码
-	 * @param time  时间. 单位为秒, 范围 60-2592000
-	 * @return 是否成功
-	 */
-	public final boolean groupBanMember(long group, long QQ, long time) {
-		return CQ_setGroupBan(getAuthCode(), group, QQ, Math.max(Math.min(time, 2592000), 60)) == 1;
+	public static int CQ_setGroupAdmin(int authCode, long group, long QQ, boolean admin) {
+		runCommand(CommandId.SET_GROUP_ADMIN, false, authCode, group, QQ, admin);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 设置/取消群管理员
-	 *
-	 * @param group 群号码
-	 * @param QQ    QQ号码
-	 * @param admin 是否管理员
-	 * @return 是否成功
-	 */
-	public final boolean groupSetAdmin(long group, long QQ, boolean admin) {
-		return CQ_setGroupAdmin(getAuthCode(), group, QQ, admin) == 1;
+	public static int CQ_setGroupSpecialTitle(int authCode, long group, long QQ, String title, long timeLimit) {
+		runCommand(CommandId.SET_GROUP_SPECIAL_TITLE, false, authCode, group, QQ, title, timeLimit);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 设置群成员的专属头衔
-	 *
-	 * @param group     群号码
-	 * @param QQ        QQ号码
-	 * @param title     头衔
-	 * @param timeLimit 时间限制. 单位为秒, 永久为 -1
-	 * @return 是否成功
-	 */
-	public final boolean groupSetTitleOfMember(long group, long QQ, String title, long timeLimit) {
-		return CQ_setGroupSpecialTitle(getAuthCode(), group, QQ, title, timeLimit == -1 ? -1 : Math.abs(timeLimit)) == 1;
+	public static int CQ_setGroupWholeBan(int authCode, long group, boolean ban) {
+		runCommand(CommandId.SET_GROUP_WHOLE_BAN, false, authCode, group, ban);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 开启/关闭全员禁言 (开启后只允许管理员和群主发言)
-	 *
-	 * @param group 群号码
-	 * @param ban   是否开启
-	 * @return 是否成功
-	 */
-	public final boolean groupSetWholeBan(long group, boolean ban) {
-		return CQ_setGroupWholeBan(getAuthCode(), group, ban) == 1;
+	public static int CQ_setGroupAnonymousBan(int authCode, long group, String anonymousId, long time) {
+		runCommand(CommandId.SET_GROUP_ANONYMOUS_BAN, false, authCode, group, anonymousId, time);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 禁言匿名用户
-	 *
-	 * @param group       群号码
-	 * @param anonymousId 匿名昵称
-	 * @param time        时间. 单位为秒, 范围 60-2592000
-	 * @return 是否成功
-	 */
-	public final boolean groupSetAnonymousBan(long group, String anonymousId, long time) {
-		return CQ_setGroupAnonymousBan(getAuthCode(), group, anonymousId, Math.max(Math.min(time, 2592000), 60)) == 1;
+	public static int CQ_setGroupAnonymous(int authCode, long group, boolean enabled) {
+		runCommand(CommandId.SET_GROUP_ANONYMOUS, false, authCode, group, enabled);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 开启/关闭匿名功能
-	 * 关闭后群员将无法切换到匿名发言
-	 *
-	 * @param group   群号码
-	 * @param enabled 是否开启
-	 * @return 是否成功
-	 */
-	public final boolean groupSetAnonymousEnabled(long group, boolean enabled) {
-		return CQ_setGroupAnonymous(getAuthCode(), group, enabled) == 1;
+	public static int CQ_setGroupCard(int authCode, long group, long QQ, String newCard) {
+		runCommand(CommandId.SET_GROUP_CARD, false, authCode, group, QQ, newCard);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 设置群成员名片
-	 *
-	 * @param group 群号码
-	 * @param QQ    QQ号码
-	 * @param card  名片
-	 * @return 是否成功
-	 */
-	public final boolean groupSetCard(long group, long QQ, String card) {
-		return CQ_setGroupCard(getAuthCode(), group, QQ, card) == 1;
+	public static int CQ_setGroupLeave(int authCode, long group, boolean dissolve) {
+		runCommand(CommandId.SET_GROUP_LEAVE, false, authCode, group, dissolve);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 离开/解散群
-	 *
-	 * @param group    群号
-	 * @param dissolve true: 解散(群主), false: 离开(成员, 管理员)
-	 * @return 是否成功
-	 */
-	public final boolean groupLeave(long group, boolean dissolve) {
-		return CQ_setGroupLeave(getAuthCode(), group, dissolve) == 1;
+	public static int CQ_setDiscussLeave(int authCode, long discuss) {
+		runCommand(CommandId.SET_DISCUSS_LEAVE, false, authCode, discuss);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 离开讨论组
-	 *
-	 * @param discuss 讨论组号码
-	 * @return 是否成功
-	 */
-	public final boolean discussLeave(long discuss) {
-		return CQ_setDiscussLeave(getAuthCode(), discuss) == 1;
+	public static int CQ_setFriendAddRequest(int authCode, String requestId, int resultType, String nick) {
+		runCommand(CommandId.SET_FRIEND_ADD_REQUEST, false, authCode, requestId, resultType, nick);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 响应好友添加请求
-	 *
-	 * @param requestFlag 请求 Id
-	 * @param accept      是否接受请求
-	 * @return 是否成功
-	 */
-	public final boolean friendAnswerAddRequest(String requestFlag, boolean accept) {
-		return friendAnswerAddRequest(requestFlag, accept, "");
+
+	@Deprecated
+	public static int CQ_setGroupAddRequest(int authCode, String requestId, int requestType, int resultType) {
+		runCommand(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, requestId, requestType, resultType);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 响应好友添加请求
-	 *
-	 * @param requestFlag  请求 Id
-	 * @param accept       是否接受请求
-	 * @param nickIfAccept 接受后的好友备注
-	 * @return 是否成功
-	 */
-	public final boolean friendAnswerAddRequest(String requestFlag, boolean accept, String nickIfAccept) {
-		return CQ_setFriendAddRequest(getAuthCode(), requestFlag, accept ? RESULT_TYPE_ACCEPT : RESULT_TYPE_DENIED, nickIfAccept) == 1;
+	public static int CQ_setGroupAddRequestV2(int authCode, String requestId, int requestType, int resultType, String reason) {
+		runCommand(CommandId.SET_GROUP_ADD_REQUEST_V2, false, authCode, requestId, requestType, resultType, reason);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 响应群添加请求
-	 *
-	 * @param requestFlag 请求 Id
-	 * @param requestType 请求类型
-	 * @param accept      是否同意请求
-	 * @return 是否成功
-	 * @see CoolQLibrary#REQUEST_TYPE_ACTIVE_JOIN
-	 * @see CoolQLibrary#REQUEST_TYPE_INVITE
-	 */
-	public final boolean groupAnswerJoinRequest(String requestFlag, int requestType, boolean accept) {
-		return groupAnswerJoinRequest(requestFlag, requestType, accept, "");
+	public static int CQ_addLog(int authCode, int priority, String type, String message) {
+		runCommand(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, priority, type, message);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 响应群添加请求
-	 *
-	 * @param requestFlag 请求 Id
-	 * @param requestType 请求类型 ({@link AddGroupRequestEvent#TYPE_JOIN}或{@link AddGroupRequestEvent#TYPE_INVITE})
-	 * @param accept      是否同意请求
-	 * @param reason      拒绝原因 (同意时填入空字符串)
-	 * @return 是否成功
-	 * @see CoolQLibrary#REQUEST_TYPE_ACTIVE_JOIN
-	 * @see CoolQLibrary#REQUEST_TYPE_INVITE
-	 */
-	public final boolean groupAnswerJoinRequest(String requestFlag, int requestType, boolean accept, String reason) {
-		return CQ_setGroupAddRequestV2(getAuthCode(), requestFlag, requestType, accept ? RESULT_TYPE_ACCEPT : RESULT_TYPE_DENIED, reason) == 1;
+	public static int CQ_setFatal(int authCode, String message) {
+		runCommand(CommandId.SET_FATAL, false, authCode, message);
+		return waitForIntResult();
 	}
 
-	/**
-	 * 记录日志.
-	 * 不建议使用本方法, 请使用 {@link JavaPlugin#getLogger()} 中的分类记录方法
-	 *
-	 * @param priority 优先级
-	 * @param type     类型
-	 * @param message  内容
-	 */
-	public final void log(int priority, String type, String message) {
-		CQ_addLog(getAuthCode(), priority, type, message);
+
+	@Deprecated
+	public static String CQ_getGroupMemberInfo(int authCode, long group, long QQ) {
+		runCommand(CommandId.GET_GROUP_MEMBER_INFO, false, authCode, group, QQ);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 记录致命错误
-	 *
-	 * @param message 错误内容
-	 * @return 是否成功
-	 */
-	public final boolean error(String message) {
-		return CQ_setFatal(getAuthCode(), message) == 1;
+	public static String CQ_getGroupMemberInfoV2(int authCode, long group, long QQ, boolean noCache) {
+		runCommand(CommandId.GET_GROUP_MEMBER_INFO_V2, false, authCode, group, QQ, noCache);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 获取群成员资料
-	 *
-	 * @param group   群号
-	 * @param QQ      QQ
-	 * @param noCache 是否不使用缓存
-	 * @return 群成员资料
-	 */
-	public final Member groupGetMemberInfo(long group, long QQ, boolean noCache) {
-		return new Member(Utils.base64decode(CQ_getGroupMemberInfoV2(getAuthCode(), group, QQ, noCache)));
+	public static String CQ_getStrangerInfo(int authCode, long QQ, boolean noCache) {
+		runCommand(CommandId.GET_STRANGER_INFO, false, authCode, QQ, noCache);
+		return waitForStringResult();
 	}
 
-	/**
-	 * 获取群成员资料 (使用缓存)
-	 *
-	 * @param group 群号
-	 * @param QQ    QQ
-	 * @return 群成员资料
-	 */
-	public final Member groupGetMemberInfo(long group, long QQ) {
-		return groupGetMemberInfo(group, QQ, false);
-	}
-
-	/**
-	 * 获取陌生人资料
-	 *
-	 * @param QQ      QQ
-	 * @param noCache 是否不使用缓存
-	 * @return 陌生人资料
-	 */
-	public final User strangerGetInfo(long QQ, boolean noCache) {
-		return new User(Utils.base64decode(CQ_getStrangerInfo(getAuthCode(), QQ, noCache)));
-	}
-
-	/**
-	 * 获取陌生人资料 (使用缓存)
-	 *
-	 * @param QQ QQ
-	 * @return 陌生人资料
-	 */
-	public final User strangerGetInfo(long QQ) {
-		return strangerGetInfo(QQ, false);
-	}
+	// TODO: 2017/1/26 0026 RtlMoveMemory
+	// TODO: 2017/1/26 0026 GlobalSize
 }

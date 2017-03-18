@@ -1,25 +1,25 @@
 package com.him188.jpre.event;
 
+import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
 import com.him188.jpre.event.action.replay.ReplayGroupMessageEvent;
 import com.him188.jpre.event.action.replay.ReplayPrivateMessageEvent;
-import com.him188.jpre.event.action.send.SendGroupMessageEvent;
-import com.him188.jpre.event.group.GroupMemberIncreaseEvent;
-import com.him188.jpre.event.plugin.PluginEnableEvent;
-import com.him188.jpre.plugin.Plugin;
-import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
 import com.him188.jpre.event.action.send.SendDiscussMessageEvent;
+import com.him188.jpre.event.action.send.SendGroupMessageEvent;
 import com.him188.jpre.event.action.send.SendPrivateMessageEvent;
-import com.him188.jpre.event.jpre.CoolQExitEvent;
 import com.him188.jpre.event.friend.FriendAddEvent;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
 import com.him188.jpre.event.group.GroupMemberDecreaseEvent;
+import com.him188.jpre.event.group.GroupMemberIncreaseEvent;
+import com.him188.jpre.event.jpre.JPREDisableEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.plugin.PluginDisableEvent;
+import com.him188.jpre.event.plugin.PluginEnableEvent;
 import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
+import com.him188.jpre.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -58,7 +58,7 @@ abstract public class Event {
 		registerEvent(AddFriendRequestEvent.class);
 		registerEvent(AddGroupRequestEvent.class);
 
-		registerEvent(CoolQExitEvent.class);
+		registerEvent(JPREDisableEvent.class);
 	}
 
 	private boolean cancelled = false;

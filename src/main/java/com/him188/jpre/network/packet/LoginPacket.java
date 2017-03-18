@@ -10,6 +10,10 @@ public class LoginPacket extends Packet {
 
 	public String password;
 
+	public String getPassword() {
+		return password;
+	}
+
 	@Override
 	public byte[] encode() {
 		return new byte[0];
@@ -18,5 +22,10 @@ public class LoginPacket extends Packet {
 	@Override
 	public void decode(Unpack unpack) {
 		password = unpack.getString();
+	}
+
+	@Override
+	public byte getNetworkId() {
+		return NETWORK_ID;
 	}
 }

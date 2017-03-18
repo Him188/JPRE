@@ -17,4 +17,9 @@ public class ServerPongPacket extends Packet {
 	public void decode(Unpack unpack) {
 
 	}
+
+	@Override
+	public byte getNetworkId() {
+		return NETWORK_ID;
+	}
 }

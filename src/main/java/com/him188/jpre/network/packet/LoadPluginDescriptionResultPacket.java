@@ -6,12 +6,12 @@ import com.him188.jpre.binary.Unpack;
 /**
  * @author Him188
  */
-public class LoginResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.LOGIN_RESULT;
+public class LoadPluginDescriptionResultPacket extends Packet {
+	public static final byte NETWORK_ID = PacketIds.LOAD_PLUGIN_DESCRIPTION_RESULT;
 
 	public boolean succeed;
 
-	public LoginResultPacket(boolean succeed){
+	public LoadPluginDescriptionResultPacket(boolean succeed){
 		this.succeed = succeed;
 	}
 

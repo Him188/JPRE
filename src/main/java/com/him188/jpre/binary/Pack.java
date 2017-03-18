@@ -96,4 +96,42 @@ public class Pack {
 		}
 		return this;
 	}
+
+	public Pack putBytes(Byte[] value) {
+		for (Byte aValue : value) {
+			if (aValue == null) {
+				continue;
+			}
+			putByte(aValue);
+		}
+		return this;
+	}
+
+	public Pack putRaw(Object... values) {
+		for (Object value : values) {
+			if (value.getClass().equals(int.class) || value.getClass().equals(Integer.class)) {
+				putInt((Integer) value);
+			} else if (value.getClass().equals(byte.class) || value.getClass().equals(Byte.class)) {
+				putByte((Byte) value);
+			} else if (value.getClass().equals(long.class) || value.getClass().equals(Long.class)) {
+				putLong((Long) value);
+			} else if (value.getClass().equals(String.class)) {
+				putString((String) value);
+			} else if (value.getClass().equals(boolean.class) || value.getClass().equals(Boolean.class)) {
+				putBoolean((Boolean) value);
+			} else if (value.getClass().equals(double.class) || value.getClass().equals(Double.class)) {
+				putDouble((Double) value);
+			} else if (value.getClass().equals(short.class) || value.getClass().equals(Short.class)) {
+				putShort((Short) value);
+			} else if (value.getClass().equals(float.class) || value.getClass().equals(Float.class)) {
+				putFloat((Float) value);
+			} else if (value.getClass().equals(byte[].class)) {
+				putBytes((byte[]) value);
+			} else if (value.getClass().equals(Byte[].class)){
+				putBytes((Byte[]) value);
+			}
+		}
+		return this;
+	}
+
 }

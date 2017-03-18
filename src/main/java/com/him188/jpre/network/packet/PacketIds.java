@@ -5,15 +5,28 @@ package com.him188.jpre.network.packet;
  */
 public interface PacketIds {
 	//receive from client:
-	byte PING = 0x01;
-	byte EVENT = 0x04;
-	byte LOGIN = 0x08;
+	byte PING = 1;
+	byte EVENT = 2;
+	byte LOGIN = 3;
+	byte LOAD_PLUGIN = 4;
+	byte ENABLE_PLUGIN = 5;
+	byte DISABLE_PLUGIN = 6;
+	byte LOAD_PLUGIN_DESCRIPTION = 7;
+	byte GET_PLUGIN_INFORMATION = 8;
+	byte COMMAND_RESULT = 20;
+	byte SET_INFORMATION = 21;
 
 	//send by server:
-	byte PONG = 0x02;
-	byte COMMAND = 0x03;
-	byte INVALID_EVENT = 0x05;
-	byte EVENT_REPLAY = 0x06;
-	byte INVALID_ID = 0x07;
-	byte LOGIN_RESULT = 0x09;
+	byte PONG = 9;
+	byte COMMAND = 10;
+	byte INVALID_EVENT = 11;
+	byte EVENT_RESULT = 12;
+	byte INVALID_ID = 13;
+	byte LOGIN_RESULT = 14;
+	byte LOAD_PLUGIN_RESULT = 15;
+	byte ENABLE_PLUGIN_RESULT = 16;
+	byte DISABLE_PLUGIN_RESULT = 17;
+	byte LOAD_PLUGIN_DESCRIPTION_RESULT = 18;
+	byte GET_PLUGIN_INFORMATION_RESULT = 19;
+	byte SET_INFORMATION_RESULT = 22;
 }

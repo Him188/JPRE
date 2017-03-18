@@ -5,8 +5,14 @@ import com.him188.jpre.binary.Unpack;
 /**
  * @author Him188
  */
-public class InvalidEventPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.INVALID_EVENT;
+public class LoadPluginDescriptionPacket extends Packet {
+	public static final byte NETWORK_ID = PacketIds.LOAD_PLUGIN_DESCRIPTION;
+
+	private String name;
+
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public byte[] encode() {
@@ -15,8 +21,9 @@ public class InvalidEventPacket extends Packet {
 
 	@Override
 	public void decode(Unpack unpack) {
-
+		this.name = unpack.getString();
 	}
+
 	@Override
 	public byte getNetworkId() {
 		return NETWORK_ID;

@@ -1,6 +1,7 @@
 package com.him188.jpre;
 
 import com.him188.jpre.plugin.JavaPlugin;
+import static com.him188.jpre.CoolQCaller.*;
 
 /**
  * 系统酷 Q调用器
@@ -8,7 +9,7 @@ import com.him188.jpre.plugin.JavaPlugin;
  *
  * @author Him188
  */
-public final class SystemCoolQCaller extends CoolQCaller {
+public final class SystemCoolQCaller extends BaseCoolQCaller{
 	private int authCode;
 
 	@Override

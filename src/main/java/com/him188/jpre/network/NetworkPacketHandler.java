@@ -10,7 +10,11 @@ import java.util.List;
  * @author Him188
  */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
-	private List<ConnectedClient> clients = new ArrayList<>();
+	private static List<ConnectedClient> clients = new ArrayList<>();
+
+	public static List<ConnectedClient> getClients() {
+		return clients;
+	}
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
@@ -27,7 +31,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 			return;
 		}
 
-		ConnectedClient client = new ConnectedClient(ctx.channel().remoteAddress());
+		ConnectedClient client = new ConnectedClient(ctx.channel().remoteAddress(), ctx);
 		clients.add(client);
 
 		System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");

@@ -6,16 +6,16 @@ import com.him188.jpre.binary.Unpack;
 /**
  * @author Him188
  */
-public class EventReplayPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.EVENT_REPLAY;
+public class EventPacket extends Packet {
+	public static final byte NETWORK_ID = PacketIds.EVENT_RESULT;
 
-	public boolean cancelled;
+	public byte cancelled;
 
-	public EventReplayPacket() {
+	public EventPacket() {
 		this(false);
 	}
 
-	public EventReplayPacket(boolean cancelled) {
+	public EventPacket(boolean cancelled) {
 		this.cancelled = cancelled;
 	}
 
@@ -27,5 +27,10 @@ public class EventReplayPacket extends Packet {
 	@Override
 	public void decode(Unpack unpack) {
 
+	}
+
+	@Override
+	public byte getNetworkId() {
+		return NETWORK_ID;
 	}
 }
