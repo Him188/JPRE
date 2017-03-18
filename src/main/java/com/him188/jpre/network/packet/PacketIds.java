@@ -29,4 +29,5 @@ public interface PacketIds {
 	byte LOAD_PLUGIN_DESCRIPTION_RESULT = 18;
 	byte GET_PLUGIN_INFORMATION_RESULT = 19;
 	byte SET_INFORMATION_RESULT = 22;
+	byte LOG = 23;
 }

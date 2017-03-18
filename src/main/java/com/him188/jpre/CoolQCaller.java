@@ -3,6 +3,7 @@ package com.him188.jpre;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
+import com.him188.jpre.network.packet.PacketIds;
 
 import java.util.List;
 import java.util.Vector;
@@ -35,6 +36,7 @@ public final class CoolQCaller {
 		synchronized (CoolQCaller.class) {
 			for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
 				connectedClient.getLastCtx().writeAndFlush(new Pack()
+						.putByte(PacketIds.EVENT)
 						.putByte(id.getId())
 						.putRaw(args)
 						.getData()
@@ -181,7 +183,7 @@ public final class CoolQCaller {
 	}
 
 	public static int CQ_addLog(int authCode, int priority, String type, String message) {
-		runCommand(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, priority, type, message);
+		runCommand(CommandId.ADD_LOG, false, authCode, priority, type, message);
 		return waitForIntResult();
 	}
 
