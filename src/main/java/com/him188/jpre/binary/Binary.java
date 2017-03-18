@@ -6,6 +6,50 @@ package com.him188.jpre.binary;
  * @author Him188
  */
 public final class Binary {
+	public static byte[] toBytes(int value) {
+		byte[] data = new byte[4];
+		data[0] = (byte) (value >> 24);
+		data[1] = (byte) (value >> 16);
+		data[2] = (byte) (value >> 8);
+		data[3] = (byte) (value);
+		return reverse(data);
+	}
+
+	public static byte[] toBytes(boolean value) {
+		return reverse(new byte[]{(byte) (value ? 1 : 0)});
+	}
+
+	public static byte[] toBytes(float value) {
+		byte[] data = new byte[4];
+		int intBits = Float.floatToIntBits(value);
+		data[0] = (byte) (intBits >> 24);
+		data[1] = (byte) (intBits >> 16);
+		data[2] = (byte) (intBits >> 8);
+		data[3] = (byte) (intBits);
+		return reverse(data);
+	}
+
+	public static byte[] toBytes(long value) {
+		byte[] data = new byte[8];
+		data[0] = (byte) (value >> 56);
+		data[1] = (byte) (value >> 48);
+		data[2] = (byte) (value >> 40);
+		data[3] = (byte) (value >> 32);
+		data[4] = (byte) (value >> 24);
+		data[5] = (byte) (value >> 16);
+		data[6] = (byte) (value >> 8);
+		data[7] = (byte) (value);
+		return reverse(data);
+	}
+
+	public static byte[] toBytes(short value) {
+		byte[] data = new byte[2];
+		data[2] = (byte) (value >> 8);
+		data[3] = (byte) (value);
+		return reverse(data);
+	}
+
+
 	public static int toInt(byte[] bytes) {
 		bytes = reverse(bytes);
 		return (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
@@ -25,6 +69,10 @@ public final class Binary {
 	public static short toShort(byte[] bytes) {
 		bytes = reverse(bytes);
 		return (short) ((bytes[0] << 8) + bytes[1]);
+	}
+
+	public static boolean toBoolean(byte[] bytes){
+		return bytes[0] == (byte)1;
 	}
 
 	/**

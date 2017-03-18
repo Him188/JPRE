@@ -1,11 +1,16 @@
 package com.him188.jpre.binary;
 
+import static com.him188.jpre.binary.Binary.*;
 /**
  * @author Him188
  */
 public class Unpack {
 	private byte[] data;
 	private int location = 0;
+
+	public Unpack(Pack pack){
+		this(pack.getData());
+	}
 
 	public Unpack() {
 		this(new byte[]{});
@@ -23,6 +28,10 @@ public class Unpack {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public byte[] getData() {
+		return data;
 	}
 
 	public void clear() {
