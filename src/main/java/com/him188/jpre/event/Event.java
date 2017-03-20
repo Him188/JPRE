@@ -102,7 +102,7 @@ abstract public class Event {
 					constructor.setAccessible(true);
 					return (Event) constructor.newInstance(args);
 				} catch (Exception e) {
-					continue;
+					return null;
 				}
 			}
 		}
@@ -117,7 +117,7 @@ abstract public class Event {
 	 * @param eventClass Event class
 	 *
 	 * @return 当 {@code eventClass} 没有继承 {@link Event} 或 {@code eventClass} 已经被注册 或 {@code eventClass} 中不存在 {@code
-	 * getEventType()I} 方法时为 false. 成功为 true
+	 * getEventType()} 方法时为 false. 成功为 true
 	 */
 	public static boolean registerEvent(Class<?> eventClass) {
 		if (!eventClass.isAssignableFrom(Event.class)) {

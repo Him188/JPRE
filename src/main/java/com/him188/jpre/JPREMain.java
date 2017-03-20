@@ -42,7 +42,7 @@ public final class JPREMain {
 	public static SystemCoolQCaller caller;
 	public static SystemLogger logger;
 
-	public static final int DEFAULT_PORT = 6158;
+	public static final int DEFAULT_PORT = 0420;
 	private static String PASSWORD; //加密过
 
 	public static String getPassword() {
