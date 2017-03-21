@@ -13,41 +13,15 @@
 **简述**  
 - JPRE依赖于易语言版酷Q运行, 而不含有独立的机器人系统.  
 本项目有 2 个部分, 一个部分就是你现在看到的——JPRE. 还有一个部分是酷Q插件.   
-酷Q插件启动的时候会通过 易语言Java支持库 运行JPRE的Jar包, JPRE加载Java插件.  
+注意！酷Q插件和JPRE都是独立运行的，他们之间通过网络进行通讯，JPRE的运行需要Jre/Jdk 8，如果你没有，请点击[这里](https://www.java.com/zh_CN/download/manual.jsp)根据操作系统获取最新的Jre8.  
+酷Q插件启动的时候会通过 网络 连接JPRE, JPRE加载Java插件.  
 
 **Java 与酷Q 通讯方式**  
-- JPREMain中有这一个方法:  
-`public static String getLog()`  
-JPRE的日志系统记录的所有日志, 都会存放在 LogManager 中  
-该方法可以获取并删除 LogManager 中的第一条日志  
-酷Q插件中有一个线程, 会不停地调用该方法, 来达到日志传输的目的
-  
-- 那JPRE中使用到的酷Q APi, 如发送消息, 发送赞是怎样传递给酷Q的?  
-答案很简单, 就是类似于日志的方式:  
-`public static String getCommand()`
+Java等到酷Q插件连接上并且通过了身份验证后 ，将会开始接收来自酷Q插件的事件数据包，同时将运行在JPRE上所有已启用应用的操作通过数据包发送给酷Q插件，让酷Q插件执行.  
 
 **酷Q 与 Java 通讯方式**  
-- 前面已经提到了易语言Java支持库, 易语言Java支持库到底是什么?  
-这个支持库可以运行Jar包, 构造类, 执行类方法或是执行类静态方法.  
-酷Q插件 与 Java 通讯方式就是通过执行静态方法实现的.  
-JPREMain 中的大部分静态方法都是提供给酷Q插件调用的.    
-下面列举酷Q插件会调用到的方法:  
-`init(ILjava/lang/String;)`  
-`callEvent(I[Ljava/lang/Object;)V`  
-`getCommand()Ljava/lang/String;`  
-`getLog()Ljava/lang/String;`  
-`setCommandResult(Ljava/lang/String;)`  
-`setCommandResult(I)`  
-`loadPluginDescription(Ljava/lang/String;)Z`  
-`getPluginName(Ljava/lang/String;)Ljava/lang/String;`  
-`getPluginVersion(Ljava/lang/String;)Ljava/lang/String;`  
-`getPluginAuthor(Ljava/lang/String;)Ljava/lang/String;`  
-`getPluginDescription(Ljava/lang/String;)Ljava/lang/String;`  
-`getPluginAPI(Ljava/lang/String;)I`  
-`loadPlugin(Ljava/lang/String;)Z`  
-`setAuthCode(I)V`  
-`enablePlugin(Ljava/lang/String;)Z`  
-`disablePlugin(Ljava/lang/String;)Z`
+在酷Q启用插件时，酷Q插件会尝试使用配置文件中的连接信息与JPRE进行连接，并进行身份验证，验证成功，酷Q插件将开始进入正常工作，此时酷Q插件将接收所有事件，并将事件以网络数据包的形式发送给JPRE，由JPRE将事件分发给所有Java插件处理.  
+当酷Q插件与JPRE 连接/身份验证 失败时，可手动在酷Q插件的菜单，单击“重新连接JPRE”重新尝试连接，本项可以在修改了配置文件中的连接信息后进行重连，注意：在连接成功后，修改配置文件中的连接信息不会影响当前与目前连接成功的JPRE的连接.  
 
 ## <span id="plugin" name="plugin">第二章 JPRE插件结构</span>
 **简述**  
