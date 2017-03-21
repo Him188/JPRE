@@ -42,7 +42,9 @@ public final class JPREMain {
 	public static SystemCoolQCaller caller;
 	public static SystemLogger logger;
 
-	public static final int DEFAULT_PORT = 0420;
+	@SuppressWarnings("OctalInteger")
+	public static final int DEFAULT_PORT = 0420; //不要问为什么, 我女票生日. 十进制 272
+
 	private static String PASSWORD; //加密过
 
 	public static String getPassword() {
