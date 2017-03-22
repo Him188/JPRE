@@ -79,7 +79,7 @@ public final class Binary {
 	public static byte[] reverse(byte[] bytes) {
 		byte[] result = new byte[bytes.length];
 		int ii = 0;
-		for (int i = bytes.length; i > 0; i--) {
+		for (int i = bytes.length-1; i > 0; i--) {
 			result[ii++] = bytes[i];
 		}
 		return result;

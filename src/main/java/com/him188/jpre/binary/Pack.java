@@ -10,7 +10,6 @@ import static com.him188.jpre.binary.Binary.toBytes;
  */
 public class Pack {
 	private List<Byte> data;
-	private int position;
 
 	public Pack(Unpack unpack) {
 		this(unpack.getData());
@@ -21,12 +20,11 @@ public class Pack {
 	}
 
 	public Pack(byte[] data) {
-		this.position = 0;
 		setData(data);
 	}
 
 	public Pack setData(byte[] data) {
-		this.data = new ArrayList<Byte>() {
+		this.data = new ArrayList<Byte>(1024) {
 			{
 				for (byte datum : data) {
 					add(datum);
@@ -80,7 +78,7 @@ public class Pack {
 	}
 
 	public Pack putByte(byte value) {
-		this.data.set(position++, value);
+		this.data.add(value);
 		return this;
 	}
 
