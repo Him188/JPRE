@@ -1,5 +1,6 @@
 package com.him188.jpre.network;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -24,5 +25,11 @@ public class NetworkChannelHandler extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast("handler", new NetworkPacketHandler());
 	}
 
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		super.exceptionCaught(ctx, cause);
+
+		// TODO: 2017/3/22  配置是否显示错误信息.
+	}
 }
 

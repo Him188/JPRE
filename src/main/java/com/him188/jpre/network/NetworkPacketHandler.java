@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,16 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 	}
 
 	@Override
+	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+		System.out.println("[Network] Data packet received2: " + msg);
+
+		super.channelRead(ctx, msg);
+	}
+
+	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
+		System.out.println("[Network] Data packet received: " + Arrays.toString(data));
+
 		for (ConnectedClient client : clients) {
 			if (client.is(ctx.channel().remoteAddress())) {
 				client.dataReceive(ctx, data);

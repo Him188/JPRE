@@ -95,15 +95,17 @@ public final class JPREMain {
 		System.out.println("GitHub: https://github.com/Him188/CQ-JPRE\n");
 	}
 
-	private static void startServer(int port) {
+	private static void startServer(final int port) {
 		System.out.println("Starting server...");
-		try {
-			Network.start(port);
-		} catch (InterruptedException e) {
-			System.out.println("Starting server failed. Could not open port " + port);
-			System.exit(0);
-		}
-		System.out.println("JPRE server is listening 0.0.0.0:");
+		new Thread(() -> {
+			try {
+				Network.start(port);
+			} catch (InterruptedException e) {
+				System.out.println("Starting server failed. Could not open port " + port);
+				System.exit(0);
+			}
+		}).start();
+		System.out.println("JPRE server is listening port " + port);
 	}
 
 	/**
