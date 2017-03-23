@@ -6,7 +6,7 @@ import com.him188.jpre.binary.Unpack;
  * @author Him188
  */
 public class ClientPingPacket extends Packet{
-	public static byte NETWORK_ID = PacketIds.PING;
+	public static final byte NETWORK_ID = PacketIds.PING;
 
 	@Override
 	public byte[] encode() {

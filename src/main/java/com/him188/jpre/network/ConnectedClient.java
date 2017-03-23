@@ -65,13 +65,9 @@ public class ConnectedClient {
 		lastCtx = ctx;
 		Unpack packet = new Unpack(data);
 
-		switch (packet.getByte()) {
+		byte pid = packet.getByte();
+		switch (pid) {
 			case EVENT:
-				Class<?> eventClass = Event.matchEvent(packet.getByte());
-				if (eventClass == null) {
-					sendPacket(ctx, new InvalidEventPacket());
-				}
-
 				Event event = null;
 				switch (packet.getInt()) {
 					case EventTypes.EXIT:
@@ -108,6 +104,9 @@ public class ConnectedClient {
 					case EventTypes.REQUEST_GROUP_ADD:
 						event = new AddGroupRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString());
 						break;
+					default:
+						sendPacket(ctx, new InvalidEventPacket());
+						break;
 				}
 				if (event == null) {
 					sendPacket(ctx, new InvalidEventPacket());
@@ -116,7 +115,8 @@ public class ConnectedClient {
 				sendPacket(ctx, new EventResultPacket(JPREMain.callEvent(event)));
 				break;
 			default:
-				Packet pk = Packet.matchPacket(packet.getByte());
+				Packet pk = Packet.matchPacket(pid);
+				System.out.println("Packet: " + pk);
 				if (pk == null) {
 					sendPacket(ctx, new InvalidIdPacket());
 					return;
@@ -223,6 +223,7 @@ public class ConnectedClient {
 		}
 		System.arraycopy(data, 0, result, 1, data.length);
 		ctx.writeAndFlush(result);
+		System.out.println("Packet sent:" + packet);
 		return true;
 	}
 }

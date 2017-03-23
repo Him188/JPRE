@@ -1,5 +1,6 @@
 package com.him188.jpre.event.jpre;
 
+import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 
 import java.net.SocketAddress;
@@ -26,4 +27,9 @@ public class JPREDisableEvent extends JPREEvent {
 	public static HandlerList getHandlers() {
 		return handlers;
 	}
+
+	public static int getEventType() {
+		return EventTypes.JPRE_DISABLE;
+	}
+
 }

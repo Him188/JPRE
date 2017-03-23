@@ -21,9 +21,9 @@ public class Unpack {
 		setData(data);
 	}
 
-	private static byte[] getCenter(byte[] array, int location, int length) {
+	private byte[] getCenter(int location, int length) {
 		byte[] result = new byte[length];
-		System.arraycopy(array, location, result, 0, length);
+		System.arraycopy(data, location, result, 0, length);
 		return result;
 	}
 
@@ -40,11 +40,11 @@ public class Unpack {
 	}
 
 	public byte[] getAll() {
-		return getCenter(data, location, getLength());
+		return getCenter(location, getLength());
 	}
 
 	public byte[] getBytes(int length) {
-		byte[] result = getCenter(data, location, length);
+		byte[] result = getCenter(location, length);
 		location += length;
 		return result;
 	}
@@ -70,7 +70,7 @@ public class Unpack {
 	}
 
 	public String getString() {
-		return new String(getBytes(getShort()));
+		return new String(getBytes(getInt()));
 	}
 
 	public boolean getBoolean() {

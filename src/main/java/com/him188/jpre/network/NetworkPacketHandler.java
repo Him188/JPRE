@@ -3,6 +3,7 @@ package com.him188.jpre.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +20,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		System.out.println("[Network] Data packet received2: " + msg);
-
 		super.channelRead(ctx, msg);
 	}
 
@@ -33,6 +32,17 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 				client.dataReceive(ctx, data);
 			}
 		}
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if (cause instanceof IOException) { //远程主机强迫关闭了一个现有的连接
+			return;
+		}
+
+		super.exceptionCaught(ctx, cause);
+
+		// TODO: 2017/3/22  配置是否显示错误信息.
 	}
 
 	@Override

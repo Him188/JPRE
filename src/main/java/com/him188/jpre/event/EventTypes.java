@@ -35,6 +35,11 @@ public interface EventTypes {
 	int PLUGIN_ACTION_SEND_GROUP = PLUGIN_BASE + 6; //Java插件主动发送群消息
 	int PLUGIN_ACTION_SEND_DISCUSS = PLUGIN_BASE + 7; //Java插件主动发送讨论组消息
 	int PLUGIN_ACTION_SEND_PRIVATE = PLUGIN_BASE + 8; //Java插件主动发送好友私聊消息
+
+	int DATA_PACKET_PRE_SEND = PLUGIN_BASE + 9; //数据包即将发送
+	int DATA_PACKET_RECEIVE = PLUGIN_BASE + 10; //接收到数据包
+
+	int JPRE_DISABLE = PLUGIN_BASE + 11;
 }
 
 

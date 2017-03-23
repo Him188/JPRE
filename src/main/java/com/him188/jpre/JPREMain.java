@@ -12,7 +12,10 @@ import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
 import com.him188.jpre.log.logger.SystemLogger;
+import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.Network;
+import com.him188.jpre.network.NetworkPacketHandler;
+import com.him188.jpre.network.packet.LoginResultPacket;
 import com.him188.jpre.plugin.JavaPlugin;
 import com.him188.jpre.plugin.Plugin;
 import org.apache.commons.cli.*;
@@ -21,6 +24,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 import static com.him188.jpre.Utils.md5Encode;
 
@@ -57,7 +61,7 @@ public final class JPREMain {
 		CommandLineParser parser = new DefaultParser();
 		Options options = new Options();
 		options.addOption("h", "help", false, "Print the usage information");
-		options.addOption("p", "port", false, "Set the server port number");
+		options.addOption("p", "port", true, "Set the server port number");
 		options.addOption("pwd", "password", true, "Set the password that client must verify after connecting to server");
 
 		CommandLine commandLine = parser.parse(options, args);
@@ -86,6 +90,15 @@ public final class JPREMain {
 		startServer(port);
 		System.out.println("\n");
 		init(System.getProperty("usr.dir"));
+
+
+		System.out.println("enter everything to send login done packet");
+		new Scanner(System.in).next();
+		LoginResultPacket packet = new LoginResultPacket(true);
+		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
+			connectedClient.sendPacket(connectedClient.getLastCtx(), packet);
+		}
+		System.out.println("data packet sent.");
 	}
 
 	public static void printAbout() {

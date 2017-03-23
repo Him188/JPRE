@@ -8,9 +8,6 @@ import com.him188.jpre.infomation.Member;
 import com.him188.jpre.infomation.User;
 import com.him188.jpre.plugin.JavaPlugin;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import static com.him188.jpre.CoolQCaller.*;
@@ -121,27 +118,11 @@ abstract public class BaseCoolQCaller {
 	public final byte[] getRecordBytes(String fileName, String outFormat) {
 		getRecord(fileName, outFormat);
 
-		String result = "";
-		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(new File(fileName)));
-			String tempString;
-			while ((tempString = reader.readLine()) != null) {
-				result += tempString + "\n";
-			}
-			reader.close();
-		} catch (Exception e) {
-			return new byte[]{};
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException ignored) {
-				}
-			}
+			return Utils.readFile(fileName).getBytes();
+		} catch (IOException e) {
+			return new byte[0];
 		}
-
-		return result.getBytes();
 	}
 
 	/**

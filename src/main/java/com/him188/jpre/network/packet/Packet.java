@@ -21,7 +21,7 @@ abstract public class Packet {
 	 * 若该包是由客户端发送的包, 该包必须有一个无参数的构造器(否则构造失败并抛出异常), 该常量用于服务器接收到数据包后识别并构造实例(否则接受失败, 无事件)
 	 * 若该包是发送给客户端的包, 该常量用于酷Q识别.
 	 */
-	public static final byte NETWORK_ID = -1;
+	public static final byte NETWORK_ID;
 
 	public ChannelHandlerContext ctx;
 
@@ -40,23 +40,48 @@ abstract public class Packet {
 	}
 
 	static {
+		NETWORK_ID = -1;
+
+		PACKETS = new Class<?>[32];
+		PACKET_IDS = new byte[32];
+		PACKETS_COUNT = 0;
+
 		try {
-			registerPacket(LoginPacket.class);
 			registerPacket(ClientPingPacket.class);
 			registerPacket(ServerPongPacket.class);
-			registerPacket(LoginResultPacket.class);
+			registerPacket(CommandResultPacket.class);
+			registerPacket(DisablePluginPacket.class);
+			registerPacket(DisablePluginResultPacket.class);
+			registerPacket(EnablePluginPacket.class);
+			registerPacket(EnablePluginResultPacket.class);
+			registerPacket(EventResultPacket.class);
+			registerPacket(GetPluginInformationPacket.class);
+			registerPacket(GetPluginInformationResultPacket.class);
 			registerPacket(InvalidEventPacket.class);
 			registerPacket(InvalidIdPacket.class);
-		} catch (Exception ignored) {
-
+			registerPacket(LoadPluginDescriptionPacket.class);
+			registerPacket(LoadPluginDescriptionResultPacket.class);
+			registerPacket(LoadPluginPacket.class);
+			registerPacket(LoadPluginResultPacket.class);
+			registerPacket(LoginPacket.class);
+			registerPacket(LoginResultPacket.class);
+			registerPacket(LogPacket.class);
+			registerPacket(SetInformationPacket.class);
+			registerPacket(SetInformationResultPacket.class);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private static final Class<?>[] PACKETS = new Class<?>[32];
-	private static final byte[] PACKET_IDS = new byte[32];
-	private static int PACKETS_COUNT = 0;
+	private static final Class<?>[] PACKETS;
+	private static final byte[] PACKET_IDS;
+	private static int PACKETS_COUNT;
 
-	public static void registerPacket(Class<? extends Packet> clazz) throws NoSuchFieldException, IllegalAccessException {
+	public static void registerPacket(Class<? extends Packet> clazz) throws NoSuchFieldException, IllegalAccessException, IllegalArgumentException {
+		if (clazz == Packet.class){
+			throw new IllegalArgumentException("class cannot be Packet.class");
+		}
+
 		PACKETS[PACKETS_COUNT] = clazz;
 		PACKET_IDS[PACKETS_COUNT++] = (byte) clazz.getField("NETWORK_ID").get(null);
 	}
@@ -88,4 +113,8 @@ abstract public class Packet {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "(Id:" + this.getNetworkId() + ")";
+	}
 }

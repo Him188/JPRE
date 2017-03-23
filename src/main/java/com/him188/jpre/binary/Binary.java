@@ -43,7 +43,7 @@ public final class Binary {
 		return reverse(data);
 	}
 
-	public static byte[] toBytes(double value){
+	public static byte[] toBytes(double value) {
 		return toBytes(Double.doubleToLongBits(value));
 	}
 
@@ -69,19 +69,22 @@ public final class Binary {
 		return (short) ((bytes[0] << 8) + bytes[1]);
 	}
 
-	public static boolean toBoolean(byte[] bytes){
-		return bytes[0] == (byte)1;
+	public static boolean toBoolean(byte[] bytes) {
+		return bytes[0] == (byte) 1;
 	}
 
 	/**
 	 * 反转
 	 */
 	public static byte[] reverse(byte[] bytes) {
+		//return bytes;
+
 		byte[] result = new byte[bytes.length];
 		int ii = 0;
 		for (int i = bytes.length-1; i > 0; i--) {
 			result[ii++] = bytes[i];
 		}
 		return result;
+
 	}
 }
