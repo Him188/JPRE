@@ -139,7 +139,7 @@ public class ConnectedClient {
 	/**
 	 * 数据包处理
 	 *
-	 * @param packet 管道
+	 * @param packet 包
 	 * @param data   数据
 	 */
 	public void composePacket(Packet packet, byte[] data) {
