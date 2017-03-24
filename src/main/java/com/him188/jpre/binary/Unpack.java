@@ -3,6 +3,8 @@ package com.him188.jpre.binary;
 import static com.him188.jpre.binary.Binary.*;
 
 /**
+ * 数据包解码器,
+ *
  * @author Him188
  */
 public class Unpack {
@@ -45,6 +47,8 @@ public class Unpack {
 
 	public byte[] getBytes(int length) {
 		byte[] result = getCenter(location, length);
+
+
 		location += length;
 		return result;
 	}

@@ -96,7 +96,7 @@ public final class JPREMain {
 		new Scanner(System.in).next();
 		LoginResultPacket packet = new LoginResultPacket(true);
 		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
-			connectedClient.sendPacket(connectedClient.getLastCtx(), packet);
+			connectedClient.sendPacket(packet);
 		}
 		System.out.println("data packet sent.");
 	}

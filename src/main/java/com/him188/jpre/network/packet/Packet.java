@@ -1,19 +1,49 @@
 package com.him188.jpre.network.packet;
 
 import com.him188.jpre.binary.Unpack;
-import io.netty.channel.ChannelHandlerContext;
+import com.him188.jpre.network.ConnectedClient;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
+ * 网络包基类
+ * 所有网络包都必须继承本类
+ *
+ * <h3>包中必须包含的内容</h3>
+ * <li>公共字节常量 NETWORK_ID </li>
+ * 该常量用于 注册包({@link #registerPacket(Class)}), 获取包网络 ID({@link #getNetworkId(Class)})
+ * 如果包中没有该常量, 注册时会失败并抛出异常. {@link IllegalArgumentException}
+ *
+ * <li><strong></strong></li>
+ *
  * @author Him188
  */
 abstract public class Packet {
+	/**
+	 * 编码包
+	 * 仅该包发送给酷Q时被调用
+	 *
+	 * @return 编码后的数据
+	 */
 	abstract public byte[] encode();
 
+	/**
+	 * 解码包
+	 * 仅从酷Q接收到包后调用
+	 *
+	 * @param unpack 包数据. Unpack 的 location 已被识别包的网络ID时定义到 1.
+	 */
 	abstract public void decode(Unpack unpack);
 
+	/**
+	 * 获取包的网络 ID.
+	 * 推荐包中有一个公开的常量 byte NETWORK_ID
+	 * 并让本方法返回常量的值.
+	 *
+	 * @return 网络 ID
+	 */
 	abstract public byte getNetworkId();
 
 	/**
@@ -23,19 +53,45 @@ abstract public class Packet {
 	 */
 	public static final byte NETWORK_ID;
 
-	public ChannelHandlerContext ctx;
+	private ConnectedClient client;
 
-	public final void setChannelHandlerContext(ChannelHandlerContext ctx) {
-		this.ctx = ctx;
+	/**
+	 * 获取这个包的归属客户端(酷Q).
+	 *
+	 * @return 客户端
+	 */
+	public final ConnectedClient getClient() {
+		return client;
 	}
 
-	public final ChannelHandlerContext getChannelHandlerContext() {
-		return ctx;
+	/**
+	 * 设置这个包的归属客户端
+	 * 仅在用于实现特殊功能时使用. JPRE网络接收包后就会调用本方法设置客户端, 直接使用 {@link #getClient()} 获取即可
+	 *
+	 * @param client 客户端
+	 */
+	public final void setClient(ConnectedClient client) {
+		this.client = client;
 	}
 
-
+	/**
+	 * 获取包的网络 ID
+	 *
+	 * @param packet 包
+	 *
+	 * @return 包的网络 ID
+	 *
+	 * @throws NoSuchFieldException   当该包中不存在常量 {@code NETWORK_ID} 时产生
+	 * @throws IllegalAccessException 当该包中的常量 {@code NETWORK_ID} 不可访问(private, protected 修饰)时产生
+	 * @see #getNetworkId(Class)  实际上会调用该方法并传参 {@code packet.getClass()}
+	 */
 	public static byte getNetworkId(Packet packet) throws NoSuchFieldException, IllegalAccessException {
-		Field field = packet.getClass().getField("NETWORK_ID");
+		return getNetworkId(packet.getClass());
+	}
+
+	public static byte getNetworkId(Class<?> packet) throws NoSuchFieldException, IllegalAccessException {
+		Field field = packet.getField("NETWORK_ID");
+		//field.setAccessible(true); //throw an IllegalAccessException instead when the field is not accessible
 		return (byte) field.get(null);
 	}
 
@@ -73,31 +129,76 @@ abstract public class Packet {
 		}
 	}
 
+	/**
+	 * 已注册的包列表. 键与 {@link #PACKET_IDS} 对应
+	 */
 	private static final Class<?>[] PACKETS;
+
+	/**
+	 * 已注册的包ID列表. 键与 {@link #PACKETS} 对应
+	 */
 	private static final byte[] PACKET_IDS;
+
+	/**
+	 * 已注册的包数量
+	 */
 	private static int PACKETS_COUNT;
 
+	/**
+	 * 注册一个包.
+	 * 关于包中必须包含的内容, 请查看 {@link Packet} 的类说明
+	 *
+	 * @param clazz 包类
+	 *
+	 * @throws NoSuchFieldException     包类中不存在常量 {@code NETWORK_ID} 时产生
+	 * @throws IllegalAccessException   包类中的常量 {@code NETWORK_ID} 不可访问时产生
+	 * @throws IllegalArgumentException {@code clazz} == Packet.class 或 {@code clazz} 是抽象类时产生
+	 */
 	public static void registerPacket(Class<? extends Packet> clazz) throws NoSuchFieldException, IllegalAccessException, IllegalArgumentException {
-		if (clazz == Packet.class){
+		if (clazz == Packet.class) {
 			throw new IllegalArgumentException("class cannot be Packet.class");
+		} else if (Modifier.isAbstract(clazz.getModifiers())) {
+			throw new IllegalArgumentException("cannot register a abstract class");
 		}
 
 		PACKETS[PACKETS_COUNT] = clazz;
 		PACKET_IDS[PACKETS_COUNT++] = (byte) clazz.getField("NETWORK_ID").get(null);
 	}
 
+	/**
+	 * 获取已注册的包
+	 *
+	 * @return 包
+	 */
 	public static Class<?>[] getPackets() {
 		return PACKETS;
 	}
 
+	/**
+	 * 获取已注册的包 ID
+	 *
+	 * @return 包 ID
+	 */
 	public static byte[] getPacketIds() {
 		return PACKET_IDS;
 	}
 
+	/**
+	 * 获取已注册的包数量
+	 *
+	 * @return 包数量
+	 */
 	public static int getPacketsCount() {
 		return PACKETS_COUNT;
 	}
 
+	/**
+	 * 由包网络 ID (NETWORK_ID) 寻找包类并调用无参数构造器构造包
+	 *
+	 * @param id 包网络 ID
+	 *
+	 * @return 包. 失败时 null
+	 */
 	public static Packet matchPacket(byte id) {
 		for (int i = 0; i < PACKET_IDS.length; i++) {
 			if (PACKET_IDS[i] == id) {

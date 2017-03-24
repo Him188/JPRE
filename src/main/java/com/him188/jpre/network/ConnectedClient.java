@@ -27,7 +27,8 @@ import java.net.SocketAddress;
 import static com.him188.jpre.network.packet.PacketIds.*;
 
 /**
- * 连接到服务器的客户端 (酷 Q 插件)
+ * 连接到服务器的客户端 (酷 Q)]
+ * 酷 Q 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
  *
  * @author Him188
  */
@@ -47,10 +48,20 @@ public class ConnectedClient {
 		return this.address == address;
 	}
 
+	/**
+	 * 获取 IP 地址
+	 *
+	 * @return IP
+	 */
 	public SocketAddress getAddress() {
 		return address;
 	}
 
+	/**
+	 * 是否已验证密码 {@link LoginPacket}
+	 *
+	 * @return 是否已验证密码
+	 */
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}
@@ -58,11 +69,9 @@ public class ConnectedClient {
 	/**
 	 * 数据包处理
 	 *
-	 * @param ctx  管道
 	 * @param data 数据
 	 */
-	public void dataReceive(ChannelHandlerContext ctx, byte[] data) {
-		lastCtx = ctx;
+	public void dataReceive(byte[] data) {
 		Unpack packet = new Unpack(data);
 
 		byte pid = packet.getByte();
@@ -72,7 +81,7 @@ public class ConnectedClient {
 				switch (packet.getInt()) {
 					case EventTypes.EXIT:
 					case EventTypes.DISABLE:
-						event = new JPREDisableEvent(ctx.channel().remoteAddress());
+						event = new JPREDisableEvent(this);
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
 						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getString(), packet.getInt());
@@ -105,28 +114,34 @@ public class ConnectedClient {
 						event = new AddGroupRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString());
 						break;
 					default:
-						sendPacket(ctx, new InvalidEventPacket());
+						sendPacket(new InvalidEventPacket());
 						break;
 				}
 				if (event == null) {
-					sendPacket(ctx, new InvalidEventPacket());
+					sendPacket(new InvalidEventPacket());
 					break;
 				}
-				sendPacket(ctx, new EventResultPacket(JPREMain.callEvent(event)));
+				sendPacket(new EventResultPacket(JPREMain.callEvent(event)));
 				break;
 			default:
 				Packet pk = Packet.matchPacket(pid);
 				System.out.println("Packet: " + pk);
 				if (pk == null) {
-					sendPacket(ctx, new InvalidIdPacket());
+					sendPacket(new InvalidIdPacket());
 					return;
 				}
-				pk.setChannelHandlerContext(ctx);
+				pk.setClient(this);
 				composePacket(pk, data);
 				break;
 		}
 	}
 
+	/**
+	 * 数据包处理
+	 *
+	 * @param packet 管道
+	 * @param data   数据
+	 */
 	public void composePacket(Packet packet, byte[] data) {
 		Unpack unpack = new Unpack(data);
 		packet.decode(unpack);
@@ -137,45 +152,44 @@ public class ConnectedClient {
 			return;
 		}
 
-		ChannelHandlerContext ctx = packet.getChannelHandlerContext();
 		switch (packet.getNetworkId()) {
 			case PING:
-				sendPacket(ctx, new ServerPongPacket());
+				sendPacket(new ServerPongPacket());
 				break;
 			case LOGIN:
 				if (((LoginPacket) packet).getPassword().equals(JPREMain.getPassword())) {
-					sendPacket(ctx, new LoginResultPacket(true));
+					sendPacket(new LoginResultPacket(true));
 					loggedIn = true;
 				} else
-					sendPacket(ctx, new LoginResultPacket(false));
+					sendPacket(new LoginResultPacket(false));
 
 				break;
 			default:
 				if (!isLoggedIn()) {
-					sendPacket(ctx, new InvalidIdPacket());
+					sendPacket(new InvalidIdPacket());
 					break;
 				}
 
 				switch (packet.getNetworkId()) {
 					case ENABLE_PLUGIN:
-						sendPacket(ctx, new EnablePluginResultPacket(JPREMain.enablePlugin(((EnablePluginPacket) packet).getName())));
+						sendPacket(new EnablePluginResultPacket(JPREMain.enablePlugin(((EnablePluginPacket) packet).getName())));
 						break;
 					case LOAD_PLUGIN:
-						sendPacket(ctx, new LoadPluginResultPacket(JPREMain.loadPlugin(((LoadPluginPacket) packet).getName())));
+						sendPacket(new LoadPluginResultPacket(JPREMain.loadPlugin(((LoadPluginPacket) packet).getName())));
 						break;
 					case DISABLE_PLUGIN:
-						sendPacket(ctx, new DisablePluginResultPacket(JPREMain.disablePlugin(((DisablePluginPacket) packet).getName())));
+						sendPacket(new DisablePluginResultPacket(JPREMain.disablePlugin(((DisablePluginPacket) packet).getName())));
 						break;
 					case LOAD_PLUGIN_DESCRIPTION:
-						sendPacket(ctx, new LoadPluginDescriptionResultPacket(JPREMain.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
+						sendPacket(new LoadPluginDescriptionResultPacket(JPREMain.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
 						break;
 					case GET_PLUGIN_INFORMATION:
 						PluginDescription description = PluginManager.matchPluginDescription(((LoadPluginDescriptionPacket) packet).getName());
 						if (description == null) {
-							sendPacket(ctx, new GetPluginInformationResultPacket("", "", "", "", 0, ""));
+							sendPacket(new GetPluginInformationResultPacket("", "", "", "", 0, ""));
 							break;
 						}
-						sendPacket(ctx, new GetPluginInformationResultPacket(
+						sendPacket(new GetPluginInformationResultPacket(
 								description.getName(),
 								description.getAuthor(),
 								description.getVersion(),
@@ -187,13 +201,13 @@ public class ConnectedClient {
 					case SET_INFORMATION:
 						JPREMain.setAuthCode(((SetInformationPacket) packet).getAuthCode());
 						JPREMain.setCqApi(((SetInformationPacket) packet).getApi());
-						sendPacket(ctx, new SetInformationResultPacket(true));
+						sendPacket(new SetInformationResultPacket(true));
 						break;
 					case COMMAND_RESULT:
 						CoolQCaller.addResult(((CommandResultPacket) packet).getResult());
 						break;
 					default:
-						sendPacket(ctx, new InvalidIdPacket());
+						sendPacket(new InvalidIdPacket());
 						break;
 				}
 		}
@@ -206,24 +220,18 @@ public class ConnectedClient {
 	/**
 	 * 向管道发送数据包
 	 *
-	 * @param ctx    管道
 	 * @param packet 包
-	 *
-	 * @return 是否成功
 	 */
-	public boolean sendPacket(ChannelHandlerContext ctx, Packet packet) {
-		lastCtx = ctx;
-
+	public void sendPacket(Packet packet) {
 		byte[] data = packet.encode();
 		byte[] result = new byte[data.length + 1];
 		try {
 			result[0] = Packet.getNetworkId(packet);
 		} catch (Throwable e) {
-			return false;
+			return;
 		}
 		System.arraycopy(data, 0, result, 1, data.length);
-		ctx.writeAndFlush(result);
+		this.getLastCtx().writeAndFlush(result);
 		System.out.println("Packet sent:" + packet);
-		return true;
 	}
 }

@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
+ *
  * @author Him188
  */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
@@ -29,7 +31,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 		for (ConnectedClient client : clients) {
 			if (client.is(ctx.channel().remoteAddress())) {
-				client.dataReceive(ctx, data);
+				client.dataReceive(data);
 			}
 		}
 	}

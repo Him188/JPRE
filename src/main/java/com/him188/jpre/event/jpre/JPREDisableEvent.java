@@ -2,8 +2,7 @@ package com.him188.jpre.event.jpre;
 
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
-
-import java.net.SocketAddress;
+import com.him188.jpre.network.ConnectedClient;
 
 /**
  * 酷 Q 上的 JPRE 插件被关闭
@@ -14,14 +13,14 @@ public class JPREDisableEvent extends JPREEvent {
 	private static final HandlerList handlers = new HandlerList();
 
 	//酷Q的IP. 现在这个参数是唯一的. 以后可能会支持多酷Q同时连接一个JPRE
-	public final SocketAddress address;
+	public final ConnectedClient client;
 
-	public JPREDisableEvent(SocketAddress address) {
-		this.address = address;
+	public JPREDisableEvent(ConnectedClient address) {
+		this.client = address;
 	}
 
-	public SocketAddress getAddress() {
-		return address;
+	public ConnectedClient getClient() {
+		return client;
 	}
 
 	public static HandlerList getHandlers() {
