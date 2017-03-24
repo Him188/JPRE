@@ -21,11 +21,11 @@ public final class CoolQCaller {
 
 	private static List<Object> results = new Vector<>();
 
-	private static int waitForIntResult(){
+	private static int waitForIntResult() {
 		return Integer.parseInt(waitForStringResult());
 	}
 
-	private static long waitForLongResult(){
+	private static long waitForLongResult() {
 		return Long.parseLong(waitForStringResult());
 	}
 
@@ -37,7 +37,7 @@ public final class CoolQCaller {
 		}
 	}
 
-	private static void runCommand(CommandId id, Object... args){
+	private static void runCommand(CommandId id, Object... args) {
 		synchronized (CoolQCaller.class) {
 			for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
 				connectedClient.getLastCtx().writeAndFlush(new Pack()
@@ -50,38 +50,38 @@ public final class CoolQCaller {
 		}
 	}
 
-	public static void addResult(Object result){
+	public static void addResult(Object result) {
 		results.add(result);
 	}
 
 	public static int CQ_sendPrivateMsg(int authCode, long QQ, String message) {
-		runCommand(CommandId.SEND_PRIVATE_MESSAGE, true, authCode, QQ, message);
+		runCommand(CommandId.SEND_PRIVATE_MESSAGE, authCode, QQ, message);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendGroupMsg(int authCode, long group, String message) {
-		runCommand(CommandId.SEND_GROUP_MESSAGE, true, authCode, group, message);
+		runCommand(CommandId.SEND_GROUP_MESSAGE, authCode, group, message);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendDiscussMsg(int authCode, long discuss, String message) {
-		runCommand(CommandId.SEND_DISCUSS_MESSAGE, true, authCode, discuss, message, int.class);
+		runCommand(CommandId.SEND_DISCUSS_MESSAGE, authCode, discuss, message, int.class);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendLike(int authCode, long QQ) {
-		runCommand(CommandId.SEND_LIKE, true, authCode, QQ);
+		runCommand(CommandId.SEND_LIKE, authCode, QQ);
 		return waitForIntResult();
 	}
 
 	//新版QQ的10次赞
 	public static int CQ_sendLikeV2(int authCode, long QQ, int times) {
-		runCommand(CommandId.SEND_LIKE_V2, true, authCode, QQ, times);
+		runCommand(CommandId.SEND_LIKE_V2, authCode, QQ, times);
 		return waitForIntResult();
 	}
 
 	public static int CQ_getCookies(int authCode) {
-		runCommand(CommandId.GET_COOKIES, true, authCode);
+		runCommand(CommandId.GET_COOKIES, authCode);
 		return waitForIntResult();
 	}
 
@@ -95,122 +95,122 @@ public final class CoolQCaller {
 	 * @return ? 似乎会直接返回 file
 	 */
 	public static String CQ_getRecord(int authCode, String file, String outFormat) {
-		runCommand(CommandId.GET_RECORD, true, authCode, file, outFormat);
+		runCommand(CommandId.GET_RECORD, authCode, file, outFormat);
 		return waitForStringResult();
 	}
 
 	public static int CQ_getCsrfToken(int authCode) {
-		runCommand(CommandId.GET_CSRF_TOKEN, true, authCode);
+		runCommand(CommandId.GET_CSRF_TOKEN, authCode);
 		return waitForIntResult();
 	}
 
 	public static String CQ_getAppDirectory(int authCode) {
-		runCommand(CommandId.GET_APP_DIRECTORY, true, authCode);
+		runCommand(CommandId.GET_APP_DIRECTORY, authCode);
 		return waitForStringResult();
 	}
 
 	public static long CQ_getLoginQQ(int authCode) {
-		runCommand(CommandId.GET_APP_DIRECTORY, true, authCode);
+		runCommand(CommandId.GET_APP_DIRECTORY, authCode);
 		return waitForLongResult();
 	}
 
 	public static String CQ_getLoginNick(int authCode) {
-		runCommand(CommandId.GET_LOGIN_NICK, true, authCode);
+		runCommand(CommandId.GET_LOGIN_NICK, authCode);
 		return waitForStringResult();
 	}
 
 	public static int CQ_setGroupKick(int authCode, long group, long QQ, boolean block) {
-		runCommand(CommandId.SET_GROUP_KICK, false, authCode, group, QQ, block);
+		runCommand(CommandId.SET_GROUP_KICK, authCode, group, QQ, block);
 		return waitForIntResult();
 	}
 
 	//time: s. 解禁0
 	public static int CQ_setGroupBan(int authCode, long group, long QQ, long time) {
-		runCommand(CommandId.SET_GROUP_BAN, false, authCode, group, QQ, time);
+		runCommand(CommandId.SET_GROUP_BAN, authCode, group, QQ, time);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupAdmin(int authCode, long group, long QQ, boolean admin) {
-		runCommand(CommandId.SET_GROUP_ADMIN, false, authCode, group, QQ, admin);
+		runCommand(CommandId.SET_GROUP_ADMIN, authCode, group, QQ, admin);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupSpecialTitle(int authCode, long group, long QQ, String title, long timeLimit) {
-		runCommand(CommandId.SET_GROUP_SPECIAL_TITLE, false, authCode, group, QQ, title, timeLimit);
+		runCommand(CommandId.SET_GROUP_SPECIAL_TITLE, authCode, group, QQ, title, timeLimit);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupWholeBan(int authCode, long group, boolean ban) {
-		runCommand(CommandId.SET_GROUP_WHOLE_BAN, false, authCode, group, ban);
+		runCommand(CommandId.SET_GROUP_WHOLE_BAN, authCode, group, ban);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupAnonymousBan(int authCode, long group, String anonymousId, long time) {
-		runCommand(CommandId.SET_GROUP_ANONYMOUS_BAN, false, authCode, group, anonymousId, time);
+		runCommand(CommandId.SET_GROUP_ANONYMOUS_BAN, authCode, group, anonymousId, time);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupAnonymous(int authCode, long group, boolean enabled) {
-		runCommand(CommandId.SET_GROUP_ANONYMOUS, false, authCode, group, enabled);
+		runCommand(CommandId.SET_GROUP_ANONYMOUS, authCode, group, enabled);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupCard(int authCode, long group, long QQ, String newCard) {
-		runCommand(CommandId.SET_GROUP_CARD, false, authCode, group, QQ, newCard);
+		runCommand(CommandId.SET_GROUP_CARD, authCode, group, QQ, newCard);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupLeave(int authCode, long group, boolean dissolve) {
-		runCommand(CommandId.SET_GROUP_LEAVE, false, authCode, group, dissolve);
+		runCommand(CommandId.SET_GROUP_LEAVE, authCode, group, dissolve);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setDiscussLeave(int authCode, long discuss) {
-		runCommand(CommandId.SET_DISCUSS_LEAVE, false, authCode, discuss);
+		runCommand(CommandId.SET_DISCUSS_LEAVE, authCode, discuss);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setFriendAddRequest(int authCode, String requestId, int resultType, String nick) {
-		runCommand(CommandId.SET_FRIEND_ADD_REQUEST, false, authCode, requestId, resultType, nick);
+		runCommand(CommandId.SET_FRIEND_ADD_REQUEST, authCode, requestId, resultType, nick);
 		return waitForIntResult();
 	}
 
 
 	@Deprecated
 	public static int CQ_setGroupAddRequest(int authCode, String requestId, int requestType, int resultType) {
-		runCommand(CommandId.SET_GROUP_ADD_REQUEST, false, authCode, requestId, requestType, resultType);
+		runCommand(CommandId.SET_GROUP_ADD_REQUEST, authCode, requestId, requestType, resultType);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setGroupAddRequestV2(int authCode, String requestId, int requestType, int resultType, String reason) {
-		runCommand(CommandId.SET_GROUP_ADD_REQUEST_V2, false, authCode, requestId, requestType, resultType, reason);
+		runCommand(CommandId.SET_GROUP_ADD_REQUEST_V2, authCode, requestId, requestType, resultType, reason);
 		return waitForIntResult();
 	}
 
 	public static int CQ_addLog(int authCode, int priority, String type, String message) {
-		runCommand(CommandId.ADD_LOG, false, authCode, priority, type, message);
+		runCommand(CommandId.ADD_LOG, authCode, priority, type, message);
 		return waitForIntResult();
 	}
 
 	public static int CQ_setFatal(int authCode, String message) {
-		runCommand(CommandId.SET_FATAL, false, authCode, message);
+		runCommand(CommandId.SET_FATAL, authCode, message);
 		return waitForIntResult();
 	}
 
 
 	@Deprecated
 	public static String CQ_getGroupMemberInfo(int authCode, long group, long QQ) {
-		runCommand(CommandId.GET_GROUP_MEMBER_INFO, false, authCode, group, QQ);
+		runCommand(CommandId.GET_GROUP_MEMBER_INFO, authCode, group, QQ);
 		return waitForStringResult();
 	}
 
 	public static String CQ_getGroupMemberInfoV2(int authCode, long group, long QQ, boolean noCache) {
-		runCommand(CommandId.GET_GROUP_MEMBER_INFO_V2, false, authCode, group, QQ, noCache);
+		runCommand(CommandId.GET_GROUP_MEMBER_INFO_V2, authCode, group, QQ, noCache);
 		return waitForStringResult();
 	}
 
 	public static String CQ_getStrangerInfo(int authCode, long QQ, boolean noCache) {
-		runCommand(CommandId.GET_STRANGER_INFO, false, authCode, QQ, noCache);
+		runCommand(CommandId.GET_STRANGER_INFO, authCode, QQ, noCache);
 		return waitForStringResult();
 	}
 

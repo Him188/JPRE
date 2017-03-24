@@ -90,7 +90,7 @@ public final class JPREMain {
 		while (true){
 			System.out.println("Enter anything to send a test message to Him188");
 			new Scanner(System.in).next();
-			getCaller().sendPrivateMessage(1040400290L, "Hello world!");
+			new Thread(() -> getCaller().sendPrivateMessage(1040400290L, "你好中文 Hello world!")).start();
 		}
 	}
 

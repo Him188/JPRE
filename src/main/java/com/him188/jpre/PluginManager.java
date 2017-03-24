@@ -100,7 +100,7 @@ public final class PluginManager {
 		if (description.getMainClass().isEmpty()) {
 			throw new PluginLoadException("Could not load plugin description: " + description.getName());
 		}
-		if (description.getMainClass().startsWith("net.coding.lamgc.coolq.jpre.")) {
+		if (description.getMainClass().startsWith("com.him188.jpre.")) {
 			throw new PluginLoadException("Could not load main class " + description.getMainClass() + ". Caused by plugin " + description.getName());
 		}
 

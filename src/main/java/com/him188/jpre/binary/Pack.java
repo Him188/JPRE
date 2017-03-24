@@ -1,5 +1,6 @@
 package com.him188.jpre.binary;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +84,11 @@ public class Pack {
 	}
 
 	public Pack putString(String value) {
-		putInt(value.length());
+		try {
+			putInt(value.getBytes("UTF-8").length);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		putBytes(value.getBytes());
 		return this;
 	}
@@ -127,6 +132,8 @@ public class Pack {
 				putBytes((byte[]) value);
 			} else if (value.getClass().equals(Byte[].class)){
 				putBytes((Byte[]) value);
+			} else {
+				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
 			}
 		}
 		return this;
