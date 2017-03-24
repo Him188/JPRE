@@ -31,16 +31,16 @@ public final class SystemCoolQCaller extends BaseCoolQCaller{
 	 */
 	@Override
 	public boolean sendPrivateMessage(long QQ, String message) {
-		return CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 1;
+		return CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 0;
 	}
 
 	@Override
 	public boolean sendDiscussMessage(long discuss, String message) {
-		return CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 1;
+		return CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 0;
 	}
 
 	@Override
 	public boolean sendGroupMessage(long group, String message) {
-		return CQ_sendGroupMsg(getAuthCode(), group, message) == 1;
+		return CQ_sendGroupMsg(getAuthCode(), group, message) == 0;
 	}
 }

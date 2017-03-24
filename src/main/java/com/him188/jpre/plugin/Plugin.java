@@ -2,6 +2,8 @@ package com.him188.jpre.plugin;
 
 import com.him188.jpre.log.logger.Logger;
 
+import java.io.File;
+
 /**
  * 所有的插件主类都必须实现的接口.
  * 推荐插件主类继承 {@link JavaPlugin}, 该类已经封装了一些常用方法, 便于开发.
@@ -88,6 +90,7 @@ public interface Plugin {
 	 * 应用 AuthCode 接收
 	 *
 	 * @param authCode authCode
+	 *
 	 * @return 0
 	 */
 	int initialize(int authCode);
@@ -118,5 +121,5 @@ public interface Plugin {
 	 *
 	 * @return 配置文件路径
 	 */
-	String getDataFolder();
+	File getDataFolder();
 }

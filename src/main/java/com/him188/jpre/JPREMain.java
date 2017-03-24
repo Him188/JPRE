@@ -12,10 +12,7 @@ import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
 import com.him188.jpre.log.logger.SystemLogger;
-import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.Network;
-import com.him188.jpre.network.NetworkPacketHandler;
-import com.him188.jpre.network.packet.LoginResultPacket;
 import com.him188.jpre.plugin.JavaPlugin;
 import com.him188.jpre.plugin.Plugin;
 import org.apache.commons.cli.*;
@@ -83,22 +80,18 @@ public final class JPREMain {
 		System.out.println("Server port: " + port);
 
 		if (commandLine.hasOption("pwd")) {
-			PASSWORD = md5Encode(commandLine.getOptionValue("pwd"));
+			PASSWORD = md5Encode(commandLine.getOptionValue("pwd").trim());
 		}
+		PASSWORD = PASSWORD == null ? "" : PASSWORD;
 
-		System.out.println("\n");
 		startServer(port);
-		System.out.println("\n");
 		init(System.getProperty("usr.dir"));
 
-
-		System.out.println("enter everything to send login done packet");
-		new Scanner(System.in).next();
-		LoginResultPacket packet = new LoginResultPacket(true);
-		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
-			connectedClient.sendPacket(packet);
+		while (true){
+			System.out.println("Enter anything to send a test message to Him188");
+			new Scanner(System.in).next();
+			getCaller().sendPrivateMessage(1040400290L, "Hello world!");
 		}
-		System.out.println("data packet sent.");
 	}
 
 	public static void printAbout() {

@@ -160,7 +160,7 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 	}
 
 	@Override
-	public String getDataFolder() {
-		return JPREMain.getDataFolder() + "/plugins/" + getName();
+	public File getDataFolder() {
+		return new File(JPREMain.getDataFolder() + "/plugins/" + getName());
 	}
 }

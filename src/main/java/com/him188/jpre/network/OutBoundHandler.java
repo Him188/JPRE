@@ -10,12 +10,13 @@ import io.netty.channel.ChannelPromise;
 public class OutBoundHandler extends ChannelOutboundHandlerAdapter {
 	@Override
 	public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-		System.out.println("数据缓冲: " + msg);
+		//System.out.println("数据缓冲: " + msg);
 		super.write(ctx, msg, promise);
 	}
 
 	@Override
 	public void flush(ChannelHandlerContext ctx) throws Exception {
-		System.out.println("数据发送");
+		//System.out.println("数据发送");
+		super.flush(ctx);
 	}
 }

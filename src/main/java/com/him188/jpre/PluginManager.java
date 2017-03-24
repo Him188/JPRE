@@ -404,7 +404,7 @@ public final class PluginManager {
 					remove.add(handler);
 				}
 			}
-			remove.forEach(handlers::remove);
+			handlers.removeAll(remove);
 		}
 
 		return true;
@@ -425,7 +425,7 @@ public final class PluginManager {
 					remove.add(handler);
 				}
 			}
-			remove.forEach(handlers::remove);
+			handlers.removeAll(remove);
 		}
 
 		return true;

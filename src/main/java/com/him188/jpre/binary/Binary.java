@@ -77,14 +77,15 @@ public final class Binary {
 	 * 反转
 	 */
 	public static byte[] reverse(byte[] bytes) {
-		//return bytes;
-
+		return bytes;
+		/*
 		byte[] result = new byte[bytes.length];
 		int ii = 0;
 		for (int i = bytes.length-1; i > 0; i--) {
 			result[ii++] = bytes[i];
 		}
+		System.out.println(Arrays.toString(result));
 		return result;
-
+		*/
 	}
 }

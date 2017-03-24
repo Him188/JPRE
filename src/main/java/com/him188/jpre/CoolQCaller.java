@@ -41,7 +41,7 @@ public final class CoolQCaller {
 		synchronized (CoolQCaller.class) {
 			for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
 				connectedClient.getLastCtx().writeAndFlush(new Pack()
-						.putByte(PacketIds.EVENT)
+						.putByte(PacketIds.COMMAND)
 						.putByte(id.getId())
 						.putRaw(args)
 						.getData()
@@ -55,28 +55,28 @@ public final class CoolQCaller {
 	}
 
 	public static int CQ_sendPrivateMsg(int authCode, long QQ, String message) {
-		runCommand(CommandId.SEND_PRIVATE_MESSAGE, false, authCode, QQ, message);
+		runCommand(CommandId.SEND_PRIVATE_MESSAGE, true, authCode, QQ, message);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendGroupMsg(int authCode, long group, String message) {
-		runCommand(CommandId.SEND_GROUP_MESSAGE, false, authCode, group, message);
+		runCommand(CommandId.SEND_GROUP_MESSAGE, true, authCode, group, message);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendDiscussMsg(int authCode, long discuss, String message) {
-		runCommand(CommandId.SEND_DISCUSS_MESSAGE, false, authCode, discuss, message, int.class);
+		runCommand(CommandId.SEND_DISCUSS_MESSAGE, true, authCode, discuss, message, int.class);
 		return waitForIntResult();
 	}
 
 	public static int CQ_sendLike(int authCode, long QQ) {
-		runCommand(CommandId.SEND_LIKE, false, authCode, QQ);
+		runCommand(CommandId.SEND_LIKE, true, authCode, QQ);
 		return waitForIntResult();
 	}
 
 	//新版QQ的10次赞
 	public static int CQ_sendLikeV2(int authCode, long QQ, int times) {
-		runCommand(CommandId.SEND_LIKE_V2, false, authCode, QQ, times);
+		runCommand(CommandId.SEND_LIKE_V2, true, authCode, QQ, times);
 		return waitForIntResult();
 	}
 

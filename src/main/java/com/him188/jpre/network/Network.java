@@ -7,7 +7,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 
@@ -33,25 +32,15 @@ public final class Network {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup);
 			b.channel(NioServerSocketChannel.class);
+			//b.option(ChannelOption.SO_BACKLOG, 100);
+			//b.handler(new LoggingHandler(LogLevel.INFO));
 			b.childHandler(new ChannelInitializer<SocketChannel>() {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline pipeline = ch.pipeline();
-
-					//pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1024, 0, 4, 0, 4));
-
-					// Encoder
-					pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
-
-					pipeline.addLast(new OutBoundHandler());
-
-					//pipeline.addLast("framer", new DelimiterBasedFrameDecoder(1024, Delimiters.lineDelimiter()));
-					//pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4));
+					//pipeline.addLast(new OutBoundHandler());
 					pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
-
-					//pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
 					pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
-
 					pipeline.addLast("handler", new NetworkPacketHandler());
 				}
 			});

@@ -30,4 +30,5 @@ public interface PacketIds {
 	byte GET_PLUGIN_INFORMATION_RESULT = 19;
 	byte SET_INFORMATION_RESULT = 22;
 	byte LOG = 23;
+	byte ACCESS_DENIED = 24;
 }

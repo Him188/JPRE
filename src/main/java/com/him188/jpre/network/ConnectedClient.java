@@ -23,6 +23,7 @@ import com.him188.jpre.plugin.PluginDescription;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.net.SocketAddress;
+import java.util.Arrays;
 
 import static com.him188.jpre.network.packet.PacketIds.*;
 
@@ -78,7 +79,9 @@ public class ConnectedClient {
 		switch (pid) {
 			case EVENT:
 				Event event = null;
-				switch (packet.getInt()) {
+				int eid = packet.getInt();
+				System.out.println("[Event] Received event: " + eid);
+				switch (eid) {
 					case EventTypes.EXIT:
 					case EventTypes.DISABLE:
 						event = new JPREDisableEvent(this);
@@ -113,9 +116,6 @@ public class ConnectedClient {
 					case EventTypes.REQUEST_GROUP_ADD:
 						event = new AddGroupRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString());
 						break;
-					default:
-						sendPacket(new InvalidEventPacket());
-						break;
 				}
 				if (event == null) {
 					sendPacket(new InvalidEventPacket());
@@ -131,7 +131,7 @@ public class ConnectedClient {
 					return;
 				}
 				pk.setClient(this);
-				composePacket(pk, data);
+				composePacket(pk, packet.getAll());
 				break;
 		}
 	}
@@ -157,16 +157,20 @@ public class ConnectedClient {
 				sendPacket(new ServerPongPacket());
 				break;
 			case LOGIN:
-				if (((LoginPacket) packet).getPassword().equals(JPREMain.getPassword())) {
+				if (((LoginPacket) packet).getPassword().equalsIgnoreCase(JPREMain.getPassword())) {
 					sendPacket(new LoginResultPacket(true));
 					loggedIn = true;
-				} else
+					System.out.println("Client login: succeed");
+				} else {
 					sendPacket(new LoginResultPacket(false));
+					loggedIn = false;
+					System.out.println("Client login: failed");
+				}
 
 				break;
 			default:
 				if (!isLoggedIn()) {
-					sendPacket(new InvalidIdPacket());
+					sendPacket(new AccessDeniedPacket());
 					break;
 				}
 
@@ -233,6 +237,6 @@ public class ConnectedClient {
 		}
 		System.arraycopy(data, 0, result, 1, data.length);
 		this.getLastCtx().writeAndFlush(result);
-		System.out.println("Packet sent:" + packet);
+		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}
 }

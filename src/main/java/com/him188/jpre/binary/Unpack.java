@@ -23,7 +23,14 @@ public class Unpack {
 		setData(data);
 	}
 
+	public void setLocation(int location) {
+		this.location = location;
+	}
+
 	private byte[] getCenter(int location, int length) {
+		if (length == 0) {
+			return new byte[0];
+		}
 		byte[] result = new byte[length];
 		System.arraycopy(data, location, result, 0, length);
 		return result;
