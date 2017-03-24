@@ -218,7 +218,7 @@ public class ConnectedClient {
 	}
 
 	/**
-	 * 向管道发送数据包
+	 * 发送数据包
 	 *
 	 * @param packet 包
 	 */
@@ -228,6 +228,7 @@ public class ConnectedClient {
 		try {
 			result[0] = Packet.getNetworkId(packet);
 		} catch (Throwable e) {
+			e.printStackTrace();
 			return;
 		}
 		System.arraycopy(data, 0, result, 1, data.length);
