@@ -62,9 +62,9 @@ public class PrivateMessageEvent extends MessageEvent {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	/*public void setMessage(String message) {
 		this.message = message;
-	}
+	}*/
 
 	public String getRepeat() {
 		return repeat;

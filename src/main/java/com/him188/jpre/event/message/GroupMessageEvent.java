@@ -71,9 +71,9 @@ public class GroupMessageEvent extends MessageEvent {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	/*public void setMessage(String message) {
 		this.message = message;
-	}
+	}*/
 
 	public int getTime() {
 		return time;
