@@ -38,6 +38,7 @@ public class Unpack {
 
 	public void setData(byte[] data) {
 		this.data = data;
+		location = 0;
 	}
 
 	public byte[] getData() {
@@ -53,15 +54,11 @@ public class Unpack {
 	}
 
 	public byte[] getBytes(int length) {
-		return getBytes(length, false);
-	}
-
-	public byte[] getBytes(int length, boolean noReversing) {
 		byte[] result = getCenter(location, length);
 
 
 		location += length;
-		return noReversing ? result :  reverse(result);
+		return reverse(result);
 	}
 
 	public int getLength() {

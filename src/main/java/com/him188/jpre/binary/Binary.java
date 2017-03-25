@@ -1,7 +1,5 @@
 package com.him188.jpre.binary;
 
-import java.util.Arrays;
-
 /**
  * 字节转换. 即将字节数组转换为各种基本数据类型
  *
@@ -25,17 +23,14 @@ public final class Binary {
 		return toBytes(Float.floatToIntBits(value));
 	}
 
-	public static byte[] toBytes(long value) {
-		byte[] data = new byte[8];
-		data[0] = (byte) (value >> 56);
-		data[1] = (byte) (value >> 48);
-		data[2] = (byte) (value >> 40);
-		data[3] = (byte) (value >> 32);
-		data[4] = (byte) (value >> 24);
-		data[5] = (byte) (value >> 16);
-		data[6] = (byte) (value >> 8);
-		data[7] = (byte) (value);
-		return (data);
+	public static byte[] toBytes(long number) {
+		long temp = number;
+		byte[] b = new byte[8];
+		for (int i = 0; i < b.length; i++) {
+			b[i] = new Long(temp & 0xff).byteValue();
+			temp = temp >> 8;
+		}
+		return b;
 	}
 
 	public static byte[] toBytes(short value) {
@@ -55,13 +50,14 @@ public final class Binary {
 	}
 
 	public static long toLong(byte[] bytes) {
-		return ((long) (bytes[0] & 0xff) << 8) |
-				((long) (bytes[1] & 0xff) << 16) |
-				((long) (bytes[2] & 0xff) << 24) |
-				((long) (bytes[3] & 0xff) << 32) |
-				((long) (bytes[4] & 0xff) << 40) |
-				((long) (bytes[5] & 0xff) << 48) |
-				((long) (bytes[6] & 0xff) << 56);
+		return ((long) (bytes[0] & 0xff) |
+				(long) (bytes[1] & 0xff) << 8) |
+				((long) (bytes[2] & 0xff) << 16) |
+				((long) (bytes[3] & 0xff) << 24) |
+				((long) (bytes[4] & 0xff) << 32) |
+				((long) (bytes[5] & 0xff) << 40) |
+				((long) (bytes[6] & 0xff) << 48) |
+				((long) (bytes[7] & 0xff) << 56);
 	}
 
 	public static short toShort(byte[] bytes) {
@@ -76,14 +72,22 @@ public final class Binary {
 	 * 反转
 	 */
 	public static byte[] reverse(byte[] bytes) {
-		//return bytes;
-
+		return bytes;
+/*
 		byte[] result = new byte[bytes.length];
 		int ii = 0;
 		for (int i = bytes.length - 1; i > 0; i--) {
 			result[ii++] = bytes[i];
 		}
 		System.out.println(Arrays.toString(result));
-		return result;
+		return result;*/
+	}
+
+	public static byte[] realReverse(byte[] Array) {
+		byte[] new_array = new byte[Array.length];
+		for (int i = 0; i < Array.length; i++) {
+			new_array[i] = Array[Array.length - i - 1];
+		}
+		return new_array;
 	}
 }
