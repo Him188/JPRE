@@ -15,13 +15,12 @@ import com.him188.jpre.log.logger.SystemLogger;
 import com.him188.jpre.network.Network;
 import com.him188.jpre.plugin.JavaPlugin;
 import com.him188.jpre.plugin.Plugin;
+import com.him188.jpre.scheduler.Scheduler;
 import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
-import java.util.Scanner;
 
 import static com.him188.jpre.Utils.md5Encode;
 
@@ -42,6 +41,8 @@ public final class JPREMain {
 	public static String dataFolder;
 	public static SystemCoolQCaller caller;
 	public static SystemLogger logger;
+
+	private static boolean shutdown;
 
 	@SuppressWarnings("OctalInteger")
 	public static final int DEFAULT_PORT = 0420; //不要问为什么, 我女票生日. 十进制 272
@@ -85,13 +86,6 @@ public final class JPREMain {
 		PASSWORD = PASSWORD == null ? "" : PASSWORD;
 
 		startServer(port);
-		init(System.getProperty("usr.dir"));
-
-		while (true){
-			System.out.println("Enter anything to send a test message to Him188");
-			new Scanner(System.in).next();
-			new Thread(() -> getCaller().sendPrivateMessage(1040400290L, "你好中文 Hello world!")).start();
-		}
 	}
 
 	public static void printAbout() {
@@ -114,17 +108,28 @@ public final class JPREMain {
 		System.out.println("JPRE server is listening port " + port);
 	}
 
+
+	public static void shutdown(boolean shutdown){
+		JPREMain.shutdown = shutdown;
+		Scheduler.shutdown();
+	}
+
+	public static boolean isShutdown() {
+		return shutdown;
+	}
+
+
 	/**
 	 * 初始化插件环境
 	 *
 	 * @param dataFolder 配置目录
 	 */
 	@SuppressWarnings({"SameParameterValue", "ResultOfMethodCallIgnored"})
-	private static void init(String dataFolder) {
+	public static void init(String dataFolder) {
 		JPREMain.dataFolder = dataFolder;
 		caller = new SystemCoolQCaller();
 		logger = new SystemLogger();
-		new File(System.getProperty("usr.dir") + File.pathSeparator + "plugins" + File.pathSeparator).mkdir();
+		new File(dataFolder +"/plugins/").mkdir();
 	}
 
 	public static void setCqApi(int cqApi) {
@@ -168,9 +173,7 @@ public final class JPREMain {
 		}
 
 		try {
-			Method method = event.getClass().getMethod("getEventType");
-			method.setAccessible(true);
-			switch ((int) method.invoke(null)) {
+			switch (Event.getEventType(event.getClass())) {
 				case EventTypes.DISCUSS_MESSAGE:
 					if (event instanceof DiscussMessageEvent) {
 						if (((DiscussMessageEvent) event).getRepeat() == null || ((DiscussMessageEvent) event).getRepeat().isEmpty()) {

@@ -1,5 +1,6 @@
 package com.him188.jpre.network;
 
+import com.him188.jpre.scheduler.Scheduler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -31,7 +32,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 		for (ConnectedClient client : clients) {
 			if (client.is(ctx.channel().remoteAddress())) {
-				client.dataReceive(data);
+				Scheduler.scheduleTask(null, () -> client.dataReceive(data));
 			}
 		}
 	}

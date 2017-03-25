@@ -4,9 +4,7 @@ import com.google.gson.*;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -30,8 +28,7 @@ public class JsonConfig extends Config {
 	 * 创建 Json 配置, 并从磁盘中读取
 	 *
 	 * @param file               文件名 (绝对路径)
-	 * @param useSynchronization 是否使用线程同步. true, HashTable 方式存放数据; false, HashMap 方式存放数据
-	 *                           当本配置需要在多线程环境中使用时, 请填 true
+	 * @param useSynchronization 是否使用线程同步. true, HashTable 方式存放数据; false, HashMap 方式存放数据 当本配置需要在多线程环境中使用时, 请填 true
 	 */
 	public JsonConfig(String file, boolean useSynchronization) {
 		super(file);
@@ -42,28 +39,12 @@ public class JsonConfig extends Config {
 	}
 
 	private static String readFile(String fileName) {
-		String result = "";
-		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(new File(fileName)));
-			String tempString;
-			while ((tempString = reader.readLine()) != null) {
-				result += tempString + "\n";
-			}
-			reader.close();
-		} catch (Exception e) {
-			return null;
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException ignored) {
-
-				}
-			}
+			return Utils.readFile(fileName);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		return result;
+		return "";
 	}
 
 	@Override
@@ -93,6 +74,13 @@ public class JsonConfig extends Config {
 
 	@Override
 	public void reload() {
+		try {
+			System.out.println(file);
+			//noinspection ResultOfMethodCallIgnored
+			new File(file).createNewFile();
+		} catch (IOException ignored) {
+
+		}
 		list = converter.toMap(readFile(file));
 	}
 
@@ -116,6 +104,7 @@ public class JsonConfig extends Config {
 		 * 获取JsonObject
 		 *
 		 * @param json JsonString
+		 *
 		 * @return JsonObject
 		 */
 		public JsonObject parseJson(String json) {
@@ -126,6 +115,7 @@ public class JsonConfig extends Config {
 		 * 根据 json 字符串返回 Map 对象
 		 *
 		 * @param json JsonString
+		 *
 		 * @return Map
 		 */
 		public Map<String, Object> toMap(String json) {
@@ -136,6 +126,7 @@ public class JsonConfig extends Config {
 		 * 将 JsonObject 转换成 Map-List 集合
 		 *
 		 * @param json JsonObject
+		 *
 		 * @return Map
 		 */
 		public Map<String, Object> toMap(JsonObject json) {
@@ -158,6 +149,7 @@ public class JsonConfig extends Config {
 		 * 将 JsonArray 对象转换成 List 集合
 		 *
 		 * @param json JsonArray
+		 *
 		 * @return List
 		 */
 		public List<Object> toList(JsonArray json) {

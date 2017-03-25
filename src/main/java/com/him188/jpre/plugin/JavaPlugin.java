@@ -28,11 +28,7 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 	}
 
 	public JavaPlugin() {
-		this(null);
-	}
-
-	public JavaPlugin(PluginDescription description) {
-		super(description.name, description.main, description.version, description.api, description.author, description.description, description.getFileName(), description.config);
+		super(null, null, null, 0, null, null, null, null);
 
 		logger = new PluginLogger();
 		new File(getDataFolder() + File.pathSeparator).mkdir();
@@ -149,9 +145,8 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 	}
 
 	@Override
-	public int initialize(int authCode) {
+	public void initialize(int authCode) {
 		this.authCode = authCode;
-		return 0;
 	}
 
 	@Override

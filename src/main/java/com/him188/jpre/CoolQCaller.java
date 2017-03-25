@@ -5,8 +5,8 @@ import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.PacketIds;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * 酷 Q通讯类
@@ -19,7 +19,7 @@ public final class CoolQCaller {
 	public static final int REQUEST_TYPE_ACTIVE_JOIN = 1; //主动加入
 	public static final int REQUEST_TYPE_INVITE = 2; //被邀请
 
-	private static List<Object> results = new Vector<>();
+	private static List<Object> results = new ArrayList<>();
 
 	private static int waitForIntResult() {
 		return Integer.parseInt(waitForStringResult());
@@ -31,6 +31,7 @@ public final class CoolQCaller {
 
 	@SuppressWarnings("StatementWithEmptyBody")
 	private static String waitForStringResult() {
+		// TODO: 2017/3/25  超时
 		synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
 			while (results.isEmpty()) ;
 			return String.valueOf(results.remove(0));

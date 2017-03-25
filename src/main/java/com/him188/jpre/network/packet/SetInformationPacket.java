@@ -10,6 +10,7 @@ public class SetInformationPacket extends Packet {
 
 	private int api;
 	private int authCode;
+	private String dataFolder;
 
 	public int getApi() {
 		return api;
@@ -17,6 +18,10 @@ public class SetInformationPacket extends Packet {
 
 	public int getAuthCode() {
 		return authCode;
+	}
+
+	public String getDataFolder() {
+		return dataFolder;
 	}
 
 	@Override
@@ -28,6 +33,7 @@ public class SetInformationPacket extends Packet {
 	public void decode(Unpack unpack) {
 		this.api = unpack.getInt();
 		this.authCode = unpack.getInt();
+		this.dataFolder = unpack.getString();
 	}
 
 	@Override

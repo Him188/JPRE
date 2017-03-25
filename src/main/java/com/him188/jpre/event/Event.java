@@ -22,6 +22,7 @@ import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -73,7 +74,7 @@ abstract public class Event {
 		return REGISTERED_TYPES;
 	}
 
-	public static Class<?> matchEvent(int type){
+	public static Class<?> matchEvent(int type) {
 		for (int i = 0; i < REGISTERED_TYPES.length; i++) {
 			if (REGISTERED_TYPES[i] == type) {
 				return REGISTERED_EVENTS[i];
@@ -131,17 +132,19 @@ abstract public class Event {
 		}
 
 		try {
-			Method method = eventClass.getMethod("getEventType");
-			method.setAccessible(true);
-
-			int result = (int) method.invoke(null);
-
-			REGISTERED_TYPES[COUNT] = result;
+			REGISTERED_TYPES[COUNT] = getEventType(eventClass);
 			REGISTERED_EVENTS[COUNT++] = eventClass;
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public static int getEventType(Class<?> eventClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+		Method method = eventClass.getMethod("getEventType");
+		method.setAccessible(true);
+
+		return (int) method.invoke(null);
 	}
 
 	public boolean isCancelled() {
@@ -191,5 +194,14 @@ abstract public class Event {
 	 */
 	public void close() {
 
+	}
+
+	@Override
+	public String toString() {
+		try {
+			return getClass().getSimpleName() + "(Id=" + getEventType(getClass()) + ")";
+		} catch (Exception e) {
+			return getClass().getSimpleName() + "(Id=null)";
+		}
 	}
 }

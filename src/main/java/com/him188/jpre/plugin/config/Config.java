@@ -12,13 +12,14 @@ abstract public class Config {
 	protected String file;
 
 	public Config(String file) {
-
+		this.file = file;
 	}
 
 	/**
 	 * 获取配置值
 	 *
 	 * @param key 键
+	 *
 	 * @return 值
 	 */
 	abstract public Object get(String key);
@@ -41,6 +42,7 @@ abstract public class Config {
 	 * @param key          键
 	 * @param defaultValue 默认值
 	 * @param <T>          值类型
+	 *
 	 * @return 值
 	 */
 	@SuppressWarnings("unchecked")
@@ -73,6 +75,7 @@ abstract public class Config {
 	 * 获取逻辑值. 值为 "true" 时返回 true, 否则 false
 	 *
 	 * @param key 键
+	 *
 	 * @return 值
 	 */
 	public boolean getBoolean(String key) {

@@ -90,10 +90,8 @@ public interface Plugin {
 	 * 应用 AuthCode 接收
 	 *
 	 * @param authCode authCode
-	 *
-	 * @return 0
 	 */
-	int initialize(int authCode);
+	void initialize(int authCode);
 
 	/**
 	 * 获取插件 API 版本

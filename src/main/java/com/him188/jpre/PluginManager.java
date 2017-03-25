@@ -62,7 +62,10 @@ public final class PluginManager {
 	 */
 	public static Plugin getPlugin(String name) {
 		for (Plugin plugin : plugins) {
-			if (plugin.getName().equals(name) || plugin.getFileName().equals(name)) {
+			System.out.println(plugin.toString());
+			if (plugin.getName()
+					.equals(name) ||
+					plugin.getFileName().equals(name)) {
 				return plugin;
 			}
 		}
@@ -80,7 +83,15 @@ public final class PluginManager {
 	public static boolean loadPlugin(String file) throws PluginLoadException {
 
 		try {
-			return loadPlugin(new JarFile(file));
+			if (!loadPlugin(new JarFile(file))) {
+				return false;
+			}
+			Plugin plugin = getPlugin(file);
+			if (plugin == null) {
+				return false;
+			}
+			plugin.initialize(JPREMain.getCaller().getAuthCode());
+			return true;
 		} catch (IOException e) {
 			return false;
 		} catch (PluginLoadException e) {
@@ -104,6 +115,12 @@ public final class PluginManager {
 			throw new PluginLoadException("Could not load main class " + description.getMainClass() + ". Caused by plugin " + description.getName());
 		}
 
+		for (Plugin plugin : plugins) {
+			if (plugin.getName().equals(description.name)) {
+				return true;
+			}
+		}
+
 		Class<?> mainClass;
 		try {
 			Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -116,23 +133,17 @@ public final class PluginManager {
 			throw new PluginLoadException("Could not found main class " + description.getMainClass() + " Caused by plugin " + description.getName(), e);
 		}
 
-		for (Plugin plugin : plugins) {
-			if (plugin.getName().equals(description.name)) {
-				return true;
-			}
-		}
-
 		if (!Plugin.class.isAssignableFrom(mainClass)) {
 			throw new PluginLoadException("The main class is not assignable from Plugin: " + mainClass.getName());
 		}
 
 		try {
-			Constructor<?> constructor = mainClass.getDeclaredConstructor();
+			Constructor<?> constructor = mainClass.getConstructor();
 			constructor.setAccessible(true);
 			Plugin plugin = (Plugin) constructor.newInstance();
+			plugins.add(plugin);
 			plugin.setPluginDescription(description);
 			plugin.onLoad();
-			plugins.add(plugin);
 			return true;
 		} catch (Throwable e) {
 			throw new PluginLoadException("Could not create instance of " + description.getName(), e);
@@ -169,8 +180,6 @@ public final class PluginManager {
 	public static PluginDescription loadPluginDescription(String file) throws PluginLoadException {
 		try {
 			return loadPluginDescription(new JarFile(file));
-		} catch (PluginLoadException e) {
-			throw new PluginLoadException("");
 		} catch (IOException e) {
 			throw new PluginLoadException("Could not load file: " + file);
 		}
@@ -258,16 +267,11 @@ public final class PluginManager {
 				}
 			}
 
-			BufferedReader fb = new BufferedReader(new InputStreamReader(file.getInputStream(entry)));
-			StringBuffer sb = new StringBuffer("");
-			String s;
-			while ((s = fb.readLine()) != null) {
-				sb = sb.append(s);
-			}
-
-			fb.close();
-			return new Gson().fromJson(sb.toString(), PluginDescription.class).setFileName(file.getName());
+			System.out.println("\n\n\n\n");
+			System.out.println(file.getName());
+			return new Gson().fromJson(Utils.readFile(file.getInputStream(entry)), PluginDescription.class).setFileName(file.getName());
 		} catch (Throwable e) {
+			e.printStackTrace();
 			JPREMain.getLogger().error("GetDescriptionError", e.getMessage());
 			return null;
 		}
@@ -316,11 +320,12 @@ public final class PluginManager {
 
 			Collection<Method> methods = new HashSet<>();
 			Collections.addAll(methods, listener.getClass().getDeclaredMethods());
+			Collections.addAll(methods, listener.getClass().getMethods());
 			for (Method method : methods) {
 				EventHandler handler;
 				try {
 					if (method.getAnnotation(Deprecated.class) != null) {
-						return;
+						continue;
 					}
 
 					handler = method.getAnnotation(EventHandler.class);
@@ -458,7 +463,10 @@ public final class PluginManager {
 			if (list == null) {
 				return false;
 			}
-
+			System.out.println(event.toString() + " have " + list.size() +" handlers");
+			if (list.size() == 0) {
+				return false;
+			}
 			for (EventPriority i : EventPriority.PRIORITIES) {
 				list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
 			}

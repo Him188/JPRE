@@ -53,11 +53,15 @@ public class Unpack {
 	}
 
 	public byte[] getBytes(int length) {
+		return getBytes(length, false);
+	}
+
+	public byte[] getBytes(int length, boolean noReversing) {
 		byte[] result = getCenter(location, length);
 
 
 		location += length;
-		return result;
+		return noReversing ? result :  reverse(result);
 	}
 
 	public int getLength() {

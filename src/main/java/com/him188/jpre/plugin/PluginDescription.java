@@ -32,26 +32,27 @@ public class PluginDescription {
 		this.api = api;
 		this.author = author;
 		this.description = description == null ? "" : description;
+		this.fileName = fileName;
 		this.config = config;
 	}
 
 	public void setValues(PluginDescription description) {
-		setValues(description.name, description.main, description.version, description.api, description.author, description.description, description.getFileName(), description.config);
+		setValues(description.name, description.main, description.version, description.api, description.author, description.description, description.fileName, description.config);
 	}
 
 	@Override
 	public String toString() {
-		return "{[PluginDescription" + "@" + Integer.toHexString(hashCode()) + "] name:" + name + ", main:" + main + ", version:" + version + ", api:" + api + ", author:" + author + ", description:" + description + ", config:" + config + "}";
+		return "{[PluginDescription" + "@" + Integer.toHexString(hashCode()) + "] name:" + this.name + ", main:" + this.main + ", version:" + this.version + ", api:" + this.api + ", author:" + this.author + ", description:" + this.description + ", file:" + this.fileName + ", config:" + this.config + "}";
 	}
 
 	public boolean isEmpty() {
-		return name != null && !name.isEmpty()
-				&& main != null && !main.isEmpty()
-				&& version != null && !version.isEmpty()
-				&& api != 0
-				&& author != null && !author.isEmpty()
-				&& description != null
-				&& fileName != null && !fileName.isEmpty();
+		return this.name != null && !this.name.isEmpty()
+				&& this.main != null && !this.main.isEmpty()
+				&& this.version != null && !this.version.isEmpty()
+				&& this.api != 0
+				&& this.author != null && !this.author.isEmpty()
+				&& this.description != null
+				&& this.fileName != null && !this.fileName.isEmpty();
 	}
 
 	public String getName() {
@@ -109,7 +110,7 @@ public class PluginDescription {
 	}
 
 	public String getFileName() {
-		return fileName;
+		return this.fileName;
 	}
 
 	public PluginDescription setFileName(String fileName) {

@@ -121,6 +121,7 @@ public class ConnectedClient {
 					sendPacket(new InvalidEventPacket());
 					break;
 				}
+				System.out.println("[Event] Parsed: " + event);
 				sendPacket(new EventResultPacket(JPREMain.callEvent(event)));
 				break;
 			default:
@@ -188,7 +189,7 @@ public class ConnectedClient {
 						sendPacket(new LoadPluginDescriptionResultPacket(JPREMain.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
 						break;
 					case GET_PLUGIN_INFORMATION:
-						PluginDescription description = PluginManager.matchPluginDescription(((LoadPluginDescriptionPacket) packet).getName());
+						PluginDescription description = PluginManager.matchPluginDescription(((GetPluginInformationPacket) packet).getName());
 						if (description == null) {
 							sendPacket(new GetPluginInformationResultPacket("", "", "", "", 0, ""));
 							break;
@@ -203,6 +204,8 @@ public class ConnectedClient {
 						));
 						break;
 					case SET_INFORMATION:
+						JPREMain.init(((SetInformationPacket) packet).getDataFolder());
+
 						JPREMain.setAuthCode(((SetInformationPacket) packet).getAuthCode());
 						JPREMain.setCqApi(((SetInformationPacket) packet).getApi());
 						sendPacket(new SetInformationResultPacket(true));

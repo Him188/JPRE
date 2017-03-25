@@ -11,10 +11,10 @@ public enum EventPriority {
 	HIGHEST;
 
 	public static final EventPriority[] PRIORITIES = new EventPriority[]{
-			LOWEST,
-			LOW,
-			NORMAL,
+			HIGHEST,
 			HIGH,
-			HIGHEST
+			NORMAL,
+			LOW,
+			LOWEST,
 	};
 }
