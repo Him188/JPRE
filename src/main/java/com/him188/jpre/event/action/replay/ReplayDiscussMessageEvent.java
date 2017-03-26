@@ -23,6 +23,7 @@ public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
 
 	public ReplayDiscussMessageEvent(DiscussMessageEvent event) {
 		this(event.type, event.time, event.discuss, event.QQ, event.message, event.font);
+		this.repeat = event.getRepeat();
 	}
 
 	public ReplayDiscussMessageEvent(int type, int time, long discuss, long QQ, String message, int font) {

@@ -1,7 +1,7 @@
 package com.him188.jpre.binary;
 
 /**
- * 字节转换. 即将字节数组转换为各种基本数据类型
+ * 字节转换. 字节数组转换为各种基本数据类型
  *
  * @author Him188
  */
@@ -66,21 +66,6 @@ public final class Binary {
 
 	public static boolean toBoolean(byte[] bytes) {
 		return bytes[0] == (byte) 1;
-	}
-
-	/**
-	 * 反转
-	 */
-	public static byte[] reverse(byte[] bytes) {
-		return bytes;
-/*
-		byte[] result = new byte[bytes.length];
-		int ii = 0;
-		for (int i = bytes.length - 1; i > 0; i--) {
-			result[ii++] = bytes[i];
-		}
-		System.out.println(Arrays.toString(result));
-		return result;*/
 	}
 
 	public static byte[] realReverse(byte[] Array) {

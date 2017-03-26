@@ -1,9 +1,8 @@
 package com.him188.jpre;
 
-import com.him188.jpre.binary.Pack;
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
-import com.him188.jpre.network.packet.PacketIds;
+import com.him188.jpre.network.packet.CommandPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,23 +31,24 @@ public final class CoolQCaller {
 	@SuppressWarnings("StatementWithEmptyBody")
 	private static String waitForStringResult() {
 		// TODO: 2017/3/25  超时
-		synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
-			while (results.isEmpty()) ;
-			return String.valueOf(results.remove(0));
+		//synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
+		while (results.isEmpty()){
+			 try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				 e.printStackTrace();
+			}
 		}
+		return String.valueOf(results.remove(0));
+		//}
 	}
 
 	private static void runCommand(CommandId id, Object... args) {
-		synchronized (CoolQCaller.class) {
-			for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
-				connectedClient.getLastCtx().writeAndFlush(new Pack()
-						.putByte(PacketIds.COMMAND)
-						.putByte(id.getId())
-						.putRaw(args)
-						.getData()
-				);
-			}
+		//synchronized (CoolQCaller.class) {
+		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
+			connectedClient.sendPacket(new CommandPacket(id, args));
 		}
+		//}
 	}
 
 	public static void addResult(Object result) {

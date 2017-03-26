@@ -86,10 +86,12 @@ public class Pack {
 	public Pack putString(String value) {
 		try {
 			putInt(value.getBytes("UTF-8").length);
+			putBytes(value.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			return this;
 		}
-		putBytes(value.getBytes());
+
 		return this;
 	}
 

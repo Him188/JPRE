@@ -80,7 +80,6 @@ public class ConnectedClient {
 			case EVENT:
 				Event event = null;
 				int eid = packet.getInt();
-				System.out.println("[Event] Received event: " + eid);
 				switch (eid) {
 					case EventTypes.EXIT:
 					case EventTypes.DISABLE:

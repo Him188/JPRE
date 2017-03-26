@@ -1,5 +1,7 @@
 package com.him188.jpre.binary;
 
+import java.util.Arrays;
+
 import static com.him188.jpre.binary.Binary.*;
 
 /**
@@ -32,7 +34,13 @@ public class Unpack {
 			return new byte[0];
 		}
 		byte[] result = new byte[length];
-		System.arraycopy(data, location, result, 0, length);
+		try {
+			System.arraycopy(data, location, result, 0, length);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out.println("[Error] Unpack getCenter 数组越界, 数据: " + Arrays.toString(data));
+			System.out.println("                                  当前位置: " + location);
+		}
+
 		return result;
 	}
 
@@ -58,7 +66,7 @@ public class Unpack {
 
 
 		location += length;
-		return reverse(result);
+		return result;
 	}
 
 	public int getLength() {

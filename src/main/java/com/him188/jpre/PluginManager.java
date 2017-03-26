@@ -463,7 +463,7 @@ public final class PluginManager {
 			if (list == null) {
 				return false;
 			}
-			System.out.println(event.toString() + " have " + list.size() +" handlers");
+
 			if (list.size() == 0) {
 				return false;
 			}

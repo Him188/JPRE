@@ -25,6 +25,7 @@ public class ReplayPrivateMessageEvent extends ReplayMessageEvent {
 
 	public ReplayPrivateMessageEvent(PrivateMessageEvent event) {
 		this(event.type, event.time, event.QQ, event.message, event.font);
+		this.repeat = event.getRepeat();
 	}
 
 	public ReplayPrivateMessageEvent(int type, int time, long QQ, String message, int font) {

@@ -48,11 +48,11 @@ public class GroupMessageEvent extends MessageEvent {
 	}
 
 	public long getGroup() {
-		return group;
+		return this.group;
 	}
 
 	public int getType() {
-		return type;
+		return this.type;
 	}
 
 	public boolean isValid() {
@@ -60,15 +60,15 @@ public class GroupMessageEvent extends MessageEvent {
 	}
 
 	public long getQQ() {
-		return QQ;
+		return this.QQ;
 	}
 
 	public Anonymous getFromAnonymous() {
-		return fromAnonymous;
+		return this.fromAnonymous;
 	}
 
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 
 	/*public void setMessage(String message) {
@@ -76,15 +76,15 @@ public class GroupMessageEvent extends MessageEvent {
 	}*/
 
 	public int getTime() {
-		return time;
+		return this.time;
 	}
 
 	public int getFont() {
-		return font;
+		return this.font;
 	}
 
 	public String getRepeat() {
-		return repeat;
+		return this.repeat;
 	}
 
 	public void setRepeat(String repeat) {

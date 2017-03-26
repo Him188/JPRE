@@ -25,6 +25,7 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 
 	public ReplayGroupMessageEvent(GroupMessageEvent event) {
 		this(event.type, event.time, event.group, event.QQ, event.fromAnonymous, event.message, event.font);
+		this.repeat = event.getRepeat();
 	}
 
 	public ReplayGroupMessageEvent(int type, int time, long group, long QQ, Anonymous fromAnonymous, String message, int font) {
@@ -46,7 +47,7 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 	}
 
 	public Anonymous getFromAnonymous() {
-		return fromAnonymous;
+		return this.fromAnonymous;
 	}
 
 	public boolean isValid() {
@@ -54,19 +55,19 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 	}
 
 	public int getType() {
-		return type;
+		return this.type;
 	}
 
 	public int getTime() {
-		return time;
+		return this.time;
 	}
 
 	public int getFont() {
-		return font;
+		return this.font;
 	}
 
 	public String getRepeat() {
-		return repeat;
+		return this.repeat;
 	}
 
 	public void setRepeat(String repeat) {
@@ -74,14 +75,14 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 	}
 
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 
 	public long getQQ() {
-		return QQ;
+		return this.QQ;
 	}
 
 	public long getGroup() {
-		return group;
+		return this.group;
 	}
 }
