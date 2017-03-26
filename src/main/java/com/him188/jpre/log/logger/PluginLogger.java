@@ -22,6 +22,7 @@ public class PluginLogger implements Logger {
 
 	public void log(Log log) {
 		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
+			// TODO: 2017/3/26  转换为 发送 Packet
 			connectedClient.getLastCtx().writeAndFlush(new Pack().putByte(PacketIds.LOG).putString(log.toString()));
 		}
 	}

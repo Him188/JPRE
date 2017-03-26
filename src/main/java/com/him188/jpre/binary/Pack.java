@@ -19,7 +19,6 @@ public class Pack {
 	public Pack() {
 		this(new byte[]{});
 	}
-
 	public Pack(byte[] data) {
 		setData(data);
 	}
