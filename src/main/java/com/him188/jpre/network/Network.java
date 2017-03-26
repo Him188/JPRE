@@ -38,10 +38,10 @@ public final class Network {
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
 					ChannelPipeline pipeline = ch.pipeline();
-					//pipeline.addLast(new OutBoundHandler());
 					pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
 					pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
 					pipeline.addLast("handler", new NetworkPacketHandler());
+					pipeline.addLast(new OutBoundHandler());
 				}
 			});
 
