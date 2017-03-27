@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1439928453181
+Build-Jdk: 1.7.0_79
+Built-By: somov
+Bundle-Description: YAML 1.1 parser and emitter for Java
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: SnakeYAML
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-SymbolicName: org.yaml.snakeyaml
+Bundle-Version: 1.16.0
+Created-By: Apache Maven Bundle Plugin
+Export-Package: org.yaml.snakeyaml;version="1.16",org.yaml.snakeyaml.com
+ poser;version="1.16",org.yaml.snakeyaml.constructor;version="1.16",org.
+ yaml.snakeyaml.emitter;version="1.16",org.yaml.snakeyaml.error;version=
+ "1.16",org.yaml.snakeyaml.events;version="1.16",org.yaml.snakeyaml.exte
+ nsions.compactnotation;version="1.16",org.yaml.snakeyaml.introspector;v
+ ersion="1.16",org.yaml.snakeyaml.nodes;version="1.16",org.yaml.snakeyam
+ l.parser;version="1.16",org.yaml.snakeyaml.reader;version="1.16",org.ya
+ ml.snakeyaml.representer;version="1.16",org.yaml.snakeyaml.resolver;ver
+ sion="1.16",org.yaml.snakeyaml.scanner;version="1.16",org.yaml.snakeyam
+ l.serializer;version="1.16",org.yaml.snakeyaml.tokens;version="1.16",or
+ g.yaml.snakeyaml.util;version="1.16"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Tool: Bnd-2.3.0.201405100607

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: io.netty.netty-all.source
+Bundle-Name: Netty/All-in-One
+Bundle-Version: 4.1.9.Final
+Built-By: norman
+Bundle-ManifestVersion: 2
+Bundle-Vendor: The Netty Project
+Eclipse-SourceBundle: io.netty.netty-all;version="4.1.9.Final";roots:=
+ "."
+Created-By: Apache Maven 3.3.3
+Build-Jdk: 1.8.0_121
+
