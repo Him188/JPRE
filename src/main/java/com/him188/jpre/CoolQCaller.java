@@ -3,6 +3,8 @@ package com.him188.jpre;
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
+import com.him188.jpre.scheduler.Scheduler;
+import com.him188.jpre.scheduler.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,27 +20,46 @@ public final class CoolQCaller {
 	public static final int REQUEST_TYPE_ACTIVE_JOIN = 1; //主动加入
 	public static final int REQUEST_TYPE_INVITE = 2; //被邀请
 
+	// TODO: 2017/3/28 带上id, 避免顺序错误
 	private static List<Object> results = new ArrayList<>();
 
+	private static int parseInt(String value) {
+		if (value.isEmpty()) {
+			return 0;
+		}
+		return Integer.parseInt(value);
+	}
+
+	private static long parseLong(String value) {
+		if (value.isEmpty()) {
+			return 0;
+		}
+		return Long.parseLong(value);
+	}
+
 	private static int waitForIntResult() {
-		return Integer.parseInt(waitForStringResult());
+		return parseInt(waitForStringResult());
 	}
 
 	private static long waitForLongResult() {
-		return Long.parseLong(waitForStringResult());
+		return parseLong(waitForStringResult());
 	}
+
 
 	@SuppressWarnings("StatementWithEmptyBody")
 	private static String waitForStringResult() {
-		// TODO: 2017/3/25  超时
+		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
+
+		Task task = Scheduler.scheduleTimingTask(null, () -> results.add(""), 500);//0.5s
 		//synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
-		while (results.isEmpty()){
-			 try {
+		while (results.isEmpty()) {
+			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				 e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
+		task.forceCancel();
 		return String.valueOf(results.remove(0));
 		//}
 	}
