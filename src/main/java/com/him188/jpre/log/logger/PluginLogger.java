@@ -1,11 +1,10 @@
 package com.him188.jpre.log.logger;
 
-import com.him188.jpre.binary.Pack;
 import com.him188.jpre.log.Log;
 import com.him188.jpre.log.Priority;
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
-import com.him188.jpre.network.packet.PacketIds;
+import com.him188.jpre.network.packet.LogPacket;
 
 /**
  * 插件日志记录器. (记录到酷Q的插件自带日志中)
@@ -22,8 +21,7 @@ public class PluginLogger implements Logger {
 
 	public void log(Log log) {
 		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
-			// TODO: 2017/3/26  转换为 发送 Packet
-			connectedClient.getLastCtx().writeAndFlush(new Pack().putByte(PacketIds.LOG).putString(log.toString()));
+			connectedClient.sendPacket(new LogPacket(log.toString()));
 		}
 	}
 

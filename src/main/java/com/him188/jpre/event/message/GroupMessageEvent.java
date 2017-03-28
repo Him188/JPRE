@@ -24,6 +24,8 @@ public class GroupMessageEvent extends MessageEvent {
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
 	public GroupMessageEvent(int type, int time, long group, long QQ, String fromAnonymous, String message, int font) {
+		System.out.println("群事件: " + group + " " + QQ + " :" + message);
+
 		this.type = type == TYPE_GROUP ? type : TYPE_UNKNOWN;
 		this.time = time;
 		this.QQ = QQ;

@@ -36,6 +36,10 @@ public class JsonConfig extends Config {
 		converter.setSynchronized(useSynchronization);
 
 		reload();
+		list.forEach((k, v) -> {
+			System.out.println(k);
+			System.out.println(v);
+		});
 	}
 
 	private static String readFile(String fileName) {
@@ -75,7 +79,7 @@ public class JsonConfig extends Config {
 	@Override
 	public void reload() {
 		try {
-			System.out.println(file);
+			//System.out.println(file);
 			//noinspection ResultOfMethodCallIgnored
 			new File(file).createNewFile();
 		} catch (IOException ignored) {
