@@ -83,6 +83,10 @@ public class Pack {
 	}
 
 	public Pack putString(String value) {
+		if (value == null) {
+			return this;
+		}
+
 		try {
 			putInt(value.getBytes("UTF-8").length);
 			putBytes(value.getBytes("UTF-8"));

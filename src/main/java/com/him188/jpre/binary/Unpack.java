@@ -10,8 +10,8 @@ import static com.him188.jpre.binary.Binary.*;
  * @author Him188
  */
 public class Unpack {
-	private byte[] data;
-	private int location = 0;
+	protected byte[] data;
+	protected int location = 0;
 
 	public Unpack(Pack pack) {
 		this(pack.getData());
@@ -29,7 +29,7 @@ public class Unpack {
 		this.location = location;
 	}
 
-	private byte[] getCenter(int location, int length) {
+	protected byte[] getCenter(int location, int length) {
 		if (length == 0) {
 			return new byte[0];
 		}

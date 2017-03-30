@@ -1,6 +1,6 @@
 package com.him188.jpre.infomation;
 
-import com.him188.jpre.binary.Unpack;
+import com.him188.jpre.binary.ReversedUnpack;
 
 /**
  * 匿名用户
@@ -18,12 +18,12 @@ public class Anonymous {
 		this.token = token;
 	}
 
-	public Anonymous(Unpack unpack) {
+	public Anonymous(ReversedUnpack unpack) {
 		this(unpack.getLong(), unpack.getString(), unpack.getToken());
 	}
 
 	public Anonymous(byte[] bytes) {
-		this(new Unpack(bytes));
+		this(new ReversedUnpack(bytes));
 	}
 
 	public byte[] getToken() {

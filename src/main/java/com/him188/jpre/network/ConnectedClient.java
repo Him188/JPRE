@@ -3,6 +3,7 @@ package com.him188.jpre.network;
 import com.him188.jpre.CoolQCaller;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
+import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Unpack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
@@ -230,14 +231,15 @@ public class ConnectedClient {
 	 */
 	public void sendPacket(Packet packet) {
 		byte[] data = packet.encode();
-		byte[] result = new byte[data.length + 1];
+		byte[] result = new byte[data.length + 4 + 1];//数据包长度, 数据包ID
 		try {
-			result[0] = Packet.getNetworkId(packet);
+			System.arraycopy(Binary.toBytes(data.length + 1), 0, result, 0, 4); //+1: 数据包ID
+			result[4] = Packet.getNetworkId(packet); //数据包长度占用 0 1 2 3
 		} catch (Throwable e) {
 			e.printStackTrace();
 			return;
 		}
-		System.arraycopy(data, 0, result, 1, data.length);
+		System.arraycopy(data, 0, result, 5, data.length);
 		this.getLastCtx().writeAndFlush(result);
 		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}

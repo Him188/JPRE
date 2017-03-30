@@ -279,6 +279,7 @@ public final class JPREMain {
 				return false;
 			}
 			plugin.enable();
+			System.out.println("[Plugin] " + plugin.getName() + " enabled!");
 			return true;
 		} catch (Throwable e) {
 			JPREMain.getLogger().exception(e);

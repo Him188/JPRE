@@ -144,6 +144,8 @@ public final class PluginManager {
 			plugins.add(plugin);
 			plugin.setPluginDescription(description);
 			plugin.onLoad();
+
+			System.out.println("[Plugin] " + plugin.getName() + " loaded!");
 			return true;
 		} catch (Throwable e) {
 			throw new PluginLoadException("Could not create instance of " + description.getName(), e);
@@ -357,7 +359,7 @@ public final class PluginManager {
 	 * @param method   事件处理器
 	 *
 	 * @return 是否成功
-	 *
+	 *+
 	 * @throws PluginEventException 当 {@code plugin} 未启用 (enable) 时
 	 * @throws PluginEventException 当 {@code method} 没有注释 {@link EventHandler} 时
 	 */

@@ -1,6 +1,6 @@
 package com.him188.jpre.infomation;
 
-import com.him188.jpre.binary.Unpack;
+import com.him188.jpre.binary.ReversedUnpack;
 
 /**
  * 群文件
@@ -21,12 +21,12 @@ public class File {
 		this.busid = busid;
 	}
 
-	public File(Unpack unpack) {
+	public File(ReversedUnpack unpack) {
 		this(unpack.getString(), unpack.getString(), unpack.getLong(), unpack.getLong());
 	}
 
 	public File(byte[] data) {
-		this(new Unpack(data));
+		this(new ReversedUnpack(data));
 	}
 
 	public long getBusid() {
