@@ -35,8 +35,8 @@ import static com.him188.jpre.Utils.md5Encode;
  * @see PluginManager 真正的插件管理器
  */
 public final class JPREMain {
-	public static final String VERSION_TYPE = "BETA";
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION_TYPE = "Pre";
+	public static final String VERSION = "1.0.1";
 
 	public static int CQ_API;
 	public static String dataFolder;
@@ -46,7 +46,7 @@ public final class JPREMain {
 	private static boolean shutdown;
 
 	@SuppressWarnings("OctalInteger")
-	public static final int DEFAULT_PORT = 0420; //不要问为什么, 我女票生日. 十进制 272
+	public static final int DEFAULT_PORT = 0420; //不要问为什么, 我女票生日233. 十进制 272
 
 	private static String PASSWORD; //加密过
 
