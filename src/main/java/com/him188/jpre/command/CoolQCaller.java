@@ -6,8 +6,7 @@ import com.him188.jpre.network.packet.CommandPacket;
 import com.him188.jpre.scheduler.Scheduler;
 import com.him188.jpre.scheduler.Task;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 酷 Q通讯类
@@ -21,7 +20,7 @@ public final class CoolQCaller {
 	public static final int REQUEST_TYPE_INVITE = 2; //被邀请
 
 	// TODO: 2017/3/28 带上id, 避免顺序错误
-	private static List<Object> results = new ArrayList<>();
+	private static ConcurrentLinkedQueue<Object> results = new ConcurrentLinkedQueue<>();
 
 	private static int parseInt(String value) {
 		if (value.isEmpty()) {
