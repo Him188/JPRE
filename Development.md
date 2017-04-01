@@ -77,7 +77,7 @@ JPRE拥有自由度高, 支持动态监听, 拦截, 取消的事件系统
 
 
 ## <span id="develop" name="develop">第三章 如何开发一个JPRE插件</span>
-1. 首先, 前往JPRE在 GitHub 上的 releases, 下载已编译好的最新版JPRE.jar (点击[这里](http://233)下载) .  
+1. 首先, 前往JPRE在 GitHub 上的 releases, 下载已编译好的最新版JPRE.jar (点击[这里](https://github.com/Him188/CQ-JPRE/releases/tag/1.0.0)下载) .  
 2. 把 JPRE.jar 添加到项目依赖库中.  
 3. 让插件主类继承 `JavaPlugin` 类("class xxx extends JavaPlugin").  
 4. 创建一个新的类, 并让这个类实现 `Listener` 接口("class xxx implements Listener"), 这个类将作为事件监听类使用.  
