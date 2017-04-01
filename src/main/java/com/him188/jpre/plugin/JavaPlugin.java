@@ -2,6 +2,7 @@ package com.him188.jpre.plugin;
 
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
+import com.him188.jpre.command.PluginCoolQCaller;
 import com.him188.jpre.log.logger.Logger;
 import com.him188.jpre.log.logger.PluginLogger;
 

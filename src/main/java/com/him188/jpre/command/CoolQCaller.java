@@ -1,4 +1,4 @@
-package com.him188.jpre;
+package com.him188.jpre.command;
 
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;

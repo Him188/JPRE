@@ -1,4 +1,4 @@
-package com.him188.jpre;
+package com.him188.jpre.command;
 
 /**
  * @author Him188

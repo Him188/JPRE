@@ -1,7 +1,6 @@
-package com.him188.jpre;
+package com.him188.jpre.command;
 
 import com.him188.jpre.plugin.JavaPlugin;
-import static com.him188.jpre.CoolQCaller.*;
 
 /**
  * 系统酷 Q调用器
@@ -31,16 +30,16 @@ public final class SystemCoolQCaller extends BaseCoolQCaller{
 	 */
 	@Override
 	public boolean sendPrivateMessage(long QQ, String message) {
-		return CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 0;
+		return CoolQCaller.CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 0;
 	}
 
 	@Override
 	public boolean sendDiscussMessage(long discuss, String message) {
-		return CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 0;
+		return CoolQCaller.CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 0;
 	}
 
 	@Override
 	public boolean sendGroupMessage(long group, String message) {
-		return CQ_sendGroupMsg(getAuthCode(), group, message) == 0;
+		return CoolQCaller.CQ_sendGroupMsg(getAuthCode(), group, message) == 0;
 	}
 }

@@ -1,6 +1,6 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.CoolQCaller;
+import com.him188.jpre.command.CoolQCaller;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
 import com.him188.jpre.binary.Binary;

@@ -1,5 +1,7 @@
 package com.him188.jpre;
 
+import com.him188.jpre.command.CoolQCaller;
+import com.him188.jpre.command.SystemCoolQCaller;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
