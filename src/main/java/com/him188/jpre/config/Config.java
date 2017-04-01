@@ -1,4 +1,4 @@
-package com.him188.jpre.plugin.config;
+package com.him188.jpre.config;
 
 import java.util.List;
 import java.util.Map;

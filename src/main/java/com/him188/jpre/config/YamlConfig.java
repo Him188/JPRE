@@ -1,4 +1,4 @@
-package com.him188.jpre.plugin.config;
+package com.him188.jpre.config;
 
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
