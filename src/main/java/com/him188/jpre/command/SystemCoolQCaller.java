@@ -9,14 +9,17 @@ import com.him188.jpre.plugin.JavaPlugin;
  * @author Him188
  */
 public final class SystemCoolQCaller extends BaseCoolQCaller{
-	private int authCode;
+	private int authCode = -1;
 
 	@Override
 	public int getAuthCode() {
 		return authCode;
 	}
 
-	protected void setAuthCode(int authCode) {
+	public void setAuthCode(int authCode) {
+		if (this.authCode != -1) {
+			return;
+		}
 		this.authCode = authCode;
 	}
 
