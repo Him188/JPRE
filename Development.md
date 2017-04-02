@@ -31,13 +31,13 @@
   `plugin.json` `cq.json` `jpre.json`  
   该文件必须存在以下字段:  
   - `name`: (String) 插件名  
+  - `appid`:(String) 应用AppID，用于在酷Q应用网络的识别
   - `author`: (String) 插件作者  
   - `api`: (int) 插件API版本号, 目前酷Q的API版本为9, 若插件API版本高于酷Q的API版本, 那么该插件将无法加载  
   - `version`: (String) 插件版本. 推荐使用 "1.0.0" 格式来书写版本号.  
   - `main`: (String) 插件主类的类全名(包含包名). 插件加载时会加载主类并调用 onLoad()    
-
-  可选字段:  
   - `description`: (String) 插件的说明.  
+  
  
 **主类**  
 - JPRE插件的主类必须实现接口 Plugin  
