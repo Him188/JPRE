@@ -101,6 +101,11 @@ public class CQUnpack {
         return kit.byte2Short(GetBin(2),0);
     }
 
+    /**
+     * 取出字符串
+     * 酷Q模块方法原名：[GetToken]
+     * @return
+     */
     public String GetString(){
         int len = GetShort();
         return String.valueOf(GetBin(len));
