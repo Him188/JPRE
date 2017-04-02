@@ -52,7 +52,7 @@ public final class Code {
 	 * @param noSpaceAdding At后添加空格，可使At更规范美观，如果不需要添加空格，请填true
 	 */
 	public static String at(long QQ, boolean noSpaceAdding) {
-		return "[CQ:at,qq=" + (QQ == 0 ? "all" : QQ) + "]" + (noSpaceAdding ? "" : " ");
+		return "[CQ:at,qq=" + (QQ == 0L ? "all" : String.valueOf(QQ)) + "]" + (noSpaceAdding ? "" : " ");
 	}
 
 	/**
