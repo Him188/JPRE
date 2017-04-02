@@ -1,6 +1,5 @@
 package com.him188.jpre.binary;
 
-
 public class CQUnpack {
 
     private byte[] m_data;
@@ -110,7 +109,7 @@ public class CQUnpack {
     /**
      * 这里是一些数据的转换方法
      */
-    private static class kit {
+    public static class kit {
         /**
          * byte数组 到 int
          *
