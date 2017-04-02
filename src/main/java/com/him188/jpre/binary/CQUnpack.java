@@ -112,6 +112,14 @@ public class CQUnpack {
     }
 
     /**
+     * 获取布尔值
+     * @return 根据下一个字节返回true 或 false
+     */
+    public boolean GetBoolean(){
+        return (GetByte() == 1);
+    }
+
+    /**
      * 这里是一些数据的转换方法
      */
     public static class kit {
