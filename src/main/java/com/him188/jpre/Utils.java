@@ -93,10 +93,11 @@ public final class Utils {
 	}
 
 	public static String messageDecode(String message){
-		try {
-			return new String(message.getBytes(), "unicode");
+		return message;
+		/*try {
+			return new String(message.getBytes(), "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			return message;
-		}
+		}*/
 	}
 }
