@@ -1,0 +1,9 @@
+{
+  "name":"JPRE_Plugin_Demo",
+  "appid":"com.example.demo",
+  "main":"com.example.demo.PluginMain",
+  "version":"1.0.0",
+  "api":9,
+  "author":"example",
+  "description":"酷Q Java应用平台 开发示例应用"
+}
