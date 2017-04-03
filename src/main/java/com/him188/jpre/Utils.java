@@ -91,4 +91,12 @@ public final class Utils {
 		BASE64Encoder base64en = new BASE64Encoder();
 		return base64en.encode(md5.digest(str.getBytes("utf-8")));
 	}
+
+	public static String messageDecode(String message){
+		try {
+			return new String(message.getBytes(), "unicode");
+		} catch (UnsupportedEncodingException e) {
+			return message;
+		}
+	}
 }

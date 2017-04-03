@@ -1,5 +1,6 @@
 package com.him188.jpre.network;
 
+import com.him188.jpre.Utils;
 import com.him188.jpre.command.CoolQCaller;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
@@ -87,13 +88,13 @@ public class ConnectedClient {
 						event = new JPREDisableEvent(this);
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getString(), packet.getInt());
+						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), Utils.messageDecode(packet.getString()), packet.getInt());
 						break;
 					case EventTypes.GROUP_MESSAGE:
-						event = new GroupMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString(), packet.getInt());
+						event = new GroupMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), Utils.messageDecode(packet.getString()), packet.getInt());
 						break;
 					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(packet.getInt(), packet.getInt(), packet.getLength(), packet.getLong(), packet.getString(), packet.getInt());
+						event = new DiscussMessageEvent(packet.getInt(), packet.getInt(), packet.getLength(), packet.getLong(), Utils.messageDecode(packet.getString()), packet.getInt());
 						break;
 					case EventTypes.GROUP_UPLOAD:
 						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
