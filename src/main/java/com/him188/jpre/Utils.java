@@ -92,12 +92,11 @@ public final class Utils {
 		return base64en.encode(md5.digest(str.getBytes("utf-8")));
 	}
 
-	public static String messageDecode(String message){
-		return message;
-		/*try {
+	public static String messageDecode(String message) {
+		try {
 			return new String(message.getBytes(), "utf-8");
-		} catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException ignored) {
 			return message;
-		}*/
+		}
 	}
 }

@@ -26,6 +26,12 @@ public final class CoolQCaller {
 		if (value.isEmpty()) {
 			return 0;
 		}
+		if (value.equalsIgnoreCase("false")) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("true")) {
+			return 1;
+		}
 		return Integer.parseInt(value);
 	}
 
