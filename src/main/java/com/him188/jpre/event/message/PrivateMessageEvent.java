@@ -1,7 +1,8 @@
 package com.him188.jpre.event.message;
 
-import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.event.HandlerList;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 私聊消息接收事件
@@ -17,17 +18,17 @@ public class PrivateMessageEvent extends MessageEvent {
 	private static final HandlerList handlers = new HandlerList();
 	public final int type;
 	public final long QQ;
-	public final int font;
+	public final Font font;
 	public final int time;
 	public String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
-	public PrivateMessageEvent(int type, int time, long QQ, String message, int font) {
+	public PrivateMessageEvent(int type, int time, long QQ, String message, byte[] font) {
 		this.type = type == TYPE_FRIEND || type == TYPE_GROUP || type == TYPE_DISCUSS || type == TYPE_ONLINE ? type : TYPE_UNKNOWN;
 		this.QQ = QQ;
 		this.message = message;
 		this.time = time;
-		this.font = font;
+		this.font = new Font(font);
 	}
 
 	public static HandlerList getHandlers() {
@@ -38,7 +39,7 @@ public class PrivateMessageEvent extends MessageEvent {
 		return EventTypes.PRIVATE_MESSAGE;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return font;
 	}
 

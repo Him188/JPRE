@@ -1,8 +1,9 @@
 package com.him188.jpre.event.action.replay;
 
+import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.message.DiscussMessageEvent;
-import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 回复讨论组消息事件
@@ -17,7 +18,7 @@ public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
 	public final int type;
 	public final long QQ;
 	public final long discuss;
-	public final int font;
+	public final Font font;
 	public final String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
@@ -26,7 +27,7 @@ public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
 		this.repeat = event.getRepeat();
 	}
 
-	public ReplayDiscussMessageEvent(int type, int time, long discuss, long QQ, String message, int font) {
+	public ReplayDiscussMessageEvent(int type, int time, long discuss, long QQ, String message, Font font) {
 		this.type = type == TYPE_DISCUSS ? type : TYPE_UNKNOWN;
 		this.time = time;
 		this.QQ = QQ;
@@ -55,7 +56,7 @@ public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
 		return type;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return font;
 	}
 

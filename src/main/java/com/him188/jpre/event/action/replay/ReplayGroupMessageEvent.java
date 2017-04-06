@@ -4,6 +4,7 @@ import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.infomation.Anonymous;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 回复群消息事件
@@ -19,7 +20,7 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 	public final int type;
 	public final long QQ;
 	public final long group;
-	public final int font; //接受消息的字体
+	public final Font font; //接受消息的字体
 	public final String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
@@ -28,7 +29,7 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 		this.repeat = event.getRepeat();
 	}
 
-	public ReplayGroupMessageEvent(int type, int time, long group, long QQ, Anonymous fromAnonymous, String message, int font) {
+	public ReplayGroupMessageEvent(int type, int time, long group, long QQ, Anonymous fromAnonymous, String message, Font font) {
 		this.type = type == TYPE_GROUP ? type : TYPE_UNKNOWN;
 		this.time = time;
 		this.QQ = QQ;
@@ -62,7 +63,7 @@ public class ReplayGroupMessageEvent extends ReplayMessageEvent {
 		return this.time;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return this.font;
 	}
 

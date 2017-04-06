@@ -4,6 +4,7 @@ import com.him188.jpre.Utils;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.infomation.Anonymous;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 群消息接收事件
@@ -19,11 +20,11 @@ public class GroupMessageEvent extends MessageEvent {
 	public final int type;
 	public final long QQ;
 	public final long group;
-	public final int font;
+	public final Font font;
 	public String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
-	public GroupMessageEvent(int type, int time, long group, long QQ, String fromAnonymous, String message, int font) {
+	public GroupMessageEvent(int type, int time, long group, long QQ, String fromAnonymous, String message, byte[] font) {
 		System.out.println("群事件: " + group + " " + QQ + " :" + message);
 
 		this.type = type == TYPE_GROUP ? type : TYPE_UNKNOWN;
@@ -38,7 +39,7 @@ public class GroupMessageEvent extends MessageEvent {
 			this.fromAnonymous = new Anonymous(code);
 
 		this.message = message;
-		this.font = font;
+		this.font = new Font(font);
 	}
 
 	public static HandlerList getHandlers() {
@@ -81,7 +82,7 @@ public class GroupMessageEvent extends MessageEvent {
 		return this.time;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return this.font;
 	}
 

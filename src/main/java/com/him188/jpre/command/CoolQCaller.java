@@ -240,7 +240,4 @@ public final class CoolQCaller {
 		runCommand(CommandId.GET_STRANGER_INFO, authCode, QQ, noCache);
 		return waitForStringResult();
 	}
-
-	// TODO: 2017/1/26 0026 RtlMoveMemory
-	// TODO: 2017/1/26 0026 GlobalSize
 }

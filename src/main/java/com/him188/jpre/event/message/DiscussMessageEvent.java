@@ -2,6 +2,7 @@ package com.him188.jpre.event.message;
 
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 讨论组消息接收事件
@@ -16,17 +17,17 @@ public class DiscussMessageEvent extends MessageEvent {
 	public final int time;
 	public final int type;
 	public final long discuss;
-	public final int font;
+	public final Font font;
 	public String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
-	public DiscussMessageEvent(int type, int time, long discuss, long QQ, String message, int font) {
+	public DiscussMessageEvent(int type, int time, long discuss, long QQ, String message, byte[] font) {
 		this.type = type == TYPE_DISCUSS ? type : TYPE_UNKNOWN;
 		this.time = time;
 		this.QQ = QQ;
 		this.discuss = discuss;
 		this.message = message;
-		this.font = font;
+		this.font = new Font(font);
 	}
 
 	public static HandlerList getHandlers() {
@@ -53,7 +54,7 @@ public class DiscussMessageEvent extends MessageEvent {
 		return type;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return font;
 	}
 

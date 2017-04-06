@@ -69,6 +69,10 @@ public class Unpack {
 		return result;
 	}
 
+	public byte[] getLast() {
+		return getBytes(getLength());
+	}
+
 	public int getLength() {
 		return data.length - location;
 	}

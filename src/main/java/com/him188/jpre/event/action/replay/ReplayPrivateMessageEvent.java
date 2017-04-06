@@ -3,6 +3,7 @@ package com.him188.jpre.event.action.replay;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.message.PrivateMessageEvent;
+import com.him188.jpre.infomation.Font;
 
 /**
  * 回复私聊消息事件
@@ -19,7 +20,7 @@ public class ReplayPrivateMessageEvent extends ReplayMessageEvent {
 	public final int type;
 	public final long QQ;
 	public final int time;
-	public final int font; //收到消息的字体
+	public final Font font; //收到消息的字体
 	public String message;
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
@@ -28,7 +29,7 @@ public class ReplayPrivateMessageEvent extends ReplayMessageEvent {
 		this.repeat = event.getRepeat();
 	}
 
-	public ReplayPrivateMessageEvent(int type, int time, long QQ, String message, int font) {
+	public ReplayPrivateMessageEvent(int type, int time, long QQ, String message, Font font) {
 		this.type = type == TYPE_FRIEND || type == TYPE_GROUP || type == TYPE_DISCUSS || type == TYPE_ONLINE ? type : TYPE_UNKNOWN;
 		this.QQ = QQ;
 		this.time = time;
@@ -49,7 +50,7 @@ public class ReplayPrivateMessageEvent extends ReplayMessageEvent {
 		return time;
 	}
 
-	public int getFont() {
+	public Font getFont() {
 		return font;
 	}
 

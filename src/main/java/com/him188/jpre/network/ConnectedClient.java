@@ -88,13 +88,13 @@ public class ConnectedClient {
 						event = new JPREDisableEvent(this);
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), Utils.messageDecode(packet.getString()), packet.getInt());
+						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), Utils.utf8Decode(packet.getString()), packet.getLast());
 						break;
 					case EventTypes.GROUP_MESSAGE:
-						event = new GroupMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), Utils.messageDecode(packet.getString()), packet.getInt());
+						event = new GroupMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), Utils.utf8Decode(packet.getString()), packet.getLast());
 						break;
 					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(packet.getInt(), packet.getInt(), packet.getLength(), packet.getLong(), Utils.messageDecode(packet.getString()), packet.getInt());
+						event = new DiscussMessageEvent(packet.getInt(), packet.getInt(), packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()), packet.getLast());
 						break;
 					case EventTypes.GROUP_UPLOAD:
 						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
