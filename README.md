@@ -1,6 +1,6 @@
-##  CoolQ-JavaPluginRuntimeEnvironment  (JPRE)
+##  JavaPluginRuntimeEnvironment  (JPRE)
 
-##### 酷Q Java插件运行环境 - 让你能使用 Java 开发酷Q插件
+##### Java插件运行环境 - 让你能使用 Java 开发酷Q插件
 
 `
 JPRE依赖于易语言版酷Q运行, 而不含有独立的机器人系统.

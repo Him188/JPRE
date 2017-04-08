@@ -11,9 +11,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 酷 Q通讯类
  *
- * @see BaseCoolQCaller
+ * @see BaseMPQCaller
  */
-public final class CoolQCaller {
+public final class MPQCaller {
 	public static final int RESULT_TYPE_ACCEPT = 1;
 	public static final int RESULT_TYPE_DENIED = 2;
 	public static final int REQUEST_TYPE_ACTIVE_JOIN = 1; //主动加入
@@ -67,7 +67,7 @@ public final class CoolQCaller {
 				() ->
 						results.add("")
 				, 500);//0.5s
-		//synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
+		//synchronized (MPQCaller.class) {//使正在等待返回值时, 指令不传达
 		while (results.isEmpty()) {
 			try {
 				Thread.sleep(1);
@@ -81,7 +81,7 @@ public final class CoolQCaller {
 	}
 
 	private static void runCommand(CommandId id, Object... args) {
-		//synchronized (CoolQCaller.class) {
+		//synchronized (MPQCaller.class) {
 		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
 			connectedClient.sendPacket(new CommandPacket(id, args));
 		}

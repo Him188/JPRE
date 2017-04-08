@@ -18,7 +18,7 @@ import java.io.IOException;
  * @author Him188
  */
 @SuppressWarnings("SameParameterValue")
-abstract public class BaseCoolQCaller {
+abstract public class BaseMPQCaller {
 	abstract public int getAuthCode();
 
 	/**
@@ -32,7 +32,7 @@ abstract public class BaseCoolQCaller {
 	public boolean sendPrivateMessage(long QQ, String message) {
 		SendPrivateMessageEvent ev = new SendPrivateMessageEvent(QQ, message);
 		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CoolQCaller.CQ_sendPrivateMsg(getAuthCode(), QQ, ev.getMessage()) == 1;
+		return !ev.isCancelled() && MPQCaller.CQ_sendPrivateMsg(getAuthCode(), QQ, ev.getMessage()) == 1;
 	}
 
 	/**
@@ -46,7 +46,7 @@ abstract public class BaseCoolQCaller {
 	public boolean sendGroupMessage(long group, String message) {
 		SendGroupMessageEvent ev = new SendGroupMessageEvent(group, message);
 		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CoolQCaller.CQ_sendGroupMsg(getAuthCode(), group, ev.getMessage()) == 1;
+		return !ev.isCancelled() && MPQCaller.CQ_sendGroupMsg(getAuthCode(), group, ev.getMessage()) == 1;
 	}
 
 	/**
@@ -60,7 +60,7 @@ abstract public class BaseCoolQCaller {
 	public boolean sendDiscussMessage(long discuss, String message) {
 		SendDiscussMessageEvent ev = new SendDiscussMessageEvent(discuss, message);
 		JPREMain.callEvent(ev);
-		return !ev.isCancelled() && CoolQCaller.CQ_sendDiscussMsg(getAuthCode(), discuss, ev.getMessage()) == 1;
+		return !ev.isCancelled() && MPQCaller.CQ_sendDiscussMsg(getAuthCode(), discuss, ev.getMessage()) == 1;
 	}
 
 	/**
@@ -83,7 +83,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean sendLike(long QQ, int times) {
-		return CoolQCaller.CQ_sendLikeV2(getAuthCode(), QQ, Math.min(Math.max(times, 1), 10)) == 1;
+		return MPQCaller.CQ_sendLikeV2(getAuthCode(), QQ, Math.min(Math.max(times, 1), 10)) == 1;
 	}
 
 	/**
@@ -92,7 +92,7 @@ abstract public class BaseCoolQCaller {
 	 * @return Cookies
 	 */
 	public final int getCookies() {
-		return CoolQCaller.CQ_getCookies(getAuthCode());
+		return MPQCaller.CQ_getCookies(getAuthCode());
 	}
 
 	/**
@@ -104,7 +104,7 @@ abstract public class BaseCoolQCaller {
 	 * @return ? 似乎会直接返回 file
 	 */
 	public final String getRecord(String fileName, String outFormat) {
-		return CoolQCaller.CQ_getRecord(getAuthCode(), fileName, outFormat);
+		return MPQCaller.CQ_getRecord(getAuthCode(), fileName, outFormat);
 	}
 
 	/**
@@ -131,7 +131,7 @@ abstract public class BaseCoolQCaller {
 	 * @return CsrfToken
 	 */
 	public final int getCsrfToken() {
-		return CoolQCaller.CQ_getCsrfToken(getAuthCode());
+		return MPQCaller.CQ_getCsrfToken(getAuthCode());
 	}
 
 	/**
@@ -140,7 +140,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 应用配置目录
 	 */
 	public final String getAppDirectory() {
-		return CoolQCaller.CQ_getAppDirectory(getAuthCode());
+		return MPQCaller.CQ_getAppDirectory(getAuthCode());
 	}
 
 	/**
@@ -149,7 +149,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 酷Q登录的QQ号码
 	 */
 	public final long getLoginQQ() {
-		return CoolQCaller.CQ_getLoginQQ(getAuthCode());
+		return MPQCaller.CQ_getLoginQQ(getAuthCode());
 	}
 
 	/**
@@ -158,7 +158,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 酷Q登录的QQ号码的昵称
 	 */
 	public final String getNickOfLoginedQQ() {
-		return CoolQCaller.CQ_getLoginNick(getAuthCode());
+		return MPQCaller.CQ_getLoginNick(getAuthCode());
 	}
 
 	/**
@@ -171,7 +171,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupKick(long group, long QQ, boolean block) {
-		return CoolQCaller.CQ_setGroupKick(getAuthCode(), group, QQ, block) == 1;
+		return MPQCaller.CQ_setGroupKick(getAuthCode(), group, QQ, block) == 1;
 	}
 
 	/**
@@ -184,7 +184,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupBanMember(long group, long QQ, long time) {
-		return CoolQCaller.CQ_setGroupBan(getAuthCode(), group, QQ, Math.max(Math.min(time, 2592000), 60)) == 1;
+		return MPQCaller.CQ_setGroupBan(getAuthCode(), group, QQ, Math.max(Math.min(time, 2592000), 60)) == 1;
 	}
 
 	/**
@@ -197,7 +197,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAdmin(long group, long QQ, boolean admin) {
-		return CoolQCaller.CQ_setGroupAdmin(getAuthCode(), group, QQ, admin) == 1;
+		return MPQCaller.CQ_setGroupAdmin(getAuthCode(), group, QQ, admin) == 1;
 	}
 
 	/**
@@ -211,7 +211,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetTitleOfMember(long group, long QQ, String title, long timeLimit) {
-		return CoolQCaller.CQ_setGroupSpecialTitle(getAuthCode(), group, QQ, title, timeLimit == -1 ? -1 : Math.abs(timeLimit)) == 1;
+		return MPQCaller.CQ_setGroupSpecialTitle(getAuthCode(), group, QQ, title, timeLimit == -1 ? -1 : Math.abs(timeLimit)) == 1;
 	}
 
 	/**
@@ -223,7 +223,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetWholeBan(long group, boolean ban) {
-		return CoolQCaller.CQ_setGroupWholeBan(getAuthCode(), group, ban) == 1;
+		return MPQCaller.CQ_setGroupWholeBan(getAuthCode(), group, ban) == 1;
 	}
 
 	/**
@@ -236,7 +236,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAnonymousBan(long group, String anonymousId, long time) {
-		return CoolQCaller.CQ_setGroupAnonymousBan(getAuthCode(), group, anonymousId, Math.max(Math.min(time, 2592000), 60)) == 1;
+		return MPQCaller.CQ_setGroupAnonymousBan(getAuthCode(), group, anonymousId, Math.max(Math.min(time, 2592000), 60)) == 1;
 	}
 
 	/**
@@ -249,7 +249,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetAnonymousEnabled(long group, boolean enabled) {
-		return CoolQCaller.CQ_setGroupAnonymous(getAuthCode(), group, enabled) == 1;
+		return MPQCaller.CQ_setGroupAnonymous(getAuthCode(), group, enabled) == 1;
 	}
 
 	/**
@@ -262,7 +262,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupSetCard(long group, long QQ, String card) {
-		return CoolQCaller.CQ_setGroupCard(getAuthCode(), group, QQ, card) == 1;
+		return MPQCaller.CQ_setGroupCard(getAuthCode(), group, QQ, card) == 1;
 	}
 
 	/**
@@ -274,7 +274,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean groupLeave(long group, boolean dissolve) {
-		return CoolQCaller.CQ_setGroupLeave(getAuthCode(), group, dissolve) == 1;
+		return MPQCaller.CQ_setGroupLeave(getAuthCode(), group, dissolve) == 1;
 	}
 
 	/**
@@ -285,7 +285,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean discussLeave(long discuss) {
-		return CoolQCaller.CQ_setDiscussLeave(getAuthCode(), discuss) == 1;
+		return MPQCaller.CQ_setDiscussLeave(getAuthCode(), discuss) == 1;
 	}
 
 	/**
@@ -310,7 +310,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean friendAnswerAddRequest(String requestFlag, boolean accept, String nickIfAccept) {
-		return CoolQCaller.CQ_setFriendAddRequest(getAuthCode(), requestFlag, accept ? CoolQCaller.RESULT_TYPE_ACCEPT : CoolQCaller.RESULT_TYPE_DENIED, nickIfAccept) == 1;
+		return MPQCaller.CQ_setFriendAddRequest(getAuthCode(), requestFlag, accept ? MPQCaller.RESULT_TYPE_ACCEPT : MPQCaller.RESULT_TYPE_DENIED, nickIfAccept) == 1;
 	}
 
 	/**
@@ -322,8 +322,8 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @return 是否成功
 	 *
-	 * @see CoolQCaller#REQUEST_TYPE_ACTIVE_JOIN
-	 * @see CoolQCaller#REQUEST_TYPE_INVITE
+	 * @see MPQCaller#REQUEST_TYPE_ACTIVE_JOIN
+	 * @see MPQCaller#REQUEST_TYPE_INVITE
 	 */
 	public final boolean groupAnswerJoinRequest(String requestFlag, int requestType, boolean accept) {
 		return groupAnswerJoinRequest(requestFlag, requestType, accept, "");
@@ -339,11 +339,11 @@ abstract public class BaseCoolQCaller {
 	 *
 	 * @return 是否成功
 	 *
-	 * @see CoolQCaller#REQUEST_TYPE_ACTIVE_JOIN
-	 * @see CoolQCaller#REQUEST_TYPE_INVITE
+	 * @see MPQCaller#REQUEST_TYPE_ACTIVE_JOIN
+	 * @see MPQCaller#REQUEST_TYPE_INVITE
 	 */
 	public final boolean groupAnswerJoinRequest(String requestFlag, int requestType, boolean accept, String reason) {
-		return CoolQCaller.CQ_setGroupAddRequestV2(getAuthCode(), requestFlag, requestType, accept ? CoolQCaller.RESULT_TYPE_ACCEPT : CoolQCaller.RESULT_TYPE_DENIED, reason) == 1;
+		return MPQCaller.CQ_setGroupAddRequestV2(getAuthCode(), requestFlag, requestType, accept ? MPQCaller.RESULT_TYPE_ACCEPT : MPQCaller.RESULT_TYPE_DENIED, reason) == 1;
 	}
 
 	/**
@@ -355,7 +355,7 @@ abstract public class BaseCoolQCaller {
 	 * @param message  内容
 	 */
 	public final void log(int priority, String type, String message) {
-		CoolQCaller.CQ_addLog(getAuthCode(), priority, type, message);
+		MPQCaller.CQ_addLog(getAuthCode(), priority, type, message);
 	}
 
 	/**
@@ -366,7 +366,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 是否成功
 	 */
 	public final boolean error(String message) {
-		return CoolQCaller.CQ_setFatal(getAuthCode(), message) == 1;
+		return MPQCaller.CQ_setFatal(getAuthCode(), message) == 1;
 	}
 
 	/**
@@ -379,7 +379,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 群成员资料
 	 */
 	public final Member groupGetMemberInfo(long group, long QQ, boolean noCache) {
-		return new Member(Utils.base64decode(CoolQCaller.CQ_getGroupMemberInfoV2(getAuthCode(), group, QQ, noCache)));
+		return new Member(Utils.base64decode(MPQCaller.CQ_getGroupMemberInfoV2(getAuthCode(), group, QQ, noCache)));
 	}
 
 	/**
@@ -403,7 +403,7 @@ abstract public class BaseCoolQCaller {
 	 * @return 陌生人资料
 	 */
 	public final User strangerGetInfo(long QQ, boolean noCache) {
-		return new User(Utils.base64decode(CoolQCaller.CQ_getStrangerInfo(getAuthCode(), QQ, noCache)));
+		return new User(Utils.base64decode(MPQCaller.CQ_getStrangerInfo(getAuthCode(), QQ, noCache)));
 	}
 
 	/**

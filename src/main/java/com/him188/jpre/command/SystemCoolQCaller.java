@@ -8,7 +8,7 @@ import com.him188.jpre.plugin.JavaPlugin;
  *
  * @author Him188
  */
-public final class SystemCoolQCaller extends BaseCoolQCaller{
+public final class SystemMPQCaller extends BaseMPQCaller{
 	private int authCode = -1;
 
 	@Override
@@ -33,16 +33,16 @@ public final class SystemCoolQCaller extends BaseCoolQCaller{
 	 */
 	@Override
 	public boolean sendPrivateMessage(long QQ, String message) {
-		return CoolQCaller.CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 0;
+		return MPQCaller.CQ_sendPrivateMsg(getAuthCode(), QQ, message) == 0;
 	}
 
 	@Override
 	public boolean sendDiscussMessage(long discuss, String message) {
-		return CoolQCaller.CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 0;
+		return MPQCaller.CQ_sendDiscussMsg(getAuthCode(), discuss, message) == 0;
 	}
 
 	@Override
 	public boolean sendGroupMessage(long group, String message) {
-		return CoolQCaller.CQ_sendGroupMsg(getAuthCode(), group, message) == 0;
+		return MPQCaller.CQ_sendGroupMsg(getAuthCode(), group, message) == 0;
 	}
 }

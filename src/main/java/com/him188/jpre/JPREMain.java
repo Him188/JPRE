@@ -1,7 +1,7 @@
 package com.him188.jpre;
 
-import com.him188.jpre.command.CoolQCaller;
-import com.him188.jpre.command.SystemCoolQCaller;
+import com.him188.jpre.command.MPQCaller;
+import com.him188.jpre.command.SystemMPQCaller;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
@@ -40,7 +40,7 @@ public final class JPREMain {
 
 	public static int CQ_API;
 	public static String dataFolder;
-	public static SystemCoolQCaller caller;
+	public static SystemMPQCaller caller;
 	public static SystemLogger logger;
 
 	private static boolean shutdown;
@@ -90,7 +90,7 @@ public final class JPREMain {
 	}
 
 	public static void printAbout() {
-		System.out.println("CoolQ JavaPluginRuntimeEnvironment");
+		System.out.println("MPQ JavaPluginRuntimeEnvironment");
 		System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);
 		System.out.println("Author: Him188 & LamGC");
 		System.out.println("GitHub: https://github.com/Him188/CQ-JPRE\n");
@@ -128,7 +128,7 @@ public final class JPREMain {
 	@SuppressWarnings({"SameParameterValue", "ResultOfMethodCallIgnored"})
 	public static void init(String dataFolder) {
 		JPREMain.dataFolder = dataFolder;
-		caller = new SystemCoolQCaller();
+		caller = new SystemMPQCaller();
 		logger = new SystemLogger();
 		new File(dataFolder +"/plugins/").mkdir();
 	}
@@ -150,11 +150,11 @@ public final class JPREMain {
 	}
 
 	/**
-	 * 不建议使用该方法. 请使用 {@link JavaPlugin}({@link CoolQCaller}) 下的方法.
+	 * 不建议使用该方法. 请使用 {@link JavaPlugin}({@link MPQCaller}) 下的方法.
 	 *
 	 * @return 酷Q调用器
 	 */
-	public static SystemCoolQCaller getCaller() {
+	public static SystemMPQCaller getCaller() {
 		return caller;
 	}
 

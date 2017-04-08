@@ -9,7 +9,7 @@ import com.him188.jpre.JPREMain;
  *
  * @see JPREMain#getLogger()
  */
-public class CoolQLogger implements Logger {
+public class MPQLogger implements Logger {
 	public static final int DEBUG = 0;
 	public static final int INFO = 10;
 	public static final int WARNING = 20;

@@ -1,7 +1,7 @@
 package com.him188.jpre.network;
 
 import com.him188.jpre.Utils;
-import com.him188.jpre.command.CoolQCaller;
+import com.him188.jpre.command.MPQCaller;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
 import com.him188.jpre.binary.Binary;
@@ -212,7 +212,7 @@ public class ConnectedClient {
 						sendPacket(new SetInformationResultPacket(true));
 						break;
 					case COMMAND_RESULT:
-						CoolQCaller.addResult(((CommandResultPacket) packet).getResult());
+						MPQCaller.addResult(((CommandResultPacket) packet).getResult());
 						break;
 					default:
 						sendPacket(new InvalidIdPacket());
