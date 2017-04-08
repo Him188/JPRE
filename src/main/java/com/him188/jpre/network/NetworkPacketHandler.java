@@ -1,5 +1,6 @@
 package com.him188.jpre.network;
 
+import com.him188.jpre.Utils;
 import com.him188.jpre.scheduler.Scheduler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
@@ -21,6 +23,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 		return clients;
 	}
 
+	public static ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
+
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		super.channelRead(ctx, msg);
@@ -28,11 +32,25 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
-		System.out.println("[Network] Data packet received: " + Arrays.toString(data));
+		synchronized (this){
+			System.out.println("[Network] Data packet received: " + Arrays.toString(data));
 
-		for (ConnectedClient client : clients) {
-			if (client.is(ctx.channel().remoteAddress())) {
-				Scheduler.scheduleTask(null, () -> client.dataReceive(data));
+			if (data.length >= 2) {
+				if (data[data.length - 2] == (byte) 127 && data[data.length - 1] == (byte) 127) {
+					dataTemp.add(Utils.arrayDelete(data, 2));
+					byte[] realData = new byte[0];
+					while ((data = dataTemp.poll()) != null) {
+						realData = Utils.arrayAppend(realData, data);
+					}
+					for (ConnectedClient client : clients) {
+						if (client.is(ctx.channel().remoteAddress())) {
+							final byte[] finalRealData = realData;
+							Scheduler.scheduleTask(null, () -> client.dataReceive(finalRealData));
+						}
+					}
+				}
+			} else {
+				dataTemp.add(data);
 			}
 		}
 	}

@@ -39,11 +39,19 @@ public final class CoolQCaller {
 		if (value.isEmpty()) {
 			return 0;
 		}
+		if (value.equalsIgnoreCase("false")) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("true")) {
+			return 1;
+		}
 		return Long.parseLong(value);
 	}
 
 	private static int waitForIntResult() {
-		return parseInt(waitForStringResult());
+		return 1;
+		// TODO: 2017/4/8
+		//return parseInt(waitForStringResult());
 	}
 
 	private static long waitForLongResult() {
@@ -55,7 +63,10 @@ public final class CoolQCaller {
 	private static String waitForStringResult() {
 		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
 
-		Task task = Scheduler.scheduleTimingTask(null, () -> results.add(""), 500);//0.5s
+		Task task = Scheduler.scheduleTimingTask(null,
+				() ->
+						results.add("")
+				, 500);//0.5s
 		//synchronized (CoolQCaller.class) {//使正在等待返回值时, 指令不传达
 		while (results.isEmpty()) {
 			try {

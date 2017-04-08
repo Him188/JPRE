@@ -459,7 +459,7 @@ public final class PluginManager {
 	 * @see JPREMain#callEvent(Event)
 	 */
 	protected static boolean callEvent(Event event) {
-		try {
+		//try {
 
 			HandlerList list = getHandlerList(event.getClass());
 			if (list == null) {
@@ -474,10 +474,10 @@ public final class PluginManager {
 			}
 			event.close();
 			return event.isCancelled();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			JPREMain.getLogger().error("EventError", e.getMessage());
-			return false;
-		}
+		//} catch (Throwable e) {
+		//	e.printStackTrace();
+		//	JPREMain.getLogger().error("EventError", e.getMessage());
+		//	return false;
+		//}
 	}
 }

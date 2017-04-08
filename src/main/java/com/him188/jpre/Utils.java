@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public final class Utils {
 	public static void writeFile(String fileName, String content) throws IOException {
@@ -94,14 +93,24 @@ public final class Utils {
 	}
 
 	public static String utf8Decode(String message) {
-		System.out.println("Decode: original:" + Arrays.toString(message.getBytes()));
-		//return message;
 		try {
-			String str = new String(message.getBytes(), "utf-8");
-			System.out.println(Arrays.toString(str.getBytes()));
-			return str;
+			return new String(message.getBytes(), "utf-8");
 		} catch (UnsupportedEncodingException ignored) {
 			return message;
 		}
+	}
+
+
+	public static byte[] arrayAppend(byte[] original, byte[] append) {
+		byte[] newArray = new byte[original.length + append.length];
+		System.arraycopy(original, 0, newArray, 0, original.length);
+		System.arraycopy(append, 0, newArray, original.length, append.length);
+		return newArray;
+	}
+
+	public static byte[] arrayDelete(byte[] array, int amount) {
+		byte[] newArray = new byte[array.length - amount];
+		System.arraycopy(array, 0, newArray, 0, array.length - amount);
+		return newArray;
 	}
 }

@@ -1,12 +1,15 @@
-import com.him188.jpre.binary.Pack;
 import com.him188.jpre.binary.Unpack;
+
+import java.util.Arrays;
 
 /**
  * @author Him188
  */
 public class TestPacket {
 	private static final byte[] data = new byte[]
-			{2,     0, 0, 0, 2,     0, 0, 0, 1, 88, -42, -128, -67, 0, 0, 0, 0, 30, 117, -9, -76, 0, 0, 0, 0, -80, 119, 37, 6, 0, 0, 0, 0, 0, 0, 0, 24, -27, -113, -115, -26, -83, -93, -24, -75, -108, -23, -110, -79, -28, -71, -97, -26, -78, -95, -26, -124, -113, -26, -128, -99, 7, 125, -74, 72};
+			{
+					2, 0, 0, 0, 2, 0, 0, 0, 1, 88, -27, -66, -42, 4, -50, 72, 37, 0, 0, 0, 0, -94, 63, 3, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, -50, -46, 0, 0, 0, 8, -50, -94, -56, -19, -47, -59, -70, -38, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10
+			};
 
 	public static void main(String[] args){
 		Unpack unpack
@@ -17,14 +20,8 @@ public class TestPacket {
 		unpack.getInt();
 		System.out.println(unpack.getLong());
 		System.out.println(unpack.getLong());
-
-		Pack pack = new Pack();
-		pack.putLong(Long.MAX_VALUE);
-		unpack.setData(pack.getData());
-
-		System.out.println(Long.MAX_VALUE);
-
-		System.out.println(unpack.getLong());
+		System.out.println(unpack.getString());
+		System.out.println(Arrays.toString(unpack.getString().getBytes()));
 	}
 }
 /*
