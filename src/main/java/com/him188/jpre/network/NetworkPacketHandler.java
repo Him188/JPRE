@@ -48,10 +48,11 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 							Scheduler.scheduleTask(null, () -> client.dataReceive(finalRealData));
 						}
 					}
+					return;
 				}
-			} else {
-				dataTemp.add(data);
 			}
+
+			dataTemp.add(data);
 		}
 	}
 
