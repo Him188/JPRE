@@ -49,7 +49,7 @@ public class RobotQQ {
 	 * @param card  群名片
 	 */
 	public static void cacheNameCard(long group, long QQ, String card) {
-		runCommand(CACHE_NAME_CARD, group, QQ, card);
+		runCommand(CACHE_NAME_CARD, 0L, group, QQ, card);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class RobotQQ {
 	 * @return 图片下载链接
 	 */
 	public static String guidGetPicLink(String guid) {
-		runCommand(GUID_GET_PIC_LINK, guid);
+		runCommand(GUID_GET_PIC_LINK, 0L, guid);
 		return stringResult();
 	}
 
@@ -72,7 +72,7 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public static int send(String data) {
-		runCommand(SEND, data);
+		runCommand(SEND, 0L, data);
 		return intResult();
 	}
 
@@ -84,7 +84,7 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public static int output(String context) {
-		runCommand(OUTPUT, context);
+		runCommand(OUTPUT, 0L, context);
 		return intResult();
 	}
 
@@ -94,7 +94,7 @@ public class RobotQQ {
 	 * @return 本插件(JPRE)启用状态
 	 */
 	public static boolean isEnabled() {
-		runCommand(IS_ENABLE);
+		runCommand(IS_ENABLE, 0L);
 		return booleanResult();
 	}
 
@@ -106,7 +106,7 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public static boolean login(long QQ) {
-		runCommand(LOGIN, QQ);
+		runCommand(LOGIN, 0L, QQ);
 		return booleanResult();
 	}
 
@@ -116,7 +116,7 @@ public class RobotQQ {
 	 * @param QQ QQ
 	 */
 	public static void logout(long QQ) {
-		runCommand(LOGOUT, QQ);
+		runCommand(LOGOUT, 0L, QQ);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class RobotQQ {
 	 * @return 加密结果
 	 */
 	public static String teaEncode(String context, String key) {
-		runCommand(TEA_ENCODE, context, key);
+		runCommand(TEA_ENCODE, 0L, context, key);
 		return stringResult();
 	}
 
@@ -141,7 +141,7 @@ public class RobotQQ {
 	 * @return 解密结果
 	 */
 	public static String teaDecode(String context, String key) {
-		runCommand(TEA_DECODE, context, key);
+		runCommand(TEA_DECODE, 0L, context, key);
 		return stringResult();
 	}
 
@@ -153,7 +153,7 @@ public class RobotQQ {
 	 * @return 用户名
 	 */
 	public static String getNick(long QQ) {
-		runCommand(GET_NICK, QQ);
+		runCommand(GET_NICK, 0L, QQ);
 		return stringResult();
 	}
 
@@ -165,7 +165,7 @@ public class RobotQQ {
 	 * @return QQ 等级
 	 */
 	public static String getQQLevel(long QQ) {
-		runCommand(GET_QQ_LEVEL, QQ);
+		runCommand(GET_QQ_LEVEL, 0L, QQ);
 		return stringResult();
 	}
 
@@ -177,7 +177,7 @@ public class RobotQQ {
 	 * @return GID
 	 */
 	public static String getGId(long groupNumber) {
-		runCommand(GN_GET_GID, groupNumber);
+		runCommand(GN_GET_GID, 0L, groupNumber);
 		return stringResult();
 	}
 
@@ -189,7 +189,7 @@ public class RobotQQ {
 	 * @return 群号
 	 */
 	public static long getGroupNumber(String gid) {
-		runCommand(GID_GET_GN, gid);
+		runCommand(GID_GET_GN, 0L, gid);
 		return longResult();
 	}
 
@@ -199,7 +199,7 @@ public class RobotQQ {
 	 * @return 框架版本号(发布时间戳)
 	 */
 	public static int getVersion() {
-		runCommand(GET_VERSION);
+		runCommand(GET_VERSION, 0L);
 		return intResult();
 	}
 
@@ -209,7 +209,7 @@ public class RobotQQ {
 	 * @return 框架版本名
 	 */
 	public static String getVersionName() {
-		runCommand(GET_VERSION_NAME);
+		runCommand(GET_VERSION_NAME, 0L);
 		return stringResult();
 	}
 
@@ -219,7 +219,7 @@ public class RobotQQ {
 	 * @return 当前框架内部时间戳, 周期性与服务器时间同步
 	 */
 	public static int getTimeStamp() {
-		runCommand(GET_TIME_STAMP);
+		runCommand(GET_TIME_STAMP, 0L);
 		return intResult();
 	}
 
@@ -231,7 +231,7 @@ public class RobotQQ {
 	 */
 	//LONG PACKET WARNING!!!
 	public static String getLog() {
-		runCommand(GET_LOG);
+		runCommand(GET_LOG, 0L);
 		return stringResult();
 	}
 
@@ -241,7 +241,7 @@ public class RobotQQ {
 	 * @return 框架内随机一个在线且可以使用的QQ
 	 */
 	public static String getRandomOnlineQQ() {
-		runCommand(GET_RANDOM_ONLINE_QQ);
+		runCommand(GET_RANDOM_ONLINE_QQ, 0L);
 		return stringResult();
 	}
 
@@ -255,7 +255,7 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public static boolean addQQ(long QQ, long password, boolean autoLogin) {
-		runCommand(ADD_QQ, QQ, password, autoLogin);
+		runCommand(ADD_QQ, 0L, QQ, password, autoLogin);
 		return booleanResult();
 	}
 
@@ -269,7 +269,7 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public static boolean setOnlineStatus(long QQ, int status, String additionMessage) {
-		runCommand(SET_OL_STATUS, QQ, status, additionMessage);
+		runCommand(SET_OL_STATUS, 0L, QQ, status, additionMessage);
 		return booleanResult();
 	}
 
@@ -279,7 +279,7 @@ public class RobotQQ {
 	 * @return 机器码
 	 */
 	public static String getMachineCode() {
-		runCommand(GET_MC);
+		runCommand(GET_MC, 0L);
 		return stringResult();
 	}
 
@@ -289,7 +289,7 @@ public class RobotQQ {
 	 * @return 框架所在目录
 	 */
 	public static String getRunPath() {
-		runCommand(GET_RUN_PATH);
+		runCommand(GET_RUN_PATH, 0L);
 		return stringResult();
 	}
 
@@ -299,7 +299,7 @@ public class RobotQQ {
 	 * @return 当前框架内在线可用的QQ列表
 	 */
 	public static String getOnlineQQList() {
-		runCommand(GET_ONLINE_QQ_LIST);
+		runCommand(GET_ONLINE_QQ_LIST, 0L);
 		return stringResult();
 	}
 
@@ -309,7 +309,7 @@ public class RobotQQ {
 	 * @return 框架内所有QQ列表
 	 */
 	public static String getQQList() {
-		runCommand(GET_QQ_LIST);
+		runCommand(GET_QQ_LIST, 0L);
 		return stringResult();
 	}
 
