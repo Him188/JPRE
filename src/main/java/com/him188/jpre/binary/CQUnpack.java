@@ -11,7 +11,6 @@ public class CQUnpack {
      * @param data 数据
      */
     public CQUnpack(byte[] data) {
-        this.m_data = new byte[data.length];
         this.m_data = data;
         location = 1;
     }
@@ -108,7 +107,7 @@ public class CQUnpack {
      */
     public String GetString(){
         int len = GetShort();
-        return String.valueOf(GetBin(len));
+        return new String(GetBin(len));
     }
 
     /**

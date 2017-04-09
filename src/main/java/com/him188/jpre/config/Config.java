@@ -15,20 +15,6 @@ abstract public class Config {
 		this.file = file;
 	}
 
-	public static <T> boolean contains(List<T> array, T a){
-		/*if (array == null) {
-			return false;
-		}*/ //throw NullPointerException instead
-
-		for (T t : array) {
-			if (t == a) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	/**
 	 * 获取配置值
 	 *
