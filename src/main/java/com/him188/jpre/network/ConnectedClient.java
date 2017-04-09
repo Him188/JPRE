@@ -30,8 +30,8 @@ import java.util.Arrays;
 import static com.him188.jpre.network.packet.PacketIds.*;
 
 /**
- * 连接到服务器的客户端 (酷 Q)]
- * 酷 Q 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
+ * 连接到服务器的客户端 (MPQ)]
+ * MPQ 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
  *
  * @author Him188
  */

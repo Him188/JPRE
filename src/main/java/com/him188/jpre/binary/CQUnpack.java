@@ -103,7 +103,7 @@ public class CQUnpack {
 
     /**
      * 取出字符串
-     * 酷Q模块方法原名：[GetToken]
+     * MPQ模块方法原名：[GetToken]
      * @return
      */
     public String GetString(){

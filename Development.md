@@ -11,17 +11,17 @@
 
 ## <span id="第一章-JPRE原理" name="第一章-JPRE原理">第一章 JPRE原理</span>
 **简述**  
-- JPRE依赖于易语言版酷Q运行, 而不含有独立的机器人系统.  
-本项目有 2 个部分, 一个部分就是你现在看到的——JPRE. 还有一个部分是酷Q插件.   
-注意！酷Q插件和JPRE都是独立运行的, 他们之间通过网络进行通讯, JPRE的运行需要JRE/JDK 8, 如果你没有, 请点击[这里](https://www.java.com/zh_CN/download/manual.jsp)根据操作系统获取最新的Jre8.  
-酷Q插件启动的时候会通过 TCP网络 连接JPRE, JPRE加载Java插件.  
+- JPRE依赖于易语言版MPQ运行, 而不含有独立的机器人系统.  
+本项目有 2 个部分, 一个部分就是你现在看到的——JPRE. 还有一个部分是MPQ插件.   
+注意！MPQ插件和JPRE都是独立运行的, 他们之间通过网络进行通讯, JPRE的运行需要JRE/JDK 8, 如果你没有, 请点击[这里](https://www.java.com/zh_CN/download/manual.jsp)根据操作系统获取最新的Jre8.  
+MPQ插件启动的时候会通过 TCP网络 连接JPRE, JPRE加载Java插件.  
 
-**Java 与酷Q 通讯方式**  
-- Java等到酷Q插件连接上并且通过了身份验证后, 将会开始接收来自酷Q插件的事件数据包, 同时将运行在JPRE上所有已启用应用的操作通过数据包发送给酷Q插件, 让酷Q插件执行.  
+**Java 与MPQ 通讯方式**  
+- Java等到MPQ插件连接上并且通过了身份验证后, 将会开始接收来自MPQ插件的事件数据包, 同时将运行在JPRE上所有已启用应用的操作通过数据包发送给MPQ插件, 让MPQ插件执行.  
 
-**酷Q 与 Java 通讯方式**  
-- 在酷Q启用插件时, 酷Q插件会尝试使用配置文件中的连接信息与JPRE进行连接, 并进行身份验证, 验证成功, 酷Q插件将开始进入正常工作, 此时酷Q插件将接收所有事件, 并将事件以网络数据包的形式发送给JPRE, 由JPRE将事件分发给所有Java插件处理.  
-- 当酷Q插件与JPRE 连接/身份验证 失败时, 可手动在酷Q插件的菜单, 单击 "重新连接JPRE" 重新尝试连接, 本项可以在修改了配置文件中的连接信息后进行重连.  
+**MPQ 与 Java 通讯方式**  
+- 在MPQ启用插件时, MPQ插件会尝试使用配置文件中的连接信息与JPRE进行连接, 并进行身份验证, 验证成功, MPQ插件将开始进入正常工作, 此时MPQ插件将接收所有事件, 并将事件以网络数据包的形式发送给JPRE, 由JPRE将事件分发给所有Java插件处理.  
+- 当MPQ插件与JPRE 连接/身份验证 失败时, 可手动在MPQ插件的菜单, 单击 "重新连接JPRE" 重新尝试连接, 本项可以在修改了配置文件中的连接信息后进行重连.  
 - **注意: 在连接成功后, 修改配置文件中的连接信息不会影响当前与目前连接成功的JPRE的连接.**  
 
 ## <span id="plugin" name="plugin">第二章 JPRE插件结构</span>
@@ -31,9 +31,9 @@
   `plugin.json` `cq.json` `jpre.json`  
   该文件必须存在以下字段:  
   - `name`: (String) 插件名  
-  - `appid`:(String) 应用AppID，用于在酷Q应用网络的识别
+  - `appid`:(String) 应用AppID，用于在MPQ应用网络的识别
   - `author`: (String) 插件作者  
-  - `api`: (int) 插件API版本号, 目前酷Q的API版本为9, 若插件API版本高于酷Q的API版本, 那么该插件将无法加载  
+  - `api`: (int) 插件API版本号, 目前MPQ的API版本为9, 若插件API版本高于MPQ的API版本, 那么该插件将无法加载  
   - `version`: (String) 插件版本. 推荐使用 "1.0.0" 格式来书写版本号.  
   - `main`: (String) 插件主类的类全名(包含包名). 插件加载时会加载主类并调用 onLoad()    
   - `description`: (String) 插件的说明.  
@@ -41,7 +41,7 @@
  
 **主类**  
 - JPRE插件的主类必须实现接口 Plugin  
-JPRE内置了类 JavaPlugin, 该类已经实现 Plugin 接口, 并集成了酷Q API和jar包资源文件读取, 我们推荐插件继承类 JavaPlugin, 这样可以节省开发时间, 最大化简化插件开发过程.  
+JPRE内置了类 JavaPlugin, 该类已经实现 Plugin 接口, 并集成了MPQ API和jar包资源文件读取, 我们推荐插件继承类 JavaPlugin, 这样可以节省开发时间, 最大化简化插件开发过程.  
   - 例子:  
   
   public class TestPluginMain extends PluginBase{  
@@ -53,7 +53,7 @@ JPRE内置了类 JavaPlugin, 该类已经实现 Plugin 接口, 并集成了酷Q 
   
 
 **事件**  
-- JPRE插件与酷Q插件不同, 酷Q由于局限于静态库机制, 监听事件必须在插件信息中定义.  
+- JPRE插件与MPQ插件不同, MPQ由于局限于静态库机制, 监听事件必须在插件信息中定义.  
 JPRE拥有自由度高, 支持动态监听, 拦截, 取消的事件系统
 - 事件监听器  
     - 一个事件监听器可以监听一个事件.  

@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 abstract public class Packet {
 	/**
 	 * 编码包
-	 * 仅该包发送给酷Q时被调用
+	 * 仅该包发送给MPQ时被调用
 	 *
 	 * @return 编码后的数据
 	 */
@@ -31,7 +31,7 @@ abstract public class Packet {
 
 	/**
 	 * 解码包
-	 * 仅从酷Q接收到包后调用
+	 * 仅从MPQ接收到包后调用
 	 *
 	 * @param unpack 包数据. Unpack 的 location 已被识别包的网络ID时定义到 1.
 	 */
@@ -49,14 +49,14 @@ abstract public class Packet {
 	/**
 	 * 所有包都必须有的常量
 	 * 若该包是由客户端发送的包, 该包必须有一个无参数的构造器(否则构造失败并抛出异常), 该常量用于服务器接收到数据包后识别并构造实例(否则接受失败, 无事件)
-	 * 若该包是发送给客户端的包, 该常量用于酷Q识别.
+	 * 若该包是发送给客户端的包, 该常量用于MPQ识别.
 	 */
 	public static final byte NETWORK_ID;
 
 	private ConnectedClient client;
 
 	/**
-	 * 获取这个包的归属客户端(酷Q).
+	 * 获取这个包的归属客户端(MPQ).
 	 *
 	 * @return 客户端
 	 */

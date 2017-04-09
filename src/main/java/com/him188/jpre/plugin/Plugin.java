@@ -34,11 +34,11 @@ public interface Plugin {
 	void setPluginDescription(PluginDescription description);
 
 	/**
-	 * 在酷Q启动时调用本方法. 即只会被调用 1 次
+	 * 在MPQ启动时调用本方法. 即只会被调用 1 次
 	 * 加载插件的过程都是单线程的, 请尽量不要在本方法中进行可能阻塞线程的操作.
 	 * <p>
 	 * 注意: 如果本方法调用时出现错误, 将直接停用插件
-	 * 警告: 本方法调用时 AuthCode 并未接收. 请不要使用任何酷 Q接口
+	 * 警告: 本方法调用时 AuthCode 并未接收. 请不要使用任何MPQ接口
 	 */
 	void onLoad();
 

@@ -4,9 +4,9 @@ package com.him188.jpre.event;
  * @author Him188
  */
 public interface EventTypes {
-	//以下事件由酷Q创建:
+	//以下事件由MPQ创建:
 
-	int EXIT = 1002; //酷Q退出
+	int EXIT = 1002; //MPQ退出
 
 	int DISABLE = 1004; //应用(JPRE)将被停用
 

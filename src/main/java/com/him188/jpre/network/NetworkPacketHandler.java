@@ -69,7 +69,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		if (!clients.isEmpty()) { //只允许一个酷q连接
+		if (!clients.isEmpty()) { //只允许一个MPQ连接
 			return;
 		}
 
