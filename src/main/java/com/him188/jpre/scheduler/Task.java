@@ -56,6 +56,7 @@ public abstract class Task implements Runnable {
 	public void forceCancel() {
 		cancel();
 		Scheduler.service.remove(this);
+		Scheduler.pool.remove(this);
 	}
 
 	@Override
