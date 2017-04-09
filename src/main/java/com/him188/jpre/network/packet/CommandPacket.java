@@ -1,6 +1,6 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.command.CommandId;
+import com.him188.jpre.CommandId;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.binary.Unpack;
 

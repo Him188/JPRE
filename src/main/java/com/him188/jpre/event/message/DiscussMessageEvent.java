@@ -1,8 +1,8 @@
 package com.him188.jpre.event.message;
 
-import com.him188.jpre.event.HandlerList;
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;
-import com.him188.jpre.infomation.Font;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * 讨论组消息接收事件
@@ -14,20 +14,23 @@ public class DiscussMessageEvent extends MessageEvent {
 	public static final int TYPE_DISCUSS = 1;
 	private static final HandlerList handlers = new HandlerList();
 	public final long QQ;
-	public final int time;
 	public final int type;
 	public final long discuss;
-	public final Font font;
+	public final RobotQQ robot;
 	public String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
-	public DiscussMessageEvent(int type, int time, long discuss, long QQ, String message, byte[] font) {
+	public DiscussMessageEvent(RobotQQ robot, int type, long discuss, long QQ, String message) {
+		this.robot = robot;
 		this.type = type == TYPE_DISCUSS ? type : TYPE_UNKNOWN;
-		this.time = time;
 		this.QQ = QQ;
 		this.discuss = discuss;
 		this.message = message;
-		this.font = new Font(font);
+	}
+
+	@Override
+	public RobotQQ getRobot() {
+		return robot;
 	}
 
 	public static HandlerList getHandlers() {
@@ -46,17 +49,10 @@ public class DiscussMessageEvent extends MessageEvent {
 		return discuss;
 	}
 
-	public int getTime() {
-		return time;
-	}
-
 	public int getType() {
 		return type;
 	}
 
-	public Font getFont() {
-		return font;
-	}
 
 	public long getQQ() {
 		return QQ;

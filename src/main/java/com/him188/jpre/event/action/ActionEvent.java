@@ -1,5 +1,6 @@
 package com.him188.jpre.event.action;
 
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.Event;
 
 /**
@@ -8,4 +9,5 @@ import com.him188.jpre.event.Event;
  * @author Him188
  */
 abstract public class ActionEvent extends Event {
+	public abstract RobotQQ getRobot();
 }

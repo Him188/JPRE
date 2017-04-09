@@ -1,12 +1,10 @@
 package com.him188.jpre;
 
-import com.him188.jpre.command.MPQCaller;
-import com.him188.jpre.command.SystemMPQCaller;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
-import com.him188.jpre.event.action.replay.ReplayDiscussMessageEvent;
-import com.him188.jpre.event.action.replay.ReplayGroupMessageEvent;
-import com.him188.jpre.event.action.replay.ReplayPrivateMessageEvent;
+import com.him188.jpre.event.action.reply.ReplyDiscussMessageEvent;
+import com.him188.jpre.event.action.reply.ReplyGroupMessageEvent;
+import com.him188.jpre.event.action.reply.ReplyPrivateMessageEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
@@ -15,7 +13,6 @@ import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
 import com.him188.jpre.log.logger.SystemLogger;
 import com.him188.jpre.network.Network;
-import com.him188.jpre.plugin.JavaPlugin;
 import com.him188.jpre.plugin.Plugin;
 import com.him188.jpre.scheduler.Scheduler;
 import org.apache.commons.cli.*;
@@ -38,9 +35,7 @@ public final class JPREMain {
 	public static final String VERSION_TYPE = "Pre";
 	public static final String VERSION = "1.0.1";
 
-	public static int CQ_API;
 	public static String dataFolder;
-	public static SystemMPQCaller caller;
 	public static SystemLogger logger;
 
 	private static boolean shutdown;
@@ -110,7 +105,7 @@ public final class JPREMain {
 	}
 
 
-	public static void shutdown(boolean shutdown){
+	public static void shutdown(boolean shutdown) {
 		JPREMain.shutdown = shutdown;
 		Scheduler.shutdown();
 	}
@@ -128,34 +123,16 @@ public final class JPREMain {
 	@SuppressWarnings({"SameParameterValue", "ResultOfMethodCallIgnored"})
 	public static void init(String dataFolder) {
 		JPREMain.dataFolder = dataFolder;
-		caller = new SystemMPQCaller();
 		logger = new SystemLogger();
-		new File(dataFolder +"/plugins/").mkdir();
-	}
-
-	public static void setCqApi(int cqApi) {
-		CQ_API = cqApi;
+		new File(dataFolder + "/plugins/").mkdir();
 	}
 
 	public static SystemLogger getLogger() {
 		return logger;
 	}
 
-	public static int getCqApi() {
-		return CQ_API;
-	}
-
 	public static String getDataFolder() {
 		return dataFolder;
-	}
-
-	/**
-	 * 不建议使用该方法. 请使用 {@link JavaPlugin}({@link MPQCaller}) 下的方法.
-	 *
-	 * @return 酷Q调用器
-	 */
-	public static SystemMPQCaller getCaller() {
-		return caller;
 	}
 
 	/**
@@ -181,13 +158,14 @@ public final class JPREMain {
 							return false;
 						}
 
-						ReplayDiscussMessageEvent ev = new ReplayDiscussMessageEvent((DiscussMessageEvent) event);
+						ReplyDiscussMessageEvent ev = new ReplyDiscussMessageEvent((DiscussMessageEvent) event);
 						JPREMain.callEvent(ev);
 						if (ev.isCancelled()) {
 							return false;
 						}
 
-						JPREMain.getCaller().sendDiscussMessage(ev.getDiscuss(), ev.getRepeat());
+
+						ev.getRobot().sendDiscussMessage(ev.getDiscuss(), ev.getRepeat());
 					}
 					return false;
 				case EventTypes.GROUP_MESSAGE:
@@ -196,13 +174,13 @@ public final class JPREMain {
 							return false;
 						}
 
-						ReplayGroupMessageEvent ev = new ReplayGroupMessageEvent((GroupMessageEvent) event);
+						ReplyGroupMessageEvent ev = new ReplyGroupMessageEvent((GroupMessageEvent) event);
 						JPREMain.callEvent(ev);
 						if (ev.isCancelled()) {
 							return false;
 						}
 
-						JPREMain.getCaller().sendGroupMessage(ev.getGroup(), ev.getRepeat());
+						ev.getRobot().sendGroupMessage(ev.getGroup(), ev.getRepeat());
 					}
 					return false;
 				case EventTypes.PRIVATE_MESSAGE:
@@ -211,23 +189,25 @@ public final class JPREMain {
 							return false;
 						}
 
-						ReplayPrivateMessageEvent ev = new ReplayPrivateMessageEvent((PrivateMessageEvent) event);
+						ReplyPrivateMessageEvent ev = new ReplyPrivateMessageEvent((PrivateMessageEvent) event);
 						JPREMain.callEvent(ev);
 						if (ev.isCancelled()) {
 							return false;
 						}
 
-						JPREMain.getCaller().sendPrivateMessage(ev.getQQ(), ev.getRepeat());
+						ev.getRobot().sendPrivateMessage(ev.getQQ(), ev.getRepeat());
 					}
 					return false;
 				case EventTypes.REQUEST_FRIEND_ADD:
 					if (event instanceof AddFriendRequestEvent) {
-						JPREMain.getCaller().friendAnswerAddRequest(((AddFriendRequestEvent) event).getResponseFlag(), ((AddFriendRequestEvent) event).isAccept(), ((AddFriendRequestEvent) event).getNickIfAccept());
+						// TODO: 2017/4/9
+						//JPREMain.getCaller().friendAnswerAddRequest(((AddFriendRequestEvent) event).getResponseFlag(), ((AddFriendRequestEvent) event).isAccept(), ((AddFriendRequestEvent) event).getNickIfAccept());
 					}
 					return false;
 				case EventTypes.REQUEST_GROUP_ADD:
 					if (event instanceof AddGroupRequestEvent) {
-						JPREMain.getCaller().groupAnswerJoinRequest(((AddGroupRequestEvent) event).getResponseFlag(), ((AddGroupRequestEvent) event).getType(), ((AddGroupRequestEvent) event).isAccept(), ((AddGroupRequestEvent) event).reasonIfRefused);
+						// TODO: 2017/4/9
+						//JPREMain.getCaller().groupAnswerJoinRequest(((AddGroupRequestEvent) event).getResponseFlag(), ((AddGroupRequestEvent) event).getType(), ((AddGroupRequestEvent) event).isAccept(), ((AddGroupRequestEvent) event).reasonIfRefused);
 					}
 					return false;
 			}
@@ -262,16 +242,6 @@ public final class JPREMain {
 
 	public static boolean loadPlugin(String fileName) throws PluginLoadException {
 		return PluginManager.loadPlugin(fileName);
-	}
-
-	public static void setAuthCode(int authCode) {
-		try {
-			PluginManager.getPlugins().forEach(plugin -> plugin.initialize(authCode));
-			caller.setAuthCode(authCode);
-		} catch (Throwable e) {
-			JPREMain.getLogger().exception(e);
-		}
-
 	}
 
 	public static boolean enablePlugin(String name) {

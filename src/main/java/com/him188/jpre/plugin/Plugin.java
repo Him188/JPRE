@@ -80,20 +80,6 @@ public interface Plugin {
 	String getName();
 
 	/**
-	 * 获取应用 AuthCode
-	 *
-	 * @return AuthCode
-	 */
-	int getAuthCode();
-
-	/**
-	 * 应用 AuthCode 接收
-	 *
-	 * @param authCode authCode
-	 */
-	void initialize(int authCode);
-
-	/**
 	 * 获取插件 API 版本
 	 *
 	 * @return API version

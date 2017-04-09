@@ -1,7 +1,8 @@
 package com.him188.jpre.event.action.send;
 
-import com.him188.jpre.event.HandlerList;
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * @author Him188
@@ -10,10 +11,17 @@ public class SendPrivateMessageEvent extends SendMessageEvent {
 	private static final HandlerList handlers = new HandlerList();
 	public final long QQ;
 	public String message;
+	public final RobotQQ robot;
 
-	public SendPrivateMessageEvent(long QQ, String message) {
+	public SendPrivateMessageEvent(RobotQQ robot, long QQ, String message) {
+		this.robot = robot;
 		this.QQ = QQ;
 		this.message = message;
+	}
+
+	@Override
+	public RobotQQ getRobot() {
+		return robot;
 	}
 
 	public static HandlerList getHandlers() {

@@ -1,12 +1,11 @@
-package com.him188.jpre.event.action.replay;
+package com.him188.jpre.event.action.reply;
 
 import com.him188.jpre.event.action.ActionEvent;
-import com.him188.jpre.infomation.Font;
 
 /**
  * @author Him188
  */
-abstract public class ReplayMessageEvent extends ActionEvent {
+abstract public class ReplyMessageEvent extends ActionEvent {
 
 	abstract public long getQQ();
 
@@ -18,9 +17,7 @@ abstract public class ReplayMessageEvent extends ActionEvent {
 
 	abstract public void setRepeat(String repeat);
 
-	abstract public int getTime();
 
-	abstract public Font getFont();
 }
 
 

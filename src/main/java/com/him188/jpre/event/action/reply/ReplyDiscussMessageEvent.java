@@ -1,39 +1,42 @@
-package com.him188.jpre.event.action.replay;
+package com.him188.jpre.event.action.reply;
 
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.message.DiscussMessageEvent;
-import com.him188.jpre.infomation.Font;
 
 /**
  * 回复讨论组消息事件
  *
  * @author Him188
  */
-public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
+public class ReplyDiscussMessageEvent extends ReplyMessageEvent {
 	public static final int TYPE_UNKNOWN = 0;
 	public static final int TYPE_DISCUSS = 1;
 	private static final HandlerList handlers = new HandlerList();
-	public final int time;
 	public final int type;
 	public final long QQ;
 	public final long discuss;
-	public final Font font;
 	public final String message; //收到的消息
+	public final RobotQQ robot;
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
 
-	public ReplayDiscussMessageEvent(DiscussMessageEvent event) {
-		this(event.type, event.time, event.discuss, event.QQ, event.message, event.font);
+	public ReplyDiscussMessageEvent(DiscussMessageEvent event) {
+		this(event.robot, event.type, event.discuss, event.QQ, event.message);
 		this.repeat = event.getRepeat();
 	}
 
-	public ReplayDiscussMessageEvent(int type, int time, long discuss, long QQ, String message, Font font) {
+	public ReplyDiscussMessageEvent(RobotQQ robot, int type, long discuss, long QQ, String message) {
+		this.robot = robot;
 		this.type = type == TYPE_DISCUSS ? type : TYPE_UNKNOWN;
-		this.time = time;
 		this.QQ = QQ;
 		this.discuss = discuss;
 		this.message = message;
-		this.font = font;
+	}
+
+	@Override
+	public RobotQQ getRobot() {
+		return null;
 	}
 
 	public static HandlerList getHandlers() {
@@ -54,14 +57,6 @@ public class ReplayDiscussMessageEvent extends ReplayMessageEvent {
 
 	public int getType() {
 		return type;
-	}
-
-	public Font getFont() {
-		return font;
-	}
-
-	public int getTime() {
-		return time;
 	}
 
 	public String getRepeat() {

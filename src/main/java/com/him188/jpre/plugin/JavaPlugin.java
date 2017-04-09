@@ -2,7 +2,6 @@ package com.him188.jpre.plugin;
 
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
-import com.him188.jpre.command.PluginMPQCaller;
 import com.him188.jpre.log.logger.Logger;
 import com.him188.jpre.log.logger.PluginLogger;
 
@@ -21,19 +20,12 @@ import java.util.jar.JarFile;
 public class JavaPlugin extends PluginDescription implements Plugin {
 	private final Logger logger;
 	private boolean enabled;
-	private int authCode;
-	private PluginMPQCaller cq;
-
-	public PluginMPQCaller getCq() {
-		return cq;
-	}
 
 	public JavaPlugin() {
 		super(null, null, null, 0, null, null, null, null);
 
 		logger = new PluginLogger();
 		new File(getDataFolder() + File.pathSeparator).mkdir();
-		cq = new PluginMPQCaller(this);
 	}
 
 	/**
@@ -143,16 +135,6 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 	public void disable() {
 		setEnabled(false);
 		onDisable();
-	}
-
-	@Override
-	public void initialize(int authCode) {
-		this.authCode = authCode;
-	}
-
-	@Override
-	public int getAuthCode() {
-		return authCode;
 	}
 
 	@Override

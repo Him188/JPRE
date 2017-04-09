@@ -1,5 +1,6 @@
 package com.him188.jpre.event.action.send;
 
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.EventTypes;
 
@@ -11,9 +12,17 @@ public class SendDiscussMessageEvent extends SendMessageEvent {
 	public final long discuss;
 	public String message;
 
-	public SendDiscussMessageEvent(long discuss, String message) {
+	public final RobotQQ robot;
+
+	public SendDiscussMessageEvent(RobotQQ robot, long discuss, String message) {
+		this.robot = robot;
 		this.discuss = discuss;
 		this.message = message;
+	}
+
+	@Override
+	public RobotQQ getRobot() {
+		return robot;
 	}
 
 	public static HandlerList getHandlers() {

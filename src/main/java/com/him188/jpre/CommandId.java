@@ -1,4 +1,4 @@
-package com.him188.jpre.command;
+package com.him188.jpre;
 
 /**
  * @author Him188
@@ -54,8 +54,8 @@ public enum CommandId {
 	SET_SIGN(48),
 	GET_GROUP_LIST_A(49),
 	GET_GROUP_LIST_B(50),
-	GET_GROUP_NUMBER_A(51),
-	GET_GROUP_NUMBER_B(52),
+	GET_GROUP_MEMBER_A(51),
+	GET_GROUP_MEMBER_B(52),
 	GET_FRIEND_LIST(53),
 	GET_QQ_AGE(54),
 	GET_AGE(55),

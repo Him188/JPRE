@@ -90,7 +90,6 @@ public final class PluginManager {
 			if (plugin == null) {
 				return false;
 			}
-			plugin.initialize(JPREMain.getCaller().getAuthCode());
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -198,10 +197,6 @@ public final class PluginManager {
 		PluginDescription description = getDescription(file);
 		if (description == null) {
 			throw new PluginLoadException("Could not load plugin description: " + file.getName());
-		}
-
-		if (description.getAPIVersion() > JPREMain.CQ_API) {
-			throw new PluginLoadException("This server does not support api version: " + description.getAPIVersion());
 		}
 
 		descriptions.put(file.getName(), description);

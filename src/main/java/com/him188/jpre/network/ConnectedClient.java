@@ -1,9 +1,9 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.Utils;
-import com.him188.jpre.command.MPQCaller;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.PluginManager;
+import com.him188.jpre.RobotQQ;
+import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Unpack;
 import com.him188.jpre.event.Event;
@@ -88,13 +88,13 @@ public class ConnectedClient {
 						event = new JPREDisableEvent(this);
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), Utils.utf8Decode(packet.getString()), packet.getLast());
-						break;
+						event = new PrivateMessageEvent(RobotQQ.getRobot(packet.getLong()), PrivateMessageEvent.MESSAGE_TYPE_PRIVATE, 0, packet.getLong(), Utils.utf8Decode(packet.getString()));
+						break;// TODO: 2017/4/9 check them
 					case EventTypes.GROUP_MESSAGE:
-						event = new GroupMessageEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), Utils.utf8Decode(packet.getString()), packet.getLast());
+						event = new GroupMessageEvent(RobotQQ.getRobot(packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(packet.getInt(), packet.getInt(), packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()), packet.getLast());
+						event = new DiscussMessageEvent(RobotQQ.getRobot(packet.getLong()), 0, packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.GROUP_UPLOAD:
 						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
@@ -206,13 +206,10 @@ public class ConnectedClient {
 						break;
 					case SET_INFORMATION:
 						JPREMain.init(((SetInformationPacket) packet).getDataFolder());
-
-						JPREMain.setAuthCode(((SetInformationPacket) packet).getAuthCode());
-						JPREMain.setCqApi(((SetInformationPacket) packet).getApi());
 						sendPacket(new SetInformationResultPacket(true));
 						break;
 					case COMMAND_RESULT:
-						MPQCaller.addResult(((CommandResultPacket) packet).getResult());
+						RobotQQ.addResult(((CommandResultPacket) packet).getResult());
 						break;
 					default:
 						sendPacket(new InvalidIdPacket());

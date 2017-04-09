@@ -1,8 +1,8 @@
 package com.him188.jpre.event.message;
 
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
-import com.him188.jpre.infomation.Font;
 
 /**
  * 私聊消息接收事件
@@ -10,25 +10,30 @@ import com.him188.jpre.infomation.Font;
  * @author Him188
  */
 public class PrivateMessageEvent extends MessageEvent {
-	public static final int TYPE_UNKNOWN = 0;
-	public static final int TYPE_FRIEND = 11; //来自好友
-	public static final int TYPE_ONLINE = 1; //来自在线状态
-	public static final int TYPE_GROUP = 2; //来自群
-	public static final int TYPE_DISCUSS = 3; //来自讨论组
 	private static final HandlerList handlers = new HandlerList();
 	public final int type;
 	public final long QQ;
-	public final Font font;
-	public final int time;
+	public final RobotQQ robot;
 	public String message; //收到的消息
 	public String repeat = ""; //回复信息, null 或 空字符串 为不回复
+	public final int messageType;
 
-	public PrivateMessageEvent(int type, int time, long QQ, String message, byte[] font) {
-		this.type = type == TYPE_FRIEND || type == TYPE_GROUP || type == TYPE_DISCUSS || type == TYPE_ONLINE ? type : TYPE_UNKNOWN;
+
+	public static final int MESSAGE_TYPE_PRIVATE = 1;             //私聊消息
+	public static final int MESSAGE_TYPE_DISCUSS_TEMPORARY_SESSION = 2;     //群临时消息
+	public static final int MESSAGE_TYPE_GROUP_TEMPORARY_SESSION = 3;   //讨论组临时消息
+
+	public PrivateMessageEvent(RobotQQ robot, int messageType, int type, long QQ, String message) {
+		this.robot = robot;
+		this.messageType = messageType;
+		this.type = type;
 		this.QQ = QQ;
 		this.message = message;
-		this.time = time;
-		this.font = new Font(font);
+	}
+
+	@Override
+	public RobotQQ getRobot() {
+		return robot;
 	}
 
 	public static HandlerList getHandlers() {
@@ -39,12 +44,8 @@ public class PrivateMessageEvent extends MessageEvent {
 		return EventTypes.PRIVATE_MESSAGE;
 	}
 
-	public Font getFont() {
-		return font;
-	}
-
-	public int getTime() {
-		return time;
+	public int getMessageType() {
+		return messageType;
 	}
 
 	public int getType() {
@@ -53,10 +54,6 @@ public class PrivateMessageEvent extends MessageEvent {
 
 	public long getQQ() {
 		return QQ;
-	}
-
-	public boolean isValid() {
-		return this.type != TYPE_UNKNOWN;
 	}
 
 	public String getMessage() {

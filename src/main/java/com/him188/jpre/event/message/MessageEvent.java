@@ -1,7 +1,7 @@
 package com.him188.jpre.event.message;
 
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.Event;
-import com.him188.jpre.infomation.Font;
 
 /**
  * 消息事件
@@ -9,6 +9,8 @@ import com.him188.jpre.infomation.Font;
  * @author Him188
  */
 abstract public class MessageEvent extends Event {
+	abstract public RobotQQ getRobot();
+
 	abstract public long getQQ();
 
 	abstract public String getMessage();
@@ -19,7 +21,4 @@ abstract public class MessageEvent extends Event {
 
 	abstract public void setRepeat(String repeat);
 
-	abstract public int getTime();
-
-	abstract public Font getFont();
 }
