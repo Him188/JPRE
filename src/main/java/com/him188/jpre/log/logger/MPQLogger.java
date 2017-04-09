@@ -1,24 +1,24 @@
 package com.him188.jpre.log.logger;
 
 import com.him188.jpre.JPREMain;
+import com.him188.jpre.RobotQQ;
+import com.him188.jpre.log.Log;
+import com.him188.jpre.log.Priority;
+
+
+import static com.him188.jpre.log.Priority.*;
 
 /**
- * 直接写入酷Q日志的记录器.
+ * 写入MPQ日志
  * <p>
  * 写入插件日志的记录器: {@link PluginLogger}
  *
  * @see JPREMain#getLogger()
  */
 public class MPQLogger implements Logger {
-	public static final int DEBUG = 0;
-	public static final int INFO = 10;
-	public static final int WARNING = 20;
-	public static final int ERROR = 30;
-	public static final int FATAL = 40;
-
 	@Override
-	public void log(int priority, String type, String message) {
-		JPREMain.getCaller().log(priority, type, message);
+	public void log(Priority priority, String type, String message) {
+		RobotQQ.output(new Log(priority, type, message).toString());
 	}
 
 	@Override

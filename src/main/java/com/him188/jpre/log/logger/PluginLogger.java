@@ -10,7 +10,6 @@ import com.him188.jpre.network.packet.LogPacket;
  * 插件日志记录器. (记录到酷Q的插件自带日志中)
  */
 public class PluginLogger implements Logger {
-	@Override
 	public void log(int priority, String type, String message) {
 		log(Priority.fromInteger(priority), type, message);
 	}

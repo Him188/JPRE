@@ -1,10 +1,12 @@
 package com.him188.jpre.log.logger;
 
+import com.him188.jpre.log.Priority;
+
 /**
  * @author Him188
  */
 public interface Logger {
-	void log(int priority, String type, String message);
+	void log(Priority priority, String type, String message);
 
 
 	void info(String type, String message);
