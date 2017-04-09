@@ -180,6 +180,7 @@ public final class PluginManager {
 	 */
 	public static PluginDescription loadPluginDescription(String file) throws PluginLoadException {
 		try {
+			System.out.println(file);
 			return loadPluginDescription(new JarFile(file));
 		} catch (IOException e) {
 			throw new PluginLoadException("Could not load file: " + file);
