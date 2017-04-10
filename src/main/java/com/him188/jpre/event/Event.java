@@ -1,11 +1,11 @@
 package com.him188.jpre.event;
 
-import com.him188.jpre.event.action.reply.ReplyDiscussMessageEvent;
-import com.him188.jpre.event.action.reply.ReplyGroupMessageEvent;
-import com.him188.jpre.event.action.reply.ReplyPrivateMessageEvent;
-import com.him188.jpre.event.action.send.SendDiscussMessageEvent;
-import com.him188.jpre.event.action.send.SendGroupMessageEvent;
-import com.him188.jpre.event.action.send.SendPrivateMessageEvent;
+import com.him188.jpre.event.reply.ReplyDiscussMessageEvent;
+import com.him188.jpre.event.reply.ReplyGroupMessageEvent;
+import com.him188.jpre.event.reply.ReplyPrivateMessageEvent;
+import com.him188.jpre.event.send.SendDiscussMessageEvent;
+import com.him188.jpre.event.send.SendGroupMessageEvent;
+import com.him188.jpre.event.send.SendPrivateMessageEvent;
 import com.him188.jpre.event.friend.FriendAddEvent;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
@@ -45,7 +45,7 @@ abstract public class Event {
 
 		registerEvent(PluginDisableEvent.class);
 		registerEvent(PluginEnableEvent.class);
-
+// TODO: 2017/4/10
 		registerEvent(ReplyDiscussMessageEvent.class);
 		registerEvent(ReplyGroupMessageEvent.class);
 		registerEvent(ReplyPrivateMessageEvent.class);

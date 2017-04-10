@@ -4,6 +4,8 @@ import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.network.ConnectedClient;
 
+
+// TODO: 2017/4/10 包名更改为 event.mpq, 添加mpq插件启动/关闭事件, mpq重启事件
 /**
  * MPQ 上的 JPRE 插件被关闭
  *

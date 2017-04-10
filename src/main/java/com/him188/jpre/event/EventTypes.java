@@ -40,6 +40,9 @@ public interface EventTypes {
 	int DATA_PACKET_RECEIVE = PLUGIN_BASE + 10; //接收到数据包
 
 	int JPRE_DISABLE = PLUGIN_BASE + 11;
+
+
+	// TODO: 2017/4/10 新事件的事件ID, 并给新事件添加 public static int getEventType() 和 handler
 }
 
 

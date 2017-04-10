@@ -1,4 +1,4 @@
-package com.him188.jpre.event.action.reply;
+package com.him188.jpre.event.reply;
 
 import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;

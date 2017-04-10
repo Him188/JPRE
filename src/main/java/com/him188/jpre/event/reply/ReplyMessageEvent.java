@@ -1,11 +1,15 @@
-package com.him188.jpre.event.action.reply;
+package com.him188.jpre.event.reply;
 
-import com.him188.jpre.event.action.ActionEvent;
+
+import com.him188.jpre.RobotQQ;
+import com.him188.jpre.event.Event;
 
 /**
  * @author Him188
  */
-abstract public class ReplyMessageEvent extends ActionEvent {
+abstract public class ReplyMessageEvent extends Event {
+
+	abstract public RobotQQ getRobot();
 
 	abstract public long getQQ();
 

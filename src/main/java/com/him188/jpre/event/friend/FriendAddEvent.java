@@ -1,7 +1,8 @@
 package com.him188.jpre.event.friend;
 
-import com.him188.jpre.event.HandlerList;
+import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * 好友已添加事件
@@ -9,16 +10,14 @@ import com.him188.jpre.event.EventTypes;
  * @author Him188
  */
 public class FriendAddEvent extends FriendEvent {
-	public static final int TYPE_UNKNOWN = 0; //未知 (多半由插件创建本事件时传参 type 不正确导致)
-	public static final int TYPE_ADD = 1;
 	private static final HandlerList handlers = new HandlerList();
-	public final int type;
-	public final long QQ;
-	public final int time;
+	private final int type;
+	private final long QQ;
+	private final RobotQQ robot;
 
-	public FriendAddEvent(int type, int time, long QQ) {
-		this.type = type == 1 ? type : TYPE_UNKNOWN;
-		this.time = time;
+	public FriendAddEvent(RobotQQ robot, int type, long QQ) {
+		this.robot = robot;
+		this.type = type;
 		this.QQ = QQ;
 	}
 
@@ -34,15 +33,12 @@ public class FriendAddEvent extends FriendEvent {
 		return type;
 	}
 
-	public boolean isValid() {
-		return this.type != TYPE_UNKNOWN;
+	@Override
+	public RobotQQ getRobot() {
+		return robot;
 	}
 
 	public long getQQ() {
 		return QQ;
-	}
-
-	public int getTime() {
-		return time;
 	}
 }

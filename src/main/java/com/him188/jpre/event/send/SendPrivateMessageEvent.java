@@ -1,22 +1,21 @@
-package com.him188.jpre.event.action.send;
+package com.him188.jpre.event.send;
 
 import com.him188.jpre.RobotQQ;
-import com.him188.jpre.event.HandlerList;
 import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * @author Him188
  */
-public class SendDiscussMessageEvent extends SendMessageEvent {
+public class SendPrivateMessageEvent extends SendMessageEvent {
 	private static final HandlerList handlers = new HandlerList();
-	public final long discuss;
+	public final long QQ;
 	public String message;
-
 	public final RobotQQ robot;
 
-	public SendDiscussMessageEvent(RobotQQ robot, long discuss, String message) {
+	public SendPrivateMessageEvent(RobotQQ robot, long QQ, String message) {
 		this.robot = robot;
-		this.discuss = discuss;
+		this.QQ = QQ;
 		this.message = message;
 	}
 
@@ -30,7 +29,7 @@ public class SendDiscussMessageEvent extends SendMessageEvent {
 	}
 
 	public static int getEventType() {
-		return EventTypes.PLUGIN_ACTION_SEND_DISCUSS;
+		return EventTypes.PLUGIN_ACTION_SEND_PRIVATE;
 	}
 
 	public String getMessage() {
@@ -41,7 +40,7 @@ public class SendDiscussMessageEvent extends SendMessageEvent {
 		this.message = message;
 	}
 
-	public long getDiscuss() {
-		return discuss;
+	public long getQQ() {
+		return QQ;
 	}
 }

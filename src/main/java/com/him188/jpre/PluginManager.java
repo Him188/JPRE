@@ -87,10 +87,7 @@ public final class PluginManager {
 				return false;
 			}
 			Plugin plugin = getPlugin(file);
-			if (plugin == null) {
-				return false;
-			}
-			return true;
+			return plugin != null;
 		} catch (IOException e) {
 			return false;
 		} catch (PluginLoadException e) {
@@ -270,7 +267,6 @@ public final class PluginManager {
 			return new Gson().fromJson(Utils.readFile(file.getInputStream(entry)), PluginDescription.class).setFileName(file.getName());
 		} catch (Throwable e) {
 			e.printStackTrace();
-			JPREMain.getLogger().error("GetDescriptionError", e.getMessage());
 			return null;
 		}
 	}
@@ -342,7 +338,7 @@ public final class PluginManager {
 				registerEvent(listener, plugin, (Class<Event>) clazz, method);
 			}
 		} catch (Throwable e) {
-			JPREMain.getLogger().error("RegisterEventsError", e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -383,7 +379,6 @@ public final class PluginManager {
 			return true;
 		} catch (Throwable e) {
 			e.printStackTrace();
-			JPREMain.getLogger().error("RegisterEventError", e.getMessage());
 			return false;
 		}
 	}

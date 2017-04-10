@@ -1,8 +1,8 @@
 package com.him188.jpre;
 
-import com.him188.jpre.event.action.send.SendGroupMessageEvent;
-import com.him188.jpre.event.action.send.SendMessageEvent;
-import com.him188.jpre.event.action.send.SendPrivateMessageEvent;
+import com.him188.jpre.event.send.SendGroupMessageEvent;
+import com.him188.jpre.event.send.SendMessageEvent;
+import com.him188.jpre.event.send.SendPrivateMessageEvent;
 import com.him188.jpre.event.message.MessageEvent;
 import com.him188.jpre.network.ConnectedClient;
 import com.him188.jpre.network.NetworkPacketHandler;
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static com.him188.jpre.CommandId.*;
 
 /**
- * 框架上的机器人 QQ
+ * 框架上的机器人 QQ(响应 QQ)
  *
  * @author Him188
  */

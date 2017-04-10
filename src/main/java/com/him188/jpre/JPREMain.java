@@ -2,16 +2,15 @@ package com.him188.jpre;
 
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
-import com.him188.jpre.event.action.reply.ReplyDiscussMessageEvent;
-import com.him188.jpre.event.action.reply.ReplyGroupMessageEvent;
-import com.him188.jpre.event.action.reply.ReplyPrivateMessageEvent;
+import com.him188.jpre.event.reply.ReplyDiscussMessageEvent;
+import com.him188.jpre.event.reply.ReplyGroupMessageEvent;
+import com.him188.jpre.event.reply.ReplyPrivateMessageEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginLoadException;
-import com.him188.jpre.log.logger.SystemLogger;
 import com.him188.jpre.network.Network;
 import com.him188.jpre.plugin.Plugin;
 import com.him188.jpre.scheduler.Scheduler;
@@ -36,7 +35,6 @@ public final class JPREMain {
 	public static final String VERSION = "1.0.1";
 
 	public static String dataFolder;
-	public static SystemLogger logger;
 
 	private static boolean shutdown;
 
@@ -123,13 +121,9 @@ public final class JPREMain {
 	@SuppressWarnings({"SameParameterValue", "ResultOfMethodCallIgnored"})
 	public static void init(String dataFolder) {
 		JPREMain.dataFolder = dataFolder;
-		logger = new SystemLogger();
 		new File(dataFolder + "/plugins/").mkdir();
 	}
 
-	public static SystemLogger getLogger() {
-		return logger;
-	}
 
 	public static String getDataFolder() {
 		return dataFolder;
@@ -213,7 +207,6 @@ public final class JPREMain {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
-			JPREMain.getLogger().exception(e);
 			return false;
 		}
 
@@ -235,7 +228,6 @@ public final class JPREMain {
 		try {
 			return PluginManager.loadPluginDescription(fileName) != null;
 		} catch (Throwable e) {
-			JPREMain.getLogger().exception(e);
 			return false;
 		}
 	}
@@ -254,7 +246,6 @@ public final class JPREMain {
 			System.out.println("[Plugin] " + plugin.getName() + " enabled!");
 			return true;
 		} catch (Throwable e) {
-			JPREMain.getLogger().exception(e);
 			return false;
 		}
 	}
@@ -268,7 +259,6 @@ public final class JPREMain {
 			plugin.disable();
 			return true;
 		} catch (Throwable e) {
-			JPREMain.getLogger().exception(e);
 			return false;
 		}
 	}
