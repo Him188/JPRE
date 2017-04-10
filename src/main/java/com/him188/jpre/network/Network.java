@@ -41,7 +41,6 @@ public final class Network {
 					pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
 					pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
 					pipeline.addLast("handler", new NetworkPacketHandler());
-					pipeline.addLast(new OutBoundHandler());
 				}
 			});
 
