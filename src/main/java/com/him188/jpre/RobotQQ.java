@@ -23,9 +23,11 @@ import static com.him188.jpre.CommandId.*;
  * @author Him188
  */
 public class RobotQQ {
+	private final Frame frame;
 	public final long QQ;
 
-	public RobotQQ(long QQ) {
+	public RobotQQ(Frame frame, long QQ) {
+		this.frame = frame;
 		this.QQ = QQ;
 	}
 
@@ -590,7 +592,7 @@ public class RobotQQ {
 			case TYPE_FRIEND:
 				event = new SendPrivateMessageEvent(this, QQ, context);
 
-				JPREMain.callEvent(event);
+				frame.callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -600,7 +602,7 @@ public class RobotQQ {
 			case TYPE_GROUP_TEMPORARY_SESSION:
 				event = new SendPrivateMessageEvent(this, group, context);
 
-				JPREMain.callEvent(event);
+				frame.callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -610,7 +612,7 @@ public class RobotQQ {
 			case TYPE_DISCUSS:
 				event = new SendGroupMessageEvent(this, group, context);
 
-				JPREMain.callEvent(event);
+				frame.callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -978,8 +980,8 @@ public class RobotQQ {
 	 * @param plugin 用于接受 Task
 	 */
 	public void like(long QQ, int times, long millis, Plugin plugin) {
-		Scheduler.scheduleTask(plugin, () -> {
-			for (int i = 0; i < 10; i++) {
+		frame.getScheduler().scheduleTask(plugin, () -> {
+			for (int i = 0; i < times; i++) {
 				Thread.currentThread();
 				try {
 					Thread.sleep(millis);
@@ -1031,7 +1033,7 @@ public class RobotQQ {
 
 	private static int intResult() {
 		return 1;
-		// TODO: 2017/4/8
+		// TODO: 2017/4/8 fix that
 		//return parseInt(stringResult());
 	}
 
@@ -1044,6 +1046,8 @@ public class RobotQQ {
 	private static String stringResult() {
 		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
 
+
+		// TODO: 2017/4/11 static scheduler
 		Task task = Scheduler.scheduleTimingTask(null,
 				() ->
 						results.add("")

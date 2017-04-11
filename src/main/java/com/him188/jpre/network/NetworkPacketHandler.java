@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author Him188
  */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
+	// TODO: 2017/4/11  constructor
 	private static List<ConnectedClient> clients = new ArrayList<>();
 
 	public static List<ConnectedClient> getClients() {

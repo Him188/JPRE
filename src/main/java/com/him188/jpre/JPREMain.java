@@ -9,15 +9,16 @@ import java.security.NoSuchAlgorithmException;
 import static com.him188.jpre.Utils.md5Encode;
 
 /**
- * Java 插件加载器主类
+ * JPRE 主类
  * <p>
  * 如果你想开发插件. 请查看 {@link Plugin}
  *
  * @author Him188
  * @see PluginManager 真正的插件管理器
  */
+@SuppressWarnings("WeakerAccess")
 public final class JPREMain {
-	@SuppressWarnings({"OctalInteger", "WeakerAccess"})
+	@SuppressWarnings({"OctalInteger"})
 	public static final int DEFAULT_PORT = 420;
 
 	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -58,9 +59,7 @@ public final class JPREMain {
 		System.out.println("Server startup done!");
 	}
 
-	@SuppressWarnings("WeakerAccess")
 	public static final String VERSION_TYPE = "Pre";
-	@SuppressWarnings("WeakerAccess")
 	public static final String VERSION = "1.1.0";
 
 	private static void printAbout() {

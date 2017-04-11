@@ -219,4 +219,8 @@ public final class Frame {
 		Plugin plugin = pluginManager.getPlugin(name);
 		return plugin != null && plugin.isEnabled();
 	}
+
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
 }
