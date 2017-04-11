@@ -1,6 +1,6 @@
 package com.him188.jpre.scheduler;
 
-import com.him188.jpre.JPREMain;
+import com.him188.jpre.Frame;
 import com.him188.jpre.plugin.Plugin;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -17,9 +17,15 @@ import java.util.concurrent.TimeUnit;
  * @author Him188
  */
 public class Scheduler {
-	protected static final ScheduledThreadPoolExecutor service = new ScheduledThreadPoolExecutor(10);
+	private Frame frame;
 
-	protected static final ThreadPoolExecutor pool = new ThreadPoolExecutor(32, 128, 1000 * 60, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
+	final ScheduledThreadPoolExecutor service = new ScheduledThreadPoolExecutor(10);
+
+	final ThreadPoolExecutor pool = new ThreadPoolExecutor(32, 128, 1000 * 60, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
+
+	public Scheduler(Frame frame) {
+		this.frame = frame;
+	}
 
 	/**
 	 * 新建延迟任务. 该任务只会被执行一次
@@ -30,7 +36,7 @@ public class Scheduler {
 	 *
 	 * @return 是否成功
 	 */
-	public static Task scheduleTimingTask(Plugin plugin, Runnable task, long delay) {
+	public Task scheduleTimingTask(Plugin plugin, Runnable task, long delay) {
 		return scheduleTimingTask(plugin, new Task() {
 			@Override
 			public void onRun() {
@@ -39,7 +45,7 @@ public class Scheduler {
 		}, delay);
 	}
 
-	public static Task scheduleTimingTask(Plugin plugin, Task task, long delay) {
+	public Task scheduleTimingTask(Plugin plugin, Task task, long delay) {
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
@@ -57,7 +63,7 @@ public class Scheduler {
 	 *
 	 * @return 是否成功
 	 */
-	public static Task scheduleRepeatingTask(Plugin plugin, Runnable task, long delay, long period) {
+	public Task scheduleRepeatingTask(Plugin plugin, Runnable task, long delay, long period) {
 		return scheduleRepeatingTask(plugin, new Task() {
 			@Override
 			public void onRun() {
@@ -66,7 +72,7 @@ public class Scheduler {
 		}, delay, period);
 	}
 
-	public static Task scheduleRepeatingTask(Plugin plugin, Task task, long delay, long period) {
+	public Task scheduleRepeatingTask(Plugin plugin, Task task, long delay, long period) {
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
@@ -83,7 +89,7 @@ public class Scheduler {
 	 *
 	 * @return 是否成功
 	 */
-	public static Task scheduleTask(Plugin plugin, Runnable task) {
+	public Task scheduleTask(Plugin plugin, Runnable task) {
 		return scheduleTask(plugin, new Task() {
 			@Override
 			public void onRun() {
@@ -92,7 +98,7 @@ public class Scheduler {
 		});
 	}
 
-	public static Task scheduleTask(Plugin plugin, Task task) {
+	public Task scheduleTask(Plugin plugin, Task task) {
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
@@ -105,14 +111,12 @@ public class Scheduler {
 	/**
 	 * @see Task#cancel()
 	 */
-	public static void cancelTask(Task task) {
+	public void cancelTask(Task task) {
 		task.cancel();
 	}
 
-	public static void shutdown(){
-		if (JPREMain.isShutdown()) {
-			service.shutdownNow();
-			pool.shutdownNow();
-		}
+	public void shutdown() {
+		service.shutdownNow();
+		pool.shutdownNow();
 	}
 }

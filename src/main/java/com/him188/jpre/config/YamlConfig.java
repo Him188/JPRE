@@ -1,6 +1,5 @@
 package com.him188.jpre.config;
 
-import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -71,7 +70,7 @@ public class YamlConfig extends Config {
 		try {
 			this.list = yaml.loadAs(Utils.readFile(file), Map.class);
 		} catch (IOException e) {
-			JPREMain.getLogger().exception(e);
+			e.printStackTrace();
 		}
 
 		if (this.list == null) {
@@ -89,7 +88,7 @@ public class YamlConfig extends Config {
 		try {
 			Utils.writeFile(file, yaml.dump(this.list));
 		} catch (IOException e) {
-			JPREMain.getLogger().exception(e);
+			e.printStackTrace();
 		}
 	}
 }

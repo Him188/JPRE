@@ -1,9 +1,6 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.JPREMain;
-import com.him188.jpre.PluginManager;
-import com.him188.jpre.RobotQQ;
-import com.him188.jpre.Utils;
+import com.him188.jpre.*;
 import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Unpack;
 import com.him188.jpre.event.Event;
@@ -38,11 +35,13 @@ import static com.him188.jpre.network.packet.PacketIds.*;
 public class ConnectedClient {
 	private boolean loggedIn = false;
 
+	private final Frame frame;
 	private SocketAddress address;
 
 	private ChannelHandlerContext lastCtx;
 
-	public ConnectedClient(SocketAddress address, ChannelHandlerContext initCtx) {
+	public ConnectedClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
+		this.frame = frame;
 		this.address = address;
 		this.lastCtx = initCtx;
 	}
@@ -109,7 +108,7 @@ public class ConnectedClient {
 						event = new GroupMemberIncreaseEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getLong());
 						break;
 					case EventTypes.FRIEND_ADD:
-						event = new FriendAddEvent(packet.getInt(), packet.getInt(), packet.getLong());
+						event = new FriendAddEvent(RobotQQ.getRobot(packet.getLong()), packet.getInt(), packet.getLong());
 						break;
 					case EventTypes.REQUEST_FRIEND_ADD:
 						event = new AddFriendRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getString(), packet.getString());
@@ -117,13 +116,14 @@ public class ConnectedClient {
 					case EventTypes.REQUEST_GROUP_ADD:
 						event = new AddGroupRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString());
 						break;
+					// TODO: 2017/4/11 add all
 				}
 				if (event == null) {
 					sendPacket(new InvalidEventPacket());
 					break;
 				}
 				System.out.println("[Event] Parsed: " + event);
-				sendPacket(new EventResultPacket(JPREMain.callEvent(event)));
+				sendPacket(new EventResultPacket(frame.callEvent(event)));
 				break;
 			default:
 				Packet pk = Packet.matchPacket(pid);
@@ -149,7 +149,7 @@ public class ConnectedClient {
 		packet.decode(unpack);
 
 		DataPacketReceiveEvent event = new DataPacketReceiveEvent(packet, this);
-		JPREMain.callEvent(event);
+		frame.callEvent(event);
 		if (event.isCancelled()) {
 			return;
 		}
@@ -159,7 +159,7 @@ public class ConnectedClient {
 				sendPacket(new ServerPongPacket());
 				break;
 			case LOGIN:
-				if (((LoginPacket) packet).getPassword().equalsIgnoreCase(JPREMain.getPassword())) {
+				if (((LoginPacket) packet).getPassword().equalsIgnoreCase(frame.getPassword())) {
 					sendPacket(new LoginResultPacket(true));
 					loggedIn = true;
 					System.out.println("Client login: succeed");
@@ -178,19 +178,19 @@ public class ConnectedClient {
 
 				switch (packet.getNetworkId()) {
 					case ENABLE_PLUGIN:
-						sendPacket(new EnablePluginResultPacket(JPREMain.enablePlugin(((EnablePluginPacket) packet).getName())));
+						sendPacket(new EnablePluginResultPacket(frame.enablePlugin(((EnablePluginPacket) packet).getName())));
 						break;
 					case LOAD_PLUGIN:
-						sendPacket(new LoadPluginResultPacket(JPREMain.loadPlugin(((LoadPluginPacket) packet).getName())));
+						sendPacket(new LoadPluginResultPacket(frame.loadPlugin(((LoadPluginPacket) packet).getName())));
 						break;
 					case DISABLE_PLUGIN:
-						sendPacket(new DisablePluginResultPacket(JPREMain.disablePlugin(((DisablePluginPacket) packet).getName())));
+						sendPacket(new DisablePluginResultPacket(frame.disablePlugin(((DisablePluginPacket) packet).getName())));
 						break;
 					case LOAD_PLUGIN_DESCRIPTION:
-						sendPacket(new LoadPluginDescriptionResultPacket(JPREMain.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
+						sendPacket(new LoadPluginDescriptionResultPacket(frame.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
 						break;
 					case GET_PLUGIN_INFORMATION:
-						PluginDescription description = PluginManager.matchPluginDescription(((GetPluginInformationPacket) packet).getName());
+						PluginDescription description = frame.getPluginManager().matchPluginDescription(((GetPluginInformationPacket) packet).getName());
 						if (description == null) {
 							sendPacket(new GetPluginInformationResultPacket("", "", "", "", 0, ""));
 							break;
@@ -205,7 +205,7 @@ public class ConnectedClient {
 						));
 						break;
 					case SET_INFORMATION:
-						JPREMain.init(((SetInformationPacket) packet).getDataFolder());
+						frame.init(((SetInformationPacket) packet).getDataFolder());
 						sendPacket(new SetInformationResultPacket(true));
 						break;
 					case COMMAND_RESULT:

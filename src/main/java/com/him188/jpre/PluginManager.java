@@ -23,7 +23,7 @@ import java.util.zip.ZipEntry;
  * 事件管理:
  * {@link #registerEvents(Listener, Plugin)}: 注册事件
  * {@link #unregisterEvents(Plugin)}: 取消注册事件
- * {@link JPREMain#callEvent(Event)}: 调用事件
+ * {@link Frame#callEvent(Event)}: 调用事件
  * <p>
  * 加载插件:
  * 注意! 运行环境启动时 (即MPQ启动时), 会自动搜索插件目录下所有 .jar 后缀的文件并尝试加载.
@@ -40,16 +40,16 @@ import java.util.zip.ZipEntry;
  * @author Him188
  */
 public final class PluginManager {
-	private static Map<Plugin, List<Handler>> listeners = new HashMap<>();
-	private static List<Plugin> plugins = new ArrayList<>();
-	private static Map<String, PluginDescription> descriptions = new HashMap<>();
+	private Map<Plugin, List<Handler>> listeners = new HashMap<>();
+	private List<Plugin> plugins = new ArrayList<>();
+	private Map<String, PluginDescription> descriptions = new HashMap<>();
 
 	/**
 	 * 获取插件信息列表 (从 plugin.json 读取的信息)
 	 *
 	 * @return 插件信息列表
 	 */
-	public static Map<String, PluginDescription> getDescriptions() {
+	public Map<String, PluginDescription> getDescriptions() {
 		return descriptions;
 	}
 
@@ -60,7 +60,7 @@ public final class PluginManager {
 	 *
 	 * @return 插件
 	 */
-	public static Plugin getPlugin(String name) {
+	public Plugin getPlugin(String name) {
 		for (Plugin plugin : plugins) {
 			System.out.println(plugin.toString());
 			if (plugin.getName()
@@ -80,7 +80,7 @@ public final class PluginManager {
 	 *
 	 * @return 是否成功
 	 */
-	public static boolean loadPlugin(String file) throws PluginLoadException {
+	public boolean loadPlugin(String file) throws PluginLoadException {
 
 		try {
 			if (!loadPlugin(new JarFile(file))) {
@@ -102,7 +102,7 @@ public final class PluginManager {
 	 *
 	 * @return 是否成功
 	 */
-	public static boolean loadPlugin(JarFile file) throws PluginLoadException {
+	public boolean loadPlugin(JarFile file) throws PluginLoadException {
 		PluginDescription description = descriptions.get(file.getName());
 		if (description.getMainClass().isEmpty()) {
 			throw new PluginLoadException("Could not load plugin description: " + description.getName());
@@ -153,7 +153,7 @@ public final class PluginManager {
 	 *
 	 * @return 插件列表
 	 */
-	public static List<Plugin> getPlugins() {
+	public List<Plugin> getPlugins() {
 		return plugins;
 	}
 
@@ -164,7 +164,7 @@ public final class PluginManager {
 	 *
 	 * @return 已加载返回插件信息, 若未加载返回 null. 未加载时可以使用 {@link #loadPluginDescription(JarFile)} 来加载
 	 */
-	public static PluginDescription matchPluginDescription(String file) {
+	public PluginDescription matchPluginDescription(String file) {
 		return descriptions.get(file);
 	}
 
@@ -175,7 +175,7 @@ public final class PluginManager {
 	 *
 	 * @return 插件信息
 	 */
-	public static PluginDescription loadPluginDescription(String file) throws PluginLoadException {
+	public PluginDescription loadPluginDescription(String file) throws PluginLoadException {
 		try {
 			System.out.println(file);
 			return loadPluginDescription(new JarFile(file));
@@ -191,7 +191,7 @@ public final class PluginManager {
 	 *
 	 * @return 插件信息
 	 */
-	public static PluginDescription loadPluginDescription(JarFile file) throws PluginLoadException {
+	public PluginDescription loadPluginDescription(JarFile file) throws PluginLoadException {
 		PluginDescription description = getDescription(file);
 		if (description == null) {
 			throw new PluginLoadException("Could not load plugin description: " + file.getName());
@@ -204,14 +204,14 @@ public final class PluginManager {
 	/**
 	 * 启动所有插件
 	 */
-	public static void enablePlugins() {
+	public void enablePlugins() {
 		plugins.stream().filter(Plugin::isDisabled).forEach(Plugin::enable);
 	}
 
 	/**
 	 * 关闭所有插件
 	 */
-	public static void disablePlugins() {
+	public void disablePlugins() {
 		plugins.stream().filter(Plugin::isEnabled).forEach(Plugin::enable);
 	}
 
@@ -223,7 +223,7 @@ public final class PluginManager {
 	 *
 	 * @return 读取流
 	 */
-	public static InputStream getResourceFile(JarFile file, String resource) {
+	public InputStream getResourceFile(JarFile file, String resource) {
 		try {
 
 			ZipEntry entry = file.getEntry("resources/" + resource);
@@ -249,7 +249,7 @@ public final class PluginManager {
 	 *
 	 * @return PluginDescription
 	 */
-	public static PluginDescription getDescription(JarFile file) {
+	public PluginDescription getDescription(JarFile file) {
 		try {
 			ZipEntry entry = file.getEntry("cq.json");
 			if (entry == null) {
@@ -262,8 +262,6 @@ public final class PluginManager {
 				}
 			}
 
-			System.out.println("\n\n\n\n");
-			System.out.println(file.getName());
 			return new Gson().fromJson(Utils.readFile(file.getInputStream(entry)), PluginDescription.class).setFileName(file.getName());
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -285,7 +283,7 @@ public final class PluginManager {
 	 * <pre>
 	 *
 	 * import ...;
-	 * public class mainClass extends JavaPlugin{
+	 * public class MainClass extends JavaPlugin{
 	 *     public void onEnable(){
 	 *         PluginManager.registerEvents(new MySimpleListener(), this);
 	 *     }
@@ -306,7 +304,7 @@ public final class PluginManager {
 	 * @see #registerEvent(Listener, Plugin, Class, Method) 会循环调用该方法
 	 */
 	@SuppressWarnings("unchecked")
-	public static void registerEvents(Listener listener, Plugin plugin) throws PluginEventException {
+	public void registerEvents(Listener listener, Plugin plugin) throws PluginEventException {
 		try {
 			if (!plugin.isEnabled()) {
 				throw new PluginEventException("Plugin " + plugin.getName() + " tried to register event while not enabled");
@@ -351,11 +349,11 @@ public final class PluginManager {
 	 * @param method   事件处理器
 	 *
 	 * @return 是否成功
-	 *+
+	 *
 	 * @throws PluginEventException 当 {@code plugin} 未启用 (enable) 时
 	 * @throws PluginEventException 当 {@code method} 没有注释 {@link EventHandler} 时
 	 */
-	public static boolean registerEvent(Listener listener, Plugin plugin, Class<Event> event, Method method) throws PluginEventException {
+	public boolean registerEvent(Listener listener, Plugin plugin, Class<Event> event, Method method) throws PluginEventException {
 		try {
 			if (!plugin.isEnabled()) {
 				throw new PluginEventException("Plugin " + plugin.getName() + " tried to register event while not enabled");
@@ -383,7 +381,8 @@ public final class PluginManager {
 		}
 	}
 
-	protected static void unregisterAllEvents() {
+	// TODO: 2017/4/11 Restart server
+	void unregisterAllEvents() {
 		listeners.clear();
 	}
 
@@ -394,7 +393,7 @@ public final class PluginManager {
 	 *
 	 * @return 是否成功
 	 */
-	public static boolean unregisterEvents(Plugin plugin) {
+	public boolean unregisterEvents(Plugin plugin) {
 		List<Handler> remove = new ArrayList<>();
 		for (List<Handler> handlers : listeners.values()) {
 			for (Handler handler : handlers) {
@@ -415,7 +414,7 @@ public final class PluginManager {
 	 *
 	 * @return 是否成功
 	 */
-	public static boolean unregisterEvents(Listener listener) {
+	public boolean unregisterEvents(Listener listener) {
 		List<Handler> remove = new ArrayList<>();
 		for (List<Handler> handlers : listeners.values()) {
 			for (Handler handler : handlers) {
@@ -429,7 +428,7 @@ public final class PluginManager {
 		return true;
 	}
 
-	private static HandlerList getHandlerList(Class<?> eventClass) {
+	private HandlerList getHandlerList(Class<?> eventClass) {
 		try {
 			Method method = eventClass.getDeclaredMethod("getHandlers");
 			method.setAccessible(true);
@@ -441,34 +440,27 @@ public final class PluginManager {
 
 	/**
 	 * 调用事件. 本方法仅运行环境内部使用,
-	 * 插件请使用 {@link JPREMain#callEvent(Event)}
+	 * 插件请使用 {@link Frame#callEvent(Event)}
 	 *
 	 * @param event 事件
 	 *
 	 * @return 是否拦截
 	 *
-	 * @see JPREMain#callEvent(Event)
+	 * @see Frame#callEvent(Event)
 	 */
-	protected static boolean callEvent(Event event) {
-		//try {
+	boolean callEvent(Event event) {
+		HandlerList list = getHandlerList(event.getClass());
+		if (list == null) {
+			return false;
+		}
 
-			HandlerList list = getHandlerList(event.getClass());
-			if (list == null) {
-				return false;
-			}
-
-			if (list.size() == 0) {
-				return false;
-			}
-			for (EventPriority i : EventPriority.PRIORITIES) {
-				list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
-			}
-			event.close();
-			return event.isCancelled();
-		//} catch (Throwable e) {
-		//	e.printStackTrace();
-		//	JPREMain.getLogger().error("EventError", e.getMessage());
-		//	return false;
-		//}
+		if (list.size() == 0) {
+			return false;
+		}
+		for (EventPriority i : EventPriority.PRIORITIES) {
+			list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
+		}
+		event.close();
+		return event.isCancelled();
 	}
 }
