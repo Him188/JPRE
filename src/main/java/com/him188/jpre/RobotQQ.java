@@ -22,6 +22,7 @@ import static com.him188.jpre.CommandId.*;
  *
  * @author Him188
  */
+@SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class RobotQQ {
 	private final Frame frame;
 	public final long QQ;
