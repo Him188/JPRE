@@ -994,7 +994,7 @@ public class RobotQQ {
 	}
 
 
-	// TODO: 2017/4/8  
+	// TODO: 2017/4/8  other commands
 
 	/* STATIC(COMMAND SENDER) */
 
@@ -1047,7 +1047,7 @@ public class RobotQQ {
 		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
 
 
-		// TODO: 2017/4/11 static scheduler
+		// TODO: 2017/4/11 static scheduler or static framer getter
 		Task task = Scheduler.scheduleTimingTask(null,
 				() ->
 						results.add("")
