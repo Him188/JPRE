@@ -1,7 +1,8 @@
 package com.him188.jpre.network;
 
+import com.him188.jpre.Frame;
+import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
-import com.him188.jpre.scheduler.Scheduler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -17,14 +18,25 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author Him188
  */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
-	// TODO: 2017/4/11  constructor
-	private static List<ConnectedClient> clients = new ArrayList<>();
+	private JPREMain jpre;
 
-	public static List<ConnectedClient> getClients() {
+	public JPREMain getJPREMain() {
+		return jpre;
+	}
+
+	NetworkPacketHandler(JPREMain jpre){
+		this.jpre = jpre;
+	}
+
+
+	private static List<MPQClient> clients = new ArrayList<>();
+
+	public static List<MPQClient> getClients() {
 		return clients;
 	}
 
-	public static ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
+
+	private static ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -43,10 +55,10 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 					while ((data = dataTemp.poll()) != null) {
 						realData = Utils.arrayAppend(realData, data);
 					}
-					for (ConnectedClient client : clients) {
+					for (MPQClient client : clients) {
 						if (client.is(ctx.channel().remoteAddress())) {
 							final byte[] finalRealData = realData;
-							Scheduler.scheduleTask(null, () -> client.dataReceive(finalRealData));
+							client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(finalRealData));
 						}
 					}
 					return;
@@ -74,7 +86,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 			return;
 		}
 
-		ConnectedClient client = new ConnectedClient(ctx.channel().remoteAddress(), ctx);
+		MPQClient client = new MPQClient(new Frame(getJPREMain()), ctx.channel().remoteAddress(), ctx);
 		clients.add(client);
 
 		System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
@@ -83,8 +95,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		ConnectedClient found = null;
-		for (ConnectedClient client : clients) {
+		MPQClient found = null;
+		for (MPQClient client : clients) {
 			if (found != null) {
 				continue;
 			}

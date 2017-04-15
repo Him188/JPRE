@@ -1,7 +1,7 @@
 package com.him188.jpre.event.network;
 
 import com.him188.jpre.event.Event;
-import com.him188.jpre.network.ConnectedClient;
+import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.packet.Packet;
 
 /**
@@ -11,5 +11,5 @@ abstract public class NetworkEvent extends Event {
 
 	abstract public Packet getPacket();
 
-	abstract public ConnectedClient getClient();
+	abstract public MPQClient getClient();
 }

@@ -1,7 +1,5 @@
 package com.him188.jpre.plugin;
 
-import com.him188.jpre.PluginManager;
-
 import java.util.jar.JarFile;
 
 /**

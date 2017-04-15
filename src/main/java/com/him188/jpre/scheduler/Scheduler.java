@@ -27,6 +27,10 @@ public class Scheduler {
 		this.frame = frame;
 	}
 
+	public Frame getFrame() {
+		return frame;
+	}
+
 	/**
 	 * 新建延迟任务. 该任务只会被执行一次
 	 *

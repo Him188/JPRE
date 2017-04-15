@@ -2,7 +2,7 @@ package com.him188.jpre.event.network;
 
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.HandlerList;
-import com.him188.jpre.network.ConnectedClient;
+import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.packet.Packet;
 
 /**
@@ -10,7 +10,7 @@ import com.him188.jpre.network.packet.Packet;
  */
 public class DataPacketPreSendEvent extends NetworkEvent {
 	private final Packet packet;
-	private final ConnectedClient client;
+	private final MPQClient client;
 
 
 	private static final HandlerList handlers = new HandlerList();
@@ -18,13 +18,13 @@ public class DataPacketPreSendEvent extends NetworkEvent {
 		return handlers;
 	}
 
-	public DataPacketPreSendEvent(Packet packet, ConnectedClient client){
+	public DataPacketPreSendEvent(Packet packet, MPQClient client){
 		this.packet = packet;
 		this.client = client;
 	}
 
 	@Override
-	public ConnectedClient getClient() {
+	public MPQClient getClient() {
 		return client;
 	}
 

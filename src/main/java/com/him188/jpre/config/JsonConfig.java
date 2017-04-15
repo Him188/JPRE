@@ -1,7 +1,6 @@
 package com.him188.jpre.config;
 
 import com.google.gson.*;
-import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
 
 import java.io.File;
@@ -30,6 +29,7 @@ public class JsonConfig extends Config {
 	 * @param file               文件名 (绝对路径)
 	 * @param useSynchronization 是否使用线程同步. true, HashTable 方式存放数据; false, HashMap 方式存放数据 当本配置需要在多线程环境中使用时, 请填 true
 	 */
+	@SuppressWarnings("WeakerAccess")
 	public JsonConfig(String file, boolean useSynchronization) {
 		super(file);
 		converter = new JsonToMap();
@@ -93,14 +93,14 @@ public class JsonConfig extends Config {
 		try {
 			Utils.writeFile(file, new JsonParser().parse(new Gson().toJson(list)).getAsJsonObject().toString());
 		} catch (IOException e) {
-			JPREMain.getLogger().exception(e);
+			e.printStackTrace();
 		}
 	}
 
 	private final class JsonToMap {
 		private boolean useSynchronization = false;
 
-		public void setSynchronized(boolean b) {
+		void setSynchronized(boolean b) {
 			useSynchronization = b;
 		}
 
@@ -111,7 +111,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return JsonObject
 		 */
-		public JsonObject parseJson(String json) {
+		JsonObject parseJson(String json) {
 			return new JsonParser().parse(json).getAsJsonObject();
 		}
 
@@ -122,7 +122,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return Map
 		 */
-		public Map<String, Object> toMap(String json) {
+		Map<String, Object> toMap(String json) {
 			return toMap(parseJson(json));
 		}
 
@@ -133,7 +133,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return Map
 		 */
-		public Map<String, Object> toMap(JsonObject json) {
+		Map<String, Object> toMap(JsonObject json) {
 			Map<String, Object> map = useSynchronization ? new Hashtable<>() : new HashMap<>();
 			Set<Entry<String, JsonElement>> entrySet = json.entrySet();
 			for (Entry<String, JsonElement> entry : entrySet) {
@@ -156,7 +156,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return List
 		 */
-		public List<Object> toList(JsonArray json) {
+		List<Object> toList(JsonArray json) {
 			List<Object> list = useSynchronization ? new Vector<>() : new ArrayList<>();
 			for (int i = 0; i < json.size(); i++) {
 				Object value = json.get(i);

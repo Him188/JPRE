@@ -1,6 +1,8 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.*;
+import com.him188.jpre.Frame;
+import com.him188.jpre.RobotQQ;
+import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Unpack;
 import com.him188.jpre.event.Event;
@@ -10,10 +12,10 @@ import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
 import com.him188.jpre.event.group.GroupMemberDecreaseEvent;
 import com.him188.jpre.event.group.GroupMemberIncreaseEvent;
-import com.him188.jpre.event.jpre.JPREDisableEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
+import com.him188.jpre.event.mpq.MPQDisableEvent;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
 import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
@@ -32,15 +34,24 @@ import static com.him188.jpre.network.packet.PacketIds.*;
  *
  * @author Him188
  */
-public class ConnectedClient {
-	private boolean loggedIn = false;
+public class MPQClient {
+	/* Frame */
 
 	private final Frame frame;
+
+	public Frame getFrame() {
+		return frame;
+	}
+
+
+
+
 	private SocketAddress address;
 
 	private ChannelHandlerContext lastCtx;
 
-	public ConnectedClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
+	public MPQClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
+		frame.setClient(this);
 		this.frame = frame;
 		this.address = address;
 		this.lastCtx = initCtx;
@@ -60,15 +71,6 @@ public class ConnectedClient {
 	}
 
 	/**
-	 * 是否已验证密码 {@link LoginPacket}
-	 *
-	 * @return 是否已验证密码
-	 */
-	public boolean isLoggedIn() {
-		return loggedIn;
-	}
-
-	/**
 	 * 数据包处理
 	 *
 	 * @param data 数据
@@ -84,16 +86,16 @@ public class ConnectedClient {
 				switch (eid) {
 					case EventTypes.EXIT:
 					case EventTypes.DISABLE:
-						event = new JPREDisableEvent(this);
+						event = new MPQDisableEvent(this);
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(RobotQQ.getRobot(packet.getLong()), PrivateMessageEvent.MESSAGE_TYPE_PRIVATE, 0, packet.getLong(), Utils.utf8Decode(packet.getString()));
+						event = new PrivateMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), PrivateMessageEvent.MESSAGE_TYPE_PRIVATE, 0, packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;// TODO: 2017/4/9 check them
 					case EventTypes.GROUP_MESSAGE:
-						event = new GroupMessageEvent(RobotQQ.getRobot(packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
+						event = new GroupMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(RobotQQ.getRobot(packet.getLong()), 0, packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()));
+						event = new DiscussMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.GROUP_UPLOAD:
 						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
@@ -108,7 +110,7 @@ public class ConnectedClient {
 						event = new GroupMemberIncreaseEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getLong());
 						break;
 					case EventTypes.FRIEND_ADD:
-						event = new FriendAddEvent(RobotQQ.getRobot(packet.getLong()), packet.getInt(), packet.getLong());
+						event = new FriendAddEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), packet.getInt(), packet.getLong());
 						break;
 					case EventTypes.REQUEST_FRIEND_ADD:
 						event = new AddFriendRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getString(), packet.getString());
@@ -123,7 +125,7 @@ public class ConnectedClient {
 					break;
 				}
 				System.out.println("[Event] Parsed: " + event);
-				sendPacket(new EventResultPacket(frame.callEvent(event)));
+				sendPacket(new EventResultPacket(frame.getPluginManager().callEvent(event)));
 				break;
 			default:
 				Packet pk = Packet.matchPacket(pid);
@@ -149,7 +151,7 @@ public class ConnectedClient {
 		packet.decode(unpack);
 
 		DataPacketReceiveEvent event = new DataPacketReceiveEvent(packet, this);
-		frame.callEvent(event);
+		frame.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
 		}
@@ -158,24 +160,7 @@ public class ConnectedClient {
 			case PING:
 				sendPacket(new ServerPongPacket());
 				break;
-			case LOGIN:
-				if (((LoginPacket) packet).getPassword().equalsIgnoreCase(frame.getPassword())) {
-					sendPacket(new LoginResultPacket(true));
-					loggedIn = true;
-					System.out.println("Client login: succeed");
-				} else {
-					sendPacket(new LoginResultPacket(false));
-					loggedIn = false;
-					System.out.println("Client login: failed");
-				}
-
-				break;
 			default:
-				if (!isLoggedIn()) {
-					sendPacket(new AccessDeniedPacket());
-					break;
-				}
-
 				switch (packet.getNetworkId()) {
 					case ENABLE_PLUGIN:
 						sendPacket(new EnablePluginResultPacket(frame.enablePlugin(((EnablePluginPacket) packet).getName())));
@@ -218,7 +203,7 @@ public class ConnectedClient {
 		}
 	}
 
-	public ChannelHandlerContext getLastCtx() {
+	private ChannelHandlerContext getLastCtx() {
 		return lastCtx;
 	}
 

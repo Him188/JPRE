@@ -1,5 +1,6 @@
 package com.him188.jpre.network;
 
+import com.him188.jpre.JPREMain;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -25,7 +26,7 @@ public final class Network {
 	 *
 	 * @throws InterruptedException 端口被占用时产生
 	 */
-	public static void start(int port) throws InterruptedException {
+	public static void start(JPREMain jpre, int port) throws InterruptedException {
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 		try {
@@ -40,7 +41,7 @@ public final class Network {
 					ChannelPipeline pipeline = ch.pipeline();
 					pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
 					pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
-					pipeline.addLast("handler", new NetworkPacketHandler());
+					pipeline.addLast("handler", new NetworkPacketHandler(jpre));
 				}
 			});
 

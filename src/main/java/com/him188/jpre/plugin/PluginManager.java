@@ -1,13 +1,23 @@
-package com.him188.jpre;
+package com.him188.jpre.plugin;
 
 import com.google.gson.Gson;
+import com.him188.jpre.Frame;
+import com.him188.jpre.Utils;
 import com.him188.jpre.event.*;
+import com.him188.jpre.event.message.DiscussMessageEvent;
+import com.him188.jpre.event.message.GroupMessageEvent;
+import com.him188.jpre.event.message.PrivateMessageEvent;
+import com.him188.jpre.event.reply.ReplyDiscussMessageEvent;
+import com.him188.jpre.event.reply.ReplyGroupMessageEvent;
+import com.him188.jpre.event.reply.ReplyPrivateMessageEvent;
+import com.him188.jpre.event.request.AddFriendRequestEvent;
+import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.exception.PluginEventException;
-import com.him188.jpre.plugin.Plugin;
-import com.him188.jpre.plugin.PluginDescription;
 import com.him188.jpre.exception.PluginLoadException;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -23,7 +33,7 @@ import java.util.zip.ZipEntry;
  * 事件管理:
  * {@link #registerEvents(Listener, Plugin)}: 注册事件
  * {@link #unregisterEvents(Plugin)}: 取消注册事件
- * {@link Frame#callEvent(Event)}: 调用事件
+ * {@link #callEvent(Event)}: 调用事件
  * <p>
  * 加载插件:
  * 注意! 运行环境启动时 (即MPQ启动时), 会自动搜索插件目录下所有 .jar 后缀的文件并尝试加载.
@@ -39,10 +49,23 @@ import java.util.zip.ZipEntry;
  *
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 public final class PluginManager {
+	private final Frame frame;
+
+	public Frame getFrame() {
+		return frame;
+	}
+
+	public PluginManager(Frame frame) {
+		this.frame = frame;
+	}
+
+
 	private Map<Plugin, List<Handler>> listeners = new HashMap<>();
 	private List<Plugin> plugins = new ArrayList<>();
 	private Map<String, PluginDescription> descriptions = new HashMap<>();
+
 
 	/**
 	 * 获取插件信息列表 (从 plugin.json 读取的信息)
@@ -134,9 +157,9 @@ public final class PluginManager {
 		}
 
 		try {
-			Constructor<?> constructor = mainClass.getConstructor();
+			Constructor<?> constructor = mainClass.getConstructor(PluginManager.class);
 			constructor.setAccessible(true);
-			Plugin plugin = (Plugin) constructor.newInstance();
+			Plugin plugin = (Plugin) constructor.newInstance(this);
 			plugins.add(plugin);
 			plugin.setPluginDescription(description);
 			plugin.onLoad();
@@ -144,6 +167,7 @@ public final class PluginManager {
 			System.out.println("[Plugin] " + plugin.getName() + " loaded!");
 			return true;
 		} catch (Throwable e) {
+			e.printStackTrace();
 			throw new PluginLoadException("Could not create instance of " + description.getName(), e);
 		}
 	}
@@ -212,6 +236,7 @@ public final class PluginManager {
 	 * 关闭所有插件
 	 */
 	public void disablePlugins() {
+		unregisterAllEvents();
 		plugins.stream().filter(Plugin::isEnabled).forEach(Plugin::enable);
 	}
 
@@ -285,7 +310,7 @@ public final class PluginManager {
 	 * import ...;
 	 * public class MainClass extends JavaPlugin{
 	 *     public void onEnable(){
-	 *         PluginManager.registerEvents(new MySimpleListener(), this);
+	 *         this.registerEvents(new MySimpleListener(), this);
 	 *     }
 	 * }
 	 *
@@ -382,7 +407,7 @@ public final class PluginManager {
 	}
 
 	// TODO: 2017/4/11 Restart server
-	void unregisterAllEvents() {
+	private void unregisterAllEvents() {
 		listeners.clear();
 	}
 
@@ -439,28 +464,97 @@ public final class PluginManager {
 	}
 
 	/**
-	 * 调用事件. 本方法仅运行环境内部使用,
-	 * 插件请使用 {@link Frame#callEvent(Event)}
+	 * 调用事件.
 	 *
 	 * @param event 事件
 	 *
-	 * @return 是否拦截
-	 *
-	 * @see Frame#callEvent(Event)
+	 * @return 是否成功
 	 */
-	boolean callEvent(Event event) {
-		HandlerList list = getHandlerList(event.getClass());
-		if (list == null) {
-			return false;
-		}
+	public boolean callEvent(Event event) {
 
-		if (list.size() == 0) {
-			return false;
+		HandlerList list = getHandlerList(event.getClass());
+		if (list != null && list.size() != 0) {
+
+			for (EventPriority i : EventPriority.PRIORITIES) {
+				list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
+			}
+
+			event.close();
+			if (!event.isCancelled()) {
+				try {
+					switch (Event.getEventType(event.getClass())) {
+						case EventTypes.DISCUSS_MESSAGE:// TODO: 2017/4/16 remove that
+							if (event instanceof DiscussMessageEvent) {
+								if (((DiscussMessageEvent) event).getRepeat() == null || ((DiscussMessageEvent) event).getRepeat().isEmpty()) {
+									return false;
+								}
+
+								ReplyDiscussMessageEvent ev = new ReplyDiscussMessageEvent((DiscussMessageEvent) event);
+								this.callEvent(ev);
+								if (ev.isCancelled()) {
+									return false;
+								}
+
+
+								ev.getRobot().sendDiscussMessage(ev.getDiscuss(), ev.getRepeat());
+								return true;
+							}
+							return false;
+						case EventTypes.GROUP_MESSAGE:
+							if (event instanceof GroupMessageEvent) {
+								if (((GroupMessageEvent) event).getRepeat() == null || ((GroupMessageEvent) event).getRepeat().isEmpty()) {
+									return false;
+								}
+
+								ReplyGroupMessageEvent ev = new ReplyGroupMessageEvent((GroupMessageEvent) event);
+								this.callEvent(ev);
+								if (ev.isCancelled()) {
+									return false;
+								}
+
+								ev.getRobot().sendGroupMessage(ev.getGroup(), ev.getRepeat());
+								return true;
+							}
+							return false;
+						case EventTypes.PRIVATE_MESSAGE:
+							if (event instanceof PrivateMessageEvent) {
+								if (((PrivateMessageEvent) event).getRepeat() == null || ((PrivateMessageEvent) event).getRepeat().isEmpty()) {
+									return false;
+								}
+
+								ReplyPrivateMessageEvent ev = new ReplyPrivateMessageEvent((PrivateMessageEvent) event);
+								this.callEvent(ev);
+								if (ev.isCancelled()) {
+									return false;
+								}
+
+								ev.getRobot().sendPrivateMessage(ev.getQQ(), ev.getRepeat());
+								return true;
+							}
+							return false;
+						case EventTypes.REQUEST_FRIEND_ADD:
+							if (event instanceof AddFriendRequestEvent) {
+								// TODO: 2017/4/9
+								//JPREMain.getCaller().friendAnswerAddRequest(((AddFriendRequestEvent) event).getResponseFlag(), ((AddFriendRequestEvent) event).isAccept(), ((AddFriendRequestEvent) event).getNickIfAccept());
+								return true;
+							}
+							return false;
+						case EventTypes.REQUEST_GROUP_ADD:
+							if (event instanceof AddGroupRequestEvent) {
+								// TODO: 2017/4/9
+								//JPREMain.getCaller().groupAnswerJoinRequest(((AddGroupRequestEvent) event).getResponseFlag(), ((AddGroupRequestEvent) event).getType(), ((AddGroupRequestEvent) event).isAccept(), ((AddGroupRequestEvent) event).reasonIfRefused);
+								return true;
+							}
+							return false;
+					}
+				} catch (Throwable e) {
+					e.printStackTrace();
+					return false;
+				}
+
+				return false;
+			}
 		}
-		for (EventPriority i : EventPriority.PRIORITIES) {
-			list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
-		}
-		event.close();
-		return event.isCancelled();
+		return false;
 	}
 }

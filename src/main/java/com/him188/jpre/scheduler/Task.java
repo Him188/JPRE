@@ -1,6 +1,5 @@
 package com.him188.jpre.scheduler;
 
-import com.him188.jpre.Frame;
 import com.him188.jpre.plugin.Plugin;
 
 /**
@@ -10,10 +9,20 @@ import com.him188.jpre.plugin.Plugin;
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class Task implements Runnable {
+	/* Abstract */
+
 	/**
 	 * 计时时间到达后调用本方法
 	 */
 	public abstract void onRun();
+
+
+	/* Scheduler */
+	private Scheduler scheduler;
+
+	public Scheduler getScheduler() {
+		return scheduler;
+	}
 
 
 	private boolean cancelled = false;
@@ -29,7 +38,7 @@ public abstract class Task implements Runnable {
 
 	protected Plugin owner;
 
-	protected final void setOwner(Plugin owner){
+	protected final void setOwner(Plugin owner) {
 		this.owner = owner;
 	}
 
@@ -57,8 +66,8 @@ public abstract class Task implements Runnable {
 	 */
 	public void forceCancel() {
 		cancel();
-		.remove(this);
-		Scheduler.pool.remove(this);
+		getScheduler().service.remove(this);
+		getScheduler().pool.remove(this);
 	}
 
 	@Override

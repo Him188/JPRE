@@ -1,7 +1,5 @@
 package com.him188.jpre.plugin;
 
-import com.him188.jpre.JPREMain;
-import com.him188.jpre.PluginManager;
 import com.him188.jpre.log.logger.Logger;
 import com.him188.jpre.log.logger.PluginLogger;
 
@@ -19,12 +17,18 @@ import java.util.jar.JarFile;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class JavaPlugin extends PluginDescription implements Plugin {
 	private final Logger logger;
+	private final PluginManager owner;
 	private boolean enabled;
 
-	public JavaPlugin() {
-		super(null, null, null, 0, null, null, null, null);
+	public PluginManager getPluginManager() {
+		return owner;
+	}
 
-		logger = new PluginLogger();
+	public JavaPlugin(PluginManager owner) {
+		super(null, null, null, 0, null, null, null, null);
+		this.owner = owner;
+
+		logger = new PluginLogger(owner.getFrame().getClient());
 		new File(getDataFolder() + File.pathSeparator).mkdir();
 	}
 
@@ -39,7 +43,7 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 	 */
 	public boolean saveResource(String resourceFile, String savingFile, boolean forceReplace) {
 		try {
-			InputStream resource = PluginManager.getResourceFile(new JarFile(getFileName()), resourceFile);
+			InputStream resource = getPluginManager().getResourceFile(new JarFile(getFileName()), resourceFile);
 			if (resource == null) {
 				return false;
 			}
@@ -139,6 +143,6 @@ public class JavaPlugin extends PluginDescription implements Plugin {
 
 	@Override
 	public File getDataFolder() {
-		return new File(JPREMain.getDataFolder() + "/plugins/" + getName());
+		return new File(getPluginManager().getFrame().getDataFolder() + "/plugins/" + getName() + "/");
 	}
 }

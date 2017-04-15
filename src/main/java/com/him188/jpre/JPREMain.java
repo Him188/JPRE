@@ -1,12 +1,13 @@
 package com.him188.jpre;
 
+import com.him188.jpre.network.Network;
 import com.him188.jpre.plugin.Plugin;
+import com.him188.jpre.plugin.PluginManager;
+import com.him188.jpre.scheduler.ServerScheduler;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
-
-import static com.him188.jpre.Utils.md5Encode;
 
 /**
  * JPRE 主类
@@ -18,8 +19,35 @@ import static com.him188.jpre.Utils.md5Encode;
  */
 @SuppressWarnings("WeakerAccess")
 public final class JPREMain {
-	@SuppressWarnings({"OctalInteger"})
+	/* Instance */
+	private static JPREMain instance;
+
+	public static JPREMain getInstance() {
+		return instance;
+	}
+
+	/* Server Scheduler */
+	private static ServerScheduler serverScheduler;
+
+	/**
+	 * Server Scheduler 主要用于 {@link RobotQQ#addResult(Object)} 的超时处理
+	 * 插件请使用 {@link Frame#getScheduler()}
+	 *
+	 * @return Server sScheduler
+	 */
+	static ServerScheduler getServerScheduler() {
+		return serverScheduler;
+	}
+
+	/* Constants */
 	public static final int DEFAULT_PORT = 420;
+	public static final String VERSION_TYPE = "Pre";
+	public static final String VERSION = "1.1.0";
+
+
+	static {
+		serverScheduler = new ServerScheduler();
+	}
 
 	public static void main(String[] args) throws Exception {
 		printAbout();
@@ -28,7 +56,6 @@ public final class JPREMain {
 		Options options = new Options();
 		options.addOption("h", "help", false, "Print the usage information");
 		options.addOption("p", "port", true, "Set the server port number");
-		options.addOption("pwd", "password", true, "Set the password that client must verify after connecting to server");
 
 		CommandLine commandLine = parser.parse(options, args);
 
@@ -46,22 +73,25 @@ public final class JPREMain {
 				System.exit(0);
 			}
 		}
-		System.out.println("Server port: " + port);
 
-		Frame frame = new Frame();
+		System.out.println("Starting server...");
+		int finalPort = port;
+		new Thread(() -> {
+			try {
+				Network.start(instance = new JPREMain(), finalPort);
+			} catch (InterruptedException e) {
+				System.out.println("Starting server failed. Could not open port " + finalPort);
+				System.exit(0);
+			}
+		}).start();
+		System.out.println("JPRE server is listening port " + port);
 
-		if (commandLine.hasOption("pwd")) {
-			frame.password = md5Encode(commandLine.getOptionValue("pwd").trim());
-		}
-		frame.password = frame.password == null ? "" : frame.password;
-
-		frame.startServer(port);
 		System.out.println("Server startup done!");
 	}
 
-	public static final String VERSION_TYPE = "Pre";
-	public static final String VERSION = "1.1.0";
-
+	/**
+	 * 输出关于信息
+	 */
 	private static void printAbout() {
 		System.out.println("MPQ JavaPluginRuntimeEnvironment");
 		System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);

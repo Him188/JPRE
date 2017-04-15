@@ -1,7 +1,7 @@
 package com.him188.jpre.network.packet;
 
 import com.him188.jpre.binary.Unpack;
-import com.him188.jpre.network.ConnectedClient;
+import com.him188.jpre.network.MPQClient;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
  *
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 abstract public class Packet {
 	/**
 	 * 编码包
@@ -51,16 +52,16 @@ abstract public class Packet {
 	 * 若该包是由客户端发送的包, 该包必须有一个无参数的构造器(否则构造失败并抛出异常), 该常量用于服务器接收到数据包后识别并构造实例(否则接受失败, 无事件)
 	 * 若该包是发送给客户端的包, 该常量用于MPQ识别.
 	 */
-	public static final byte NETWORK_ID;
+	public static final byte NETWORK_ID = -1;
 
-	private ConnectedClient client;
+	private MPQClient client;
 
 	/**
 	 * 获取这个包的归属客户端(MPQ).
 	 *
 	 * @return 客户端
 	 */
-	public final ConnectedClient getClient() {
+	public final MPQClient getClient() {
 		return client;
 	}
 
@@ -70,7 +71,7 @@ abstract public class Packet {
 	 *
 	 * @param client 客户端
 	 */
-	public final void setClient(ConnectedClient client) {
+	public final void setClient(MPQClient client) {
 		this.client = client;
 	}
 
@@ -96,8 +97,6 @@ abstract public class Packet {
 	}
 
 	static {
-		NETWORK_ID = -1;
-
 		PACKETS = new Class<?>[32];
 		PACKET_IDS = new byte[32];
 		PACKETS_COUNT = 0;
@@ -119,8 +118,6 @@ abstract public class Packet {
 			registerPacket(LoadPluginDescriptionResultPacket.class);
 			registerPacket(LoadPluginPacket.class);
 			registerPacket(LoadPluginResultPacket.class);
-			registerPacket(LoginPacket.class);
-			registerPacket(LoginResultPacket.class);
 			registerPacket(LogPacket.class);
 			registerPacket(SetInformationPacket.class);
 			registerPacket(SetInformationResultPacket.class);

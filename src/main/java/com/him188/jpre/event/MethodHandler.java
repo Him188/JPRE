@@ -1,7 +1,7 @@
 package com.him188.jpre.event;
 
 import com.him188.jpre.plugin.Plugin;
-import com.him188.jpre.PluginManager;
+import com.him188.jpre.plugin.PluginManager;
 
 import java.lang.reflect.Method;
 

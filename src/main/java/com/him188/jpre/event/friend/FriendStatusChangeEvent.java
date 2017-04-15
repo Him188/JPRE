@@ -11,7 +11,7 @@ public class FriendStatusChangeEvent extends FriendEvent {
 
 	private final RobotQQ robot;
 	private final long qq;
-	private final int status;// TODO: 2017/4/10  enum OnlineStatus
+	private final int status;// TODO: 2170/4/10  enum OnlineStatus
 
 	public FriendStatusChangeEvent(RobotQQ robot, long QQ, int status){
 

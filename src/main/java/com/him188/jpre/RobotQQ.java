@@ -1,17 +1,17 @@
 package com.him188.jpre;
 
+import com.him188.jpre.event.message.MessageEvent;
 import com.him188.jpre.event.send.SendGroupMessageEvent;
 import com.him188.jpre.event.send.SendMessageEvent;
 import com.him188.jpre.event.send.SendPrivateMessageEvent;
-import com.him188.jpre.event.message.MessageEvent;
-import com.him188.jpre.network.ConnectedClient;
+import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
 import com.him188.jpre.plugin.Plugin;
-import com.him188.jpre.scheduler.Scheduler;
 import com.him188.jpre.scheduler.Task;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -28,6 +28,8 @@ public class RobotQQ {
 	public final long QQ;
 
 	public RobotQQ(Frame frame, long QQ) {
+		Objects.requireNonNull(frame);
+
 		this.frame = frame;
 		this.QQ = QQ;
 	}
@@ -261,6 +263,15 @@ public class RobotQQ {
 		runCommand(ADD_QQ, 0L, QQ, password, autoLogin);
 		return booleanResult();
 	}
+
+
+
+	public static final int STATUS_ONLINE = 1;          //我在线上
+	public static final int STATUS_Q_ME = 2;            //Q 我吧
+	public static final int STATUS_LEAVE = 3;           //离开
+	public static final int STATUS_WORKING = 4;         //忙碌
+	public static final int STATUS_DO_NOT_DISTURB = 5;  //请勿打扰
+	public static final int STATUS_HIDE = 6;            //隐身
 
 	/**
 	 * 设置在线状态和附加信息
@@ -593,7 +604,7 @@ public class RobotQQ {
 			case TYPE_FRIEND:
 				event = new SendPrivateMessageEvent(this, QQ, context);
 
-				frame.callEvent(event);
+				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -603,7 +614,7 @@ public class RobotQQ {
 			case TYPE_GROUP_TEMPORARY_SESSION:
 				event = new SendPrivateMessageEvent(this, group, context);
 
-				frame.callEvent(event);
+				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -613,7 +624,7 @@ public class RobotQQ {
 			case TYPE_DISCUSS:
 				event = new SendGroupMessageEvent(this, group, context);
 
-				frame.callEvent(event);
+				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
@@ -837,13 +848,6 @@ public class RobotQQ {
 		return intResult();
 	}
 
-	public static final int STATUS_ONLINE = 1;          //我在线上
-	public static final int STATUS_Q_ME = 2;            //Q 我吧
-	public static final int STATUS_LEAVE = 3;           //离开
-	public static final int STATUS_WORKING = 4;         //忙碌
-	public static final int STATUS_DO_NOT_DISTURB = 5;  //请勿打扰
-	public static final int STATUS_HIDE = 6;            //隐身
-
 	/**
 	 * 邀请对象加入群 失败返回错误理由
 	 *
@@ -1046,13 +1050,9 @@ public class RobotQQ {
 	@SuppressWarnings("StatementWithEmptyBody")
 	private static String stringResult() {
 		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
+		// TODO: 2017/4/16 该为非static方法, 收到包时判定是哪个 RobotQQ 发来的
 
-
-		// TODO: 2017/4/11 static scheduler or static framer getter
-		Task task = Scheduler.scheduleTimingTask(null,
-				() ->
-						results.add("")
-				, 500);//0.5s
+		Task task = JPREMain.getServerScheduler().scheduleTimingTask(() -> results.add(""), 500);//0.5s
 		//synchronized (MPQCaller.class) {//使正在等待返回值时, 指令不传达
 		while (results.isEmpty()) {
 			try {
@@ -1068,7 +1068,7 @@ public class RobotQQ {
 
 	private static void runCommand(CommandId id, Object... args) {
 		//synchronized (MPQCaller.class) {
-		for (ConnectedClient connectedClient : NetworkPacketHandler.getClients()) {
+		for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {
 			connectedClient.sendPacket(new CommandPacket(id, args));
 		}
 		//}
@@ -1090,16 +1090,20 @@ public class RobotQQ {
 	/**
 	 * 获取 Robot 实例, 不存在时自动创建
 	 *
+	 * @param frameIfCreate 如果 Robot 实例不存在, 构造新实例时的参数 1. 保证实例存在时可为 null
+	 *
 	 * @return Robot
+	 *
+	 * @throws NullPointerException 当实例不存在且 {@code frameIfCreate} 为 null 时抛出
 	 */
-	public static RobotQQ getRobot(long QQ) {
+	public static RobotQQ getRobot(Frame frameIfCreate, long QQ) {
 		for (RobotQQ robotQQ : list) {
 			if (robotQQ.getQQ() == QQ) {
 				return robotQQ;
 			}
 		}
 
-		RobotQQ qq = new RobotQQ(QQ);
+		RobotQQ qq = new RobotQQ(frameIfCreate, QQ);
 		list.add(qq);
 		return qq;
 	}
