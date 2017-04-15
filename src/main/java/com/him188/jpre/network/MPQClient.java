@@ -34,6 +34,7 @@ import static com.him188.jpre.network.packet.PacketIds.*;
  *
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 public class MPQClient {
 	/* Frame */
 
@@ -44,11 +45,7 @@ public class MPQClient {
 	}
 
 
-
-
 	private SocketAddress address;
-
-	private ChannelHandlerContext lastCtx;
 
 	public MPQClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
 		frame.setClient(this);
@@ -203,10 +200,6 @@ public class MPQClient {
 		}
 	}
 
-	private ChannelHandlerContext getLastCtx() {
-		return lastCtx;
-	}
-
 	/**
 	 * 发送数据包
 	 *
@@ -226,4 +219,13 @@ public class MPQClient {
 		this.getLastCtx().writeAndFlush(result);
 		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}
+
+
+
+	private ChannelHandlerContext lastCtx;
+
+	private ChannelHandlerContext getLastCtx() {
+		return lastCtx;
+	}
+
 }

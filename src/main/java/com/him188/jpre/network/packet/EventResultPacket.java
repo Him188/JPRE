@@ -25,7 +25,7 @@ public class EventResultPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 
 	}
 

@@ -24,7 +24,7 @@ public class CommandResultPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 		switch ((int) unpack.getByte()){
 			case 0:
 				result = unpack.getInt();

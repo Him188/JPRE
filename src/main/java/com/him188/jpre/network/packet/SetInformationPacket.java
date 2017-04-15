@@ -20,7 +20,7 @@ public class SetInformationPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 		this.dataFolder = unpack.getString();
 	}
 

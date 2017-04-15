@@ -9,7 +9,7 @@ import com.him188.jpre.binary.Unpack;
 public class DisablePluginResultPacket extends Packet {
 	public static final byte NETWORK_ID = PacketIds.DISABLE_PLUGIN_RESULT;
 
-	public boolean succeed;
+	private boolean succeed;
 
 	public DisablePluginResultPacket(boolean succeed){
 		this.succeed = succeed;
@@ -21,7 +21,7 @@ public class DisablePluginResultPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 
 	}
 

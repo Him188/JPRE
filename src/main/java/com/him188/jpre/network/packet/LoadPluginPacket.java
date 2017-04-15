@@ -20,7 +20,7 @@ public class LoadPluginPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 		this.name = unpack.getString();
 	}
 

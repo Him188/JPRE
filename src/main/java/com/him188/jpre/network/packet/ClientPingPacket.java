@@ -1,7 +1,5 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Unpack;
-
 /**
  * @author Him188
  */
@@ -14,7 +12,7 @@ public class ClientPingPacket extends Packet{
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 
 	}
 

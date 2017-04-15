@@ -55,7 +55,7 @@ public class GetPluginInformationResultPacket extends Packet {
 	}
 
 	@Override
-	public void decode(Unpack unpack) {
+	public void decode() {
 
 	}
 

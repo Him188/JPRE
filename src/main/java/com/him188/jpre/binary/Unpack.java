@@ -9,7 +9,7 @@ import static com.him188.jpre.binary.Binary.*;
  *
  * @author Him188
  */
-public class Unpack {
+public class Unpack { // TODO: 2017/4/16  pack unpack 合一
 	protected byte[] data;
 	protected int location = 0;
 

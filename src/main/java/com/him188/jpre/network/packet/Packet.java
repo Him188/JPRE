@@ -10,33 +10,40 @@ import java.lang.reflect.Modifier;
 /**
  * 网络包基类
  * 所有网络包都必须继承本类
- *
+ * <p>
  * <h3>包中必须包含的内容</h3>
  * <li>公共字节常量 NETWORK_ID </li>
  * 该常量用于 注册包({@link #registerPacket(Class)}), 获取包网络 ID({@link #getNetworkId(Class)})
  * 如果包中没有该常量, 注册时会失败并抛出异常. {@link IllegalArgumentException}
- *
+ * <p>
  * <li><strong></strong></li>
  *
  * @author Him188
  */
 @SuppressWarnings("WeakerAccess")
-abstract public class Packet {
+abstract public class Packet extends Unpack {
+	private boolean encoded;
+
+	public boolean isEncoded() {
+		return encoded;
+	}
+
+	public void setEncoded(boolean encoded) {
+		this.encoded = encoded;
+	}
+
+
 	/**
 	 * 编码包
 	 * 仅该包发送给MPQ时被调用
-	 *
-	 * @return 编码后的数据
 	 */
-	abstract public byte[] encode();
+	abstract public void encode();
 
 	/**
 	 * 解码包
 	 * 仅从MPQ接收到包后调用
-	 *
-	 * @param unpack 包数据. Unpack 的 location 已被识别包的网络ID时定义到 1.
 	 */
-	abstract public void decode(Unpack unpack);
+	abstract public void decode();
 
 	/**
 	 * 获取包的网络 ID.
