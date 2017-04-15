@@ -1,10 +1,10 @@
 package com.him188.jpre;
 
 import com.him188.jpre.plugin.Plugin;
-import org.apache.commons.cli.*;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
 
 import static com.him188.jpre.Utils.md5Encode;
 
@@ -21,7 +21,7 @@ public final class JPREMain {
 	@SuppressWarnings({"OctalInteger"})
 	public static final int DEFAULT_PORT = 420;
 
-	public static void main(String[] args) throws ParseException, UnsupportedEncodingException, NoSuchAlgorithmException {
+	public static void main(String[] args) throws Exception {
 		printAbout();
 
 		CommandLineParser parser = new DefaultParser();

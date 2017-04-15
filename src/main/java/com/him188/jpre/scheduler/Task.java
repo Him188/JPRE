@@ -1,5 +1,6 @@
 package com.him188.jpre.scheduler;
 
+import com.him188.jpre.Frame;
 import com.him188.jpre.plugin.Plugin;
 
 /**
@@ -7,6 +8,7 @@ import com.him188.jpre.plugin.Plugin;
  *
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class Task implements Runnable {
 	/**
 	 * 计时时间到达后调用本方法
@@ -55,7 +57,7 @@ public abstract class Task implements Runnable {
 	 */
 	public void forceCancel() {
 		cancel();
-		Scheduler.service.remove(this);
+		.remove(this);
 		Scheduler.pool.remove(this);
 	}
 

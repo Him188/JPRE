@@ -77,11 +77,6 @@ public final class Frame {
 		new File(dataFolder + "/plugins/").mkdir();
 	}
 
-
-	public String getDataFolder() {
-		return dataFolder;
-	}
-
 	/**
 	 * 触发事件.
 	 *
@@ -219,6 +214,7 @@ public final class Frame {
 		Plugin plugin = pluginManager.getPlugin(name);
 		return plugin != null && plugin.isEnabled();
 	}
+
 
 	public Scheduler getScheduler() {
 		return scheduler;
