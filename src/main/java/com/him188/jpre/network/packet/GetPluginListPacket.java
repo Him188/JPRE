@@ -1,16 +1,18 @@
 package com.him188.jpre.network.packet;
 
 
+import java.util.List;
+
 /**
  * @author Him188
  */
-public class GetPluginInformationPacket extends Packet {
+public class GetPluginListPacket extends Packet {
 	public static final byte NETWORK_ID = PacketIds.CLIENT_GET_PLUGIN_LIST;
 
-	private String name;
+	private List<String> names;
 
-	public String getName() {
-		return name;
+	public List<String> getNames() {
+		return names;
 	}
 
 	@Override
@@ -23,7 +25,7 @@ public class GetPluginInformationPacket extends Packet {
 			return;
 		}
 
-		this.name = this.getString();
+		this.names = this.getList();
 	}
 
 	@Override

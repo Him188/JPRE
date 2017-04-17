@@ -4,7 +4,7 @@ import com.him188.jpre.Frame;
 import com.him188.jpre.RobotQQ;
 import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Binary;
-import com.him188.jpre.binary.Unpack;
+import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
 import com.him188.jpre.event.friend.FriendAddEvent;
@@ -73,7 +73,7 @@ public class MPQClient {
 	 * @param data 数据
 	 */
 	public void dataReceive(byte[] data) {
-		Unpack packet = new Unpack(data);
+		Pack packet = new Pack(data);
 
 		byte pid = packet.getByte();
 		switch (pid) {
@@ -92,7 +92,7 @@ public class MPQClient {
 						event = new GroupMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLength(), packet.getLong(), Utils.utf8Decode(packet.getString()));
+						event = new DiscussMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
 						break;
 					case EventTypes.GROUP_UPLOAD:
 						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
@@ -132,7 +132,8 @@ public class MPQClient {
 					return;
 				}
 				pk.setClient(this);
-				composePacket(pk, packet.getAll());
+				pk.setData(packet.getAll());
+				composePacket(pk);
 				break;
 		}
 	}
@@ -141,11 +142,9 @@ public class MPQClient {
 	 * 数据包处理
 	 *
 	 * @param packet 包
-	 * @param data   数据
 	 */
-	public void composePacket(Packet packet, byte[] data) {
-		Unpack unpack = new Unpack(data);
-		packet.decode(unpack);
+	public void composePacket(Packet packet) {
+		packet.decode();
 
 		DataPacketReceiveEvent event = new DataPacketReceiveEvent(packet, this);
 		frame.getPluginManager().callEvent(event);
@@ -206,7 +205,8 @@ public class MPQClient {
 	 * @param packet 包
 	 */
 	public void sendPacket(Packet packet) {
-		byte[] data = packet.encode();
+		packet.encode();
+		byte[] data = packet.getAll();
 		byte[] result = new byte[data.length + 4 + 1];//数据包长度, 数据包ID
 		try {
 			System.arraycopy(Binary.toBytes(data.length + 1), 0, result, 0, 4); //+1: 数据包ID

@@ -1,10 +1,12 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Unpack;
+
+import com.him188.jpre.binary.Pack;
 import com.him188.jpre.network.MPQClient;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
 /**
@@ -12,7 +14,7 @@ import java.lang.reflect.Modifier;
  * 所有网络包都必须继承本类
  * <p>
  * <h3>包中必须包含的内容</h3>
- * <li>公共字节常量 NETWORK_ID </li>
+ * <li><strong>公共字节常量 NETWORK_ID</strong></li>
  * 该常量用于 注册包({@link #registerPacket(Class)}), 获取包网络 ID({@link #getNetworkId(Class)})
  * 如果包中没有该常量, 注册时会失败并抛出异常. {@link IllegalArgumentException}
  * <p>
@@ -21,15 +23,17 @@ import java.lang.reflect.Modifier;
  * @author Him188
  */
 @SuppressWarnings("WeakerAccess")
-abstract public class Packet extends Unpack {
+abstract public class Packet extends Pack {
 	private boolean encoded;
 
 	public boolean isEncoded() {
 		return encoded;
 	}
 
-	public void setEncoded(boolean encoded) {
+	public boolean setEncoded(boolean encoded) {
+		boolean original = this.encoded;
 		this.encoded = encoded;
+		return original;
 	}
 
 
@@ -112,10 +116,6 @@ abstract public class Packet extends Unpack {
 			registerPacket(ClientPingPacket.class);
 			registerPacket(ServerPongPacket.class);
 			registerPacket(CommandResultPacket.class);
-			registerPacket(DisablePluginPacket.class);
-			registerPacket(DisablePluginResultPacket.class);
-			registerPacket(EnablePluginPacket.class);
-			registerPacket(EnablePluginResultPacket.class);
 			registerPacket(EventResultPacket.class);
 			registerPacket(GetPluginInformationPacket.class);
 			registerPacket(GetPluginInformationResultPacket.class);
@@ -130,7 +130,7 @@ abstract public class Packet extends Unpack {
 			registerPacket(SetInformationResultPacket.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}// TODO: 2017/4/17  
 	}
 
 	/**
@@ -165,8 +165,8 @@ abstract public class Packet extends Unpack {
 			throw new IllegalArgumentException("cannot register a abstract class");
 		}
 
-		PACKETS[PACKETS_COUNT] = clazz;
-		PACKET_IDS[PACKETS_COUNT++] = (byte) clazz.getField("NETWORK_ID").get(null);
+		PACKET_IDS[PACKETS_COUNT] = (byte) clazz.getField("NETWORK_ID").get(null);
+		PACKETS[PACKETS_COUNT++] = clazz;
 	}
 
 	/**
@@ -203,16 +203,11 @@ abstract public class Packet extends Unpack {
 	 *
 	 * @return 包. 失败时 null
 	 */
-	public static Packet matchPacket(byte id) {
+	public static Packet matchPacket(byte id) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
 		for (int i = 0; i < PACKET_IDS.length; i++) {
 			if (PACKET_IDS[i] == id) {
-				try {
-					Constructor<?> constructor = PACKETS[i].getConstructor();
-					constructor.setAccessible(true);
-					return (Packet) constructor.newInstance();
-				} catch (Throwable e) {
-					return null;
-				}
+				Constructor<?> constructor = PACKETS[i].getConstructor();
+				return (Packet) constructor.newInstance();
 			}
 		}
 		return null;

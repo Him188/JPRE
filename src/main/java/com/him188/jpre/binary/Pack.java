@@ -1,90 +1,85 @@
 package com.him188.jpre.binary;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.him188.jpre.binary.Binary.toBytes;
+import static com.him188.jpre.binary.Binary.*;
 
 /**
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 public class Pack {
-	private List<Byte> data;
+	protected byte[] data;
+	protected int location;
 
-	public Pack(Unpack unpack) {
-		this(unpack.getData());
+	public Pack(Pack unpack) {
+		this(unpack.getAll());
 	}
 
 	public Pack() {
 		this(new byte[]{});
 	}
+
 	public Pack(byte[] data) {
 		setData(data);
 	}
 
-	public Pack setData(byte[] data) {
-		this.data = new ArrayList<Byte>(1024) {
-			{
-				for (byte datum : data) {
-					add(datum);
-				}
-			}
-		};
-		return this;
+
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
-	public byte[] getData() {
-		byte[] result = new byte[data.size()];
-		for (int i = 0; i < data.size(); i++) {
-			result[i] = data.get(i);
-		}
-		return result;
+	public byte[] getAll() {
+		return data.clone();
 	}
 
-	public Pack clear() {
-		this.data.clear();
-		return this;
+	public void clear() {
+		this.data = new byte[0];
+
 	}
 
-	public Pack putInt(int value) {
+
+	/* Putter */
+
+	public void putInt(int value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putLong(long value) {
+	public void putLong(long value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putShort(short value) {
+	public void putShort(short value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putBoolean(boolean value) {
+	public void putBoolean(boolean value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putFloat(float value) {
+	public void putFloat(float value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putDouble(double value) {
+	public void putDouble(double value) {
 		putBytes(toBytes(value));
-		return this;
+
 	}
 
-	public Pack putByte(byte value) {
-		this.data.add(value);
-		return this;
+	public void putByte(byte value) {
+		this.data[location++] = value;
+
 	}
 
-	public Pack putString(String value) {
+	public void putString(String value) {
 		if (value == null) {
-			return this;
+			return;
 		}
 
 		try {
@@ -92,30 +87,26 @@ public class Pack {
 			putBytes(value.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return this;
 		}
-
-		return this;
 	}
 
-	public Pack putBytes(byte[] value) {
+	public void putBytes(byte[] value) {
 		for (byte aValue : value) {
 			putByte(aValue);
 		}
-		return this;
 	}
 
-	public Pack putBytes(Byte[] value) {
+	public void putBytes(Byte[] value) {
 		for (Byte aValue : value) {
 			if (aValue == null) {
+				putByte((byte) 0);
 				continue;
 			}
 			putByte(aValue);
 		}
-		return this;
 	}
 
-	public Pack putRaw(Object... values) {
+	public void putRaw(Object... values) {
 		for (Object value : values) {
 			if (value.getClass().equals(int.class) || value.getClass().equals(Integer.class)) {
 				putInt((Integer) value);
@@ -135,13 +126,72 @@ public class Pack {
 				putFloat((Float) value);
 			} else if (value.getClass().equals(byte[].class)) {
 				putBytes((byte[]) value);
-			} else if (value.getClass().equals(Byte[].class)){
+			} else if (value.getClass().equals(Byte[].class)) {
 				putBytes((Byte[]) value);
 			} else {
 				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
 			}
 		}
-		return this;
+
 	}
 
+	public void putList(List<?> list) {
+		list.forEach(this::putRaw);
+	}
+
+
+	/* Getter */
+	public byte[] getCenter(int location, int length) {
+		if (length == 0) {
+			return new byte[0];
+		}
+		byte[] result = new byte[length];
+		try {
+			System.arraycopy(data, location, result, 0, length);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public int getLastLength() {
+		return data.length - location;
+	}
+
+
+	public byte[] getBytes(int length) {
+		byte[] result = getCenter(location, length);
+
+		location += length;
+		return result;
+	}
+
+	public byte[] getLast() {
+		return getBytes(getLastLength());
+	}
+
+	public byte getByte() {
+		return getBytes(1)[0];
+	}
+
+	public int getInt() {
+		return toInt(getBytes(4));
+	}
+
+	public long getLong() {
+		return toLong(getBytes(8));
+	}
+
+	public short getShort() {
+		return toShort(getBytes(2));
+	}
+
+	public String getString() {
+		return new String(getBytes(getInt()));
+	}
+
+	public boolean getBoolean() {
+		return toBoolean(getBytes(1));
+	}
 }

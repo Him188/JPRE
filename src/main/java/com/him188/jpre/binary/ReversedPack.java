@@ -5,17 +5,16 @@ import static com.him188.jpre.binary.Binary.*;
 /**
  * @author Him188
  */
-public class ReversedUnpack extends Unpack{
-
-	public ReversedUnpack(Pack pack) {
+public class ReversedPack extends Pack{
+	public ReversedPack(Pack pack) {
 		this(pack.getData());
 	}
 
-	public ReversedUnpack() {
+	public ReversedPack() {
 		this(new byte[]{});
 	}
 
-	public ReversedUnpack(byte[] data) {
+	public ReversedPack(byte[] data) {
 		setData(data);
 	}
 
@@ -26,16 +25,6 @@ public class ReversedUnpack extends Unpack{
 
 		location += length;
 		return result;
-	}
-
-	@Override
-	public int getLength() {
-		return data.length - location;
-	}
-
-	@Override
-	public byte getByte() {
-		return getBytes(1)[0];
 	}
 
 	@Override
@@ -55,16 +44,6 @@ public class ReversedUnpack extends Unpack{
 
 	@Override
 	public String getString() {
-		return new String(getBytes(getInt()));
-	}
-
-	@Override
-	public boolean getBoolean() {
-		return (int) getByte() == 1;
-	}
-
-	@Override
-	public byte[] getToken() {
-		return getBytes(getShort());
+		return new String(realReverse(getBytes(getInt())));
 	}
 }

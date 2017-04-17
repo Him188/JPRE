@@ -1,15 +1,21 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Pack;
-import com.him188.jpre.binary.Unpack;
-
 /**
  * @author Him188
  */
 public class EventResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.EVENT_RESULT;
+	public static final byte NETWORK_ID = PacketIds.SERVER_EVENT_RESULT;
 
-	public boolean cancelled;
+	private final boolean cancelled;
+
+	/**
+	 * 返回事件是否拦截
+	 *
+	 * @return 事件是否拦截
+	 */
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
 	public EventResultPacket() {
 		this(false);
@@ -20,8 +26,13 @@ public class EventResultPacket extends Packet {
 	}
 
 	@Override
-	public byte[] encode() {
-		return new Pack().putBoolean(cancelled).getData();
+	public void encode() {
+		if (setEncoded(true)) {
+			return;
+		}
+
+		clear();
+		putBoolean(cancelled);
 	}
 
 	@Override

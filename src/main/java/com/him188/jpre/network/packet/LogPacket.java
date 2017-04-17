@@ -1,7 +1,7 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Pack;
-import com.him188.jpre.binary.Unpack;
+
+
 
 /**
  * @author Him188
@@ -20,7 +20,7 @@ public class LogPacket extends Packet {
 	}
 
 	@Override
-	public byte[] encode() {
+	public void encode() {
 		return new Pack().putString(log).getData();
 	}
 

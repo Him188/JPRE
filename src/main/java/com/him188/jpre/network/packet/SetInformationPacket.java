@@ -1,6 +1,6 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Unpack;
+
 
 /**
  * @author Him188
@@ -15,13 +15,12 @@ public class SetInformationPacket extends Packet {
 	}
 
 	@Override
-	public byte[] encode() {
-		return new byte[0];
+	public void encode() {
 	}
 
 	@Override
 	public void decode() {
-		this.dataFolder = unpack.getString();
+		this.dataFolder = getString();
 	}
 
 	@Override

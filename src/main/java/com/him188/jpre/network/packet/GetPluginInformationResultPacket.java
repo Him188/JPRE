@@ -1,22 +1,20 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Pack;
-import com.him188.jpre.binary.Unpack;
 
 /**
  * @author Him188
  */
 public class GetPluginInformationResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.GET_PLUGIN_INFORMATION_RESULT;
+	public static final byte NETWORK_ID = PacketIds.SERVER_GET_PLUGIN_INFORMATION_RESULT;
 
-	private String name;
-	private String author;
-	private String version;
-	private String main;
-	private int api;
-	private String description;
+	private final String name;
+	private final String author;
+	private final String version;
+	private final String main;
+	private final int api;
+	private final String description;
 
-	public GetPluginInformationResultPacket(String name, String author, String version, String main, int api, String description){
+	public GetPluginInformationResultPacket(String name, String author, String version, String main, int api, String description) {
 		this.name = name;
 		this.author = author;
 		this.version = version;
@@ -50,8 +48,18 @@ public class GetPluginInformationResultPacket extends Packet {
 	}
 
 	@Override
-	public byte[] encode() {
-		return new Pack().putString(name).putString(main).putString(version).putInt(api).putString(author).putString(description).getData();
+	public void encode() {
+		if (setEncoded(true)) {
+			return;
+		}
+
+		clear();
+		putString(name);
+		putString(main);
+		putString(version);
+		putInt(api);
+		putString(author);
+		putString(description);
 	}
 
 	@Override

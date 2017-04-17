@@ -1,48 +1,41 @@
 package com.him188.jpre.network.packet;
 
-import com.him188.jpre.binary.Unpack;
-
 /**
  * @author Him188
  */
 public class CommandResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.COMMAND_RESULT;
+	public static final byte NETWORK_ID = PacketIds.CLIENT_COMMAND_RESULT;
 
-	public Object result;
+	private Object result;
 
 	public Object getResult() {
 		return result;
 	}
 
-	public CommandResultPacket(){
-
-	}
-
 	@Override
-	public byte[] encode() {
-		return new byte[0];
+	public void encode() {
 	}
 
 	@Override
 	public void decode() {
-		switch ((int) unpack.getByte()){
+		switch ((int) getByte()){
 			case 0:
-				result = unpack.getInt();
+				result = getInt();
 				break;
 			case 1:
-				result = unpack.getByte();
+				result = getByte();
 				break;
 			case 2:
-				result = unpack.getLong();
+				result = getLong();
 				break;
 			case 3:
-				result = unpack.getString();
+				result = getString();
 				break;
 			case 4:
-				result = unpack.getShort();
+				result = getShort();
 				break;
 			case 5:
-				result = unpack.getBoolean();
+				result = getBoolean();
 				break;
 		}
 	}

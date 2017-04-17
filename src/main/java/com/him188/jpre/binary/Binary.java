@@ -5,6 +5,7 @@ package com.him188.jpre.binary;
  *
  * @author Him188
  */
+@SuppressWarnings("WeakerAccess")
 public final class Binary {
 	public static byte[] toBytes(int value) {
 		byte[] data = new byte[4];
