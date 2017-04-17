@@ -77,7 +77,7 @@ public class MPQClient {
 
 		byte pid = packet.getByte();
 		switch (pid) {
-			case EVENT:
+			case CLIENT_EVENT:
 				Event event = null;
 				int eid = packet.getInt();
 				switch (eid) {

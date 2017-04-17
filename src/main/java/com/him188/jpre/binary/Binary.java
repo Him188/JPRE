@@ -45,6 +45,9 @@ public final class Binary {
 		return toBytes(Double.doubleToLongBits(value));
 	}
 
+	public static double toDouble(byte[] bytes){
+
+	}
 
 	public static int toInt(byte[] bytes) {
 		return (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];

@@ -135,8 +135,49 @@ public class Pack {
 
 	}
 
-	public void putList(List<?> list) {
-		list.forEach(this::putRaw);
+	public void putRawWithType(Object... values) {
+		for (Object value : values) {
+			if (value.getClass().equals(int.class) || value.getClass().equals(Integer.class)) {
+				putByte((byte) 0);
+				putInt((Integer) value);
+			} else if (value.getClass().equals(byte.class) || value.getClass().equals(Byte.class)) {
+				putByte((byte) 1);
+				putByte((Byte) value);
+			} else if (value.getClass().equals(long.class) || value.getClass().equals(Long.class)) {
+				putByte((byte) 2);
+				putLong((Long) value);
+			} else if (value.getClass().equals(String.class)) {
+				putByte((byte) 3);
+				putString((String) value);
+			} else if (value.getClass().equals(boolean.class) || value.getClass().equals(Boolean.class)) {
+				putByte((byte) 4);
+				putBoolean((Boolean) value);
+			} else if (value.getClass().equals(double.class) || value.getClass().equals(Double.class)) {
+				putByte((byte) 5);
+				putDouble((Double) value);
+			} else if (value.getClass().equals(short.class) || value.getClass().equals(Short.class)) {
+				putByte((byte) 6);
+				putShort((Short) value);
+			} else if (value.getClass().equals(float.class) || value.getClass().equals(Float.class)) {
+				putByte((byte) 7);
+				putFloat((Float) value);
+			} else if (value.getClass().equals(byte[].class)) {
+				putByte((byte) 8);
+				putBytes((byte[]) value);
+			} else if (value.getClass().equals(Byte[].class)) {
+				putByte((byte) 9);
+				putBytes((Byte[]) value);
+			} else {
+				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+			}
+		}
+
+	}
+
+	public <T> void putList(List<T> list, Class<T> valueClass) {
+		putString(valueClass.getName());
+		putInt(list.size());
+		list.forEach(this::putRawWithType);
 	}
 
 
@@ -193,5 +234,65 @@ public class Pack {
 
 	public boolean getBoolean() {
 		return toBoolean(getBytes(1));
+	}
+
+	public double getDouble() {
+		return toDouble(getBytes(16));
+	}
+
+
+	public Object getRaw() {
+		switch (getByte()) {
+			case 0:
+				return getInt();
+			case 1:
+				return getByte();
+			case 2:
+				return getLong();
+			case 3:
+				return getString();
+			case 4:
+				return getBoolean();
+			case 5:
+				return getDouble();
+		} else if (value.getClass().equals(long.class) || value.getClass().equals(Long.class)) {
+			putLong((Long) value);
+		} else if (value.getClass().equals(String.class)) {
+			putString((String) value);
+		} else if (value.getClass().equals(boolean.class) || value.getClass().equals(Boolean.class)) {
+			putBoolean((Boolean) value);
+		} else if (value.getClass().equals(double.class) || value.getClass().equals(Double.class)) {
+			putDouble((Double) value);
+		} else if (value.getClass().equals(short.class) || value.getClass().equals(Short.class)) {
+			putShort((Short) value);
+		} else if (value.getClass().equals(float.class) || value.getClass().equals(Float.class)) {
+			putFloat((Float) value);
+		} else if (value.getClass().equals(byte[].class)) {
+			putBytes((byte[]) value);
+		} else if (value.getClass().equals(Byte[].class)) {
+			putBytes((Byte[]) value);
+		} else {
+			throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+		}
+	}
+
+}
+
+	public List<?> getList() {
+		Class<?> clazz;
+		try {
+			clazz = Class.forName(getString());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		for (int i = 0; i < getInt(); i++) {
+			if (clazz == int.class) {
+
+			}
+		}
+
+		clazz.cast()
 	}
 }
