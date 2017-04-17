@@ -2,6 +2,7 @@
 # **该项目正在重写, 请耐心等待**
 # **This project is rewriting, please wait**
 
+## These following content is outdated:
 ##  JavaPluginRuntimeEnvironment  (JPRE)
 
 ##### Java插件运行环境 - 让你能使用 Java 开发MPQ插件
