@@ -45,8 +45,19 @@ public final class Binary {
 		return toBytes(Double.doubleToLongBits(value));
 	}
 
-	public static double toDouble(byte[] bytes){
+	public static double toDouble(byte[] bytes) {
+		return Double.longBitsToDouble(((long) (bytes[0] & 0xff) |
+				(long) (bytes[1] & 0xff) << 8) |
+				((long) (bytes[2] & 0xff) << 16) |
+				((long) (bytes[3] & 0xff) << 24) |
+				((long) (bytes[4] & 0xff) << 32) |
+				((long) (bytes[5] & 0xff) << 40) |
+				((long) (bytes[6] & 0xff) << 48) |
+				((long) (bytes[7] & 0xff) << 56));
+	}
 
+	public static float toFloat(byte[] bytes) {
+		return Float.intBitsToFloat((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]);
 	}
 
 	public static int toInt(byte[] bytes) {

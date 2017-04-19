@@ -100,7 +100,7 @@ public class JsonConfig extends Config {
 	private final class JsonToMap {
 		private boolean useSynchronization = false;
 
-		void setSynchronized(boolean b) {
+		private void setSynchronized(boolean b) {
 			useSynchronization = b;
 		}
 
@@ -111,7 +111,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return JsonObject
 		 */
-		JsonObject parseJson(String json) {
+		private JsonObject parseJson(String json) {
 			return new JsonParser().parse(json).getAsJsonObject();
 		}
 
@@ -122,7 +122,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return Map
 		 */
-		Map<String, Object> toMap(String json) {
+		private Map<String, Object> toMap(String json) {
 			return toMap(parseJson(json));
 		}
 
@@ -133,7 +133,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return Map
 		 */
-		Map<String, Object> toMap(JsonObject json) {
+		private Map<String, Object> toMap(JsonObject json) {
 			Map<String, Object> map = useSynchronization ? new Hashtable<>() : new HashMap<>();
 			Set<Entry<String, JsonElement>> entrySet = json.entrySet();
 			for (Entry<String, JsonElement> entry : entrySet) {
@@ -156,7 +156,7 @@ public class JsonConfig extends Config {
 		 *
 		 * @return List
 		 */
-		List<Object> toList(JsonArray json) {
+		private List<Object> toList(JsonArray json) {
 			List<Object> list = useSynchronization ? new Vector<>() : new ArrayList<>();
 			for (int i = 0; i < json.size(); i++) {
 				Object value = json.get(i);

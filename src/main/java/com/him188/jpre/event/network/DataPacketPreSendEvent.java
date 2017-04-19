@@ -9,14 +9,14 @@ import com.him188.jpre.network.packet.Packet;
  * @author Him188
  */
 public class DataPacketPreSendEvent extends NetworkEvent {
-	private final Packet packet;
-	private final MPQClient client;
-
-
 	private static final HandlerList handlers = new HandlerList();
 	public static HandlerList getHandlers() {
 		return handlers;
 	}
+
+
+	private final Packet packet;
+	private final MPQClient client;
 
 	public DataPacketPreSendEvent(Packet packet, MPQClient client){
 		this.packet = packet;

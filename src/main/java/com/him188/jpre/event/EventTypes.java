@@ -19,10 +19,6 @@ public interface EventTypes {
 	int GROUP_MEMBER_DECREASE = 102; //群成员减少
 	int GROUP_MEMBER_INCREASE = 103; //群成员增加
 
-	int FRIEND_ADD = 201; //好友已添加
-	int REQUEST_FRIEND_ADD = 301; //请求-好友添加
-	int REQUEST_GROUP_ADD = 302; //请求-群添加
-
 	//以下事件由Java插件创建:
 	int PLUGIN_BASE = 10000; //请勿使用
 	int PLUGIN_ENABLE = PLUGIN_BASE + 1; //Java插件启动
@@ -42,7 +38,7 @@ public interface EventTypes {
 	int JPRE_DISABLE = PLUGIN_BASE + 11;
 
 
-	// TODO: 2017/4/10 新事件的事件ID, 并给新事件添加 public static int getEventType() 和 handler
+	// TODO: 2017/4/10 新事件的事件ID, 并给新事件添加handler
 }
 
 

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@SuppressWarnings("WeakerAccess")
 public final class Utils {
 	public static void writeFile(String fileName, String content) throws IOException {
 		writeFile(fileName, new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
@@ -21,6 +22,7 @@ public final class Utils {
 		writeFile(file, new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
 	}
 
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public static void writeFile(File file, InputStream content) throws IOException {
 		if (content == null) {
 			throw new IllegalArgumentException("content must not be null");

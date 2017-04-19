@@ -11,6 +11,7 @@ import java.util.Map;
 abstract public class Config {
 	protected String file;
 
+	@SuppressWarnings("WeakerAccess")
 	public Config(String file) {
 		this.file = file;
 	}

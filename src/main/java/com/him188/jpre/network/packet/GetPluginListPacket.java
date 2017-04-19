@@ -1,7 +1,6 @@
 package com.him188.jpre.network.packet;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,23 +9,28 @@ import java.util.List;
 public class GetPluginListPacket extends Packet {
 	public static final byte NETWORK_ID = PacketIds.CLIENT_GET_PLUGIN_LIST;
 
-	private List<String> names;
+	private List<String> result;
 
-	public List<String> getNames() {
-		return names;
+	public void setResult(List<String> result) {
+		this.result = result;
+	}
+
+	public List<String> getResult() {
+		return result;
 	}
 
 	@Override
 	public void encode() {
+		if (setEncoded(true)) {
+			return;
+		}
+
+		clear();
+		putList(getResult(), String.class);
 	}
 
 	@Override
 	public void decode() {
-		if (!setEncoded(false)) {
-			return;
-		}
-
-		this.names = this.getList();
 	}
 
 	@Override

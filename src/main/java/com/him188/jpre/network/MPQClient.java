@@ -7,7 +7,6 @@ import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventTypes;
-import com.him188.jpre.event.friend.FriendAddEvent;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
 import com.him188.jpre.event.group.GroupMemberDecreaseEvent;
@@ -17,8 +16,6 @@ import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.mpq.MPQDisableEvent;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
-import com.him188.jpre.event.request.AddFriendRequestEvent;
-import com.him188.jpre.event.request.AddGroupRequestEvent;
 import com.him188.jpre.network.packet.*;
 import com.him188.jpre.plugin.PluginDescription;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,7 +23,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.net.SocketAddress;
 import java.util.Arrays;
 
-import static com.him188.jpre.network.packet.PacketIds.*;
+import static com.him188.jpre.network.packet.PacketIds.CLIENT_EVENT;
 
 /**
  * 连接到服务器的客户端 (MPQ)]
@@ -105,15 +102,6 @@ public class MPQClient {
 						break;
 					case EventTypes.GROUP_MEMBER_INCREASE:
 						event = new GroupMemberIncreaseEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getLong());
-						break;
-					case EventTypes.FRIEND_ADD:
-						event = new FriendAddEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), packet.getInt(), packet.getLong());
-						break;
-					case EventTypes.REQUEST_FRIEND_ADD:
-						event = new AddFriendRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getString(), packet.getString());
-						break;
-					case EventTypes.REQUEST_GROUP_ADD:
-						event = new AddGroupRequestEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString(), packet.getString());
 						break;
 					// TODO: 2017/4/11 add all
 				}

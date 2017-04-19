@@ -29,6 +29,7 @@ public class YamlConfig extends Config {
 	 * @param file               文件名 (绝对路径)
 	 * @param useSynchronization 是否使用线程同步. true, HashTable 方式存放数据; false, HashMap 方式存放数据 当本配置需要在多线程环境中使用时, 请填 true
 	 */
+	@SuppressWarnings("WeakerAccess")
 	public YamlConfig(String file, boolean useSynchronization) {
 		super(file);
 		this.useSynchronization = useSynchronization;

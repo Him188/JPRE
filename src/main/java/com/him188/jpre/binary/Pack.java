@@ -1,6 +1,7 @@
 package com.him188.jpre.binary;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.him188.jpre.binary.Binary.*;
@@ -163,9 +164,11 @@ public class Pack {
 				putFloat((Float) value);
 			} else if (value.getClass().equals(byte[].class)) {
 				putByte((byte) 8);
+				putInt(((byte[]) value).length);
 				putBytes((byte[]) value);
 			} else if (value.getClass().equals(Byte[].class)) {
 				putByte((byte) 9);
+				putInt(((Byte[]) value).length);
 				putBytes((Byte[]) value);
 			} else {
 				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
@@ -237,7 +240,11 @@ public class Pack {
 	}
 
 	public double getDouble() {
-		return toDouble(getBytes(16));
+		return toDouble(getBytes(8));
+	}
+
+	public float getFloat() {
+		return toFloat(getBytes(4));
 	}
 
 
@@ -255,30 +262,24 @@ public class Pack {
 				return getBoolean();
 			case 5:
 				return getDouble();
-		} else if (value.getClass().equals(long.class) || value.getClass().equals(Long.class)) {
-			putLong((Long) value);
-		} else if (value.getClass().equals(String.class)) {
-			putString((String) value);
-		} else if (value.getClass().equals(boolean.class) || value.getClass().equals(Boolean.class)) {
-			putBoolean((Boolean) value);
-		} else if (value.getClass().equals(double.class) || value.getClass().equals(Double.class)) {
-			putDouble((Double) value);
-		} else if (value.getClass().equals(short.class) || value.getClass().equals(Short.class)) {
-			putShort((Short) value);
-		} else if (value.getClass().equals(float.class) || value.getClass().equals(Float.class)) {
-			putFloat((Float) value);
-		} else if (value.getClass().equals(byte[].class)) {
-			putBytes((byte[]) value);
-		} else if (value.getClass().equals(Byte[].class)) {
-			putBytes((Byte[]) value);
-		} else {
-			throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+			case 6:
+				return getShort();
+			case 7:
+				return getFloat();
+			case 8:
+			case 9:
+				return getBytes(getInt());
+			default:
+				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
 		}
 	}
 
-}
-
 	public List<?> getList() {
+		return getList(Object.class);
+	}
+
+	@SuppressWarnings({"unchecked", "unused"})
+	public <T> List<T> getList(Class<T> valueType) {
 		Class<?> clazz;
 		try {
 			clazz = Class.forName(getString());
@@ -287,12 +288,11 @@ public class Pack {
 			return null;
 		}
 
+		List<T> result = new ArrayList<>();
 		for (int i = 0; i < getInt(); i++) {
-			if (clazz == int.class) {
-
-			}
+			result.add((T) clazz.cast(getRaw()));
 		}
 
-		clazz.cast()
+		return result;
 	}
 }

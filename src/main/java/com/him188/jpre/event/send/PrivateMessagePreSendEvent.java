@@ -7,13 +7,13 @@ import com.him188.jpre.event.HandlerList;
 /**
  * @author Him188
  */
-public class SendPrivateMessageEvent extends SendMessageEvent {
+public class PrivateMessagePreSendEvent extends SendMessageEvent {
 	private static final HandlerList handlers = new HandlerList();
 	public final long QQ;
 	public String message;
 	public final RobotQQ robot;
 
-	public SendPrivateMessageEvent(RobotQQ robot, long QQ, String message) {
+	public PrivateMessagePreSendEvent(RobotQQ robot, long QQ, String message) {
 		this.robot = robot;
 		this.QQ = QQ;
 		this.message = message;

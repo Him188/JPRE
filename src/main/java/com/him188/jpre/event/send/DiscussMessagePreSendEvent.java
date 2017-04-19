@@ -7,15 +7,16 @@ import com.him188.jpre.event.EventTypes;
 /**
  * @author Him188
  */
-public class SendGroupMessageEvent extends SendMessageEvent {
+public class DiscussMessagePreSendEvent extends SendMessageEvent {
 	private static final HandlerList handlers = new HandlerList();
-	public final long group;
+	public final long discuss;
 	public String message;
+
 	public final RobotQQ robot;
 
-	public SendGroupMessageEvent(RobotQQ robot, long group, String message) {
+	public DiscussMessagePreSendEvent(RobotQQ robot, long discuss, String message) {
 		this.robot = robot;
-		this.group = group;
+		this.discuss = discuss;
 		this.message = message;
 	}
 
@@ -29,7 +30,7 @@ public class SendGroupMessageEvent extends SendMessageEvent {
 	}
 
 	public static int getEventType() {
-		return EventTypes.PLUGIN_ACTION_SEND_GROUP;
+		return EventTypes.PLUGIN_ACTION_SEND_DISCUSS;
 	}
 
 	public String getMessage() {
@@ -40,7 +41,7 @@ public class SendGroupMessageEvent extends SendMessageEvent {
 		this.message = message;
 	}
 
-	public long getGroup() {
-		return group;
+	public long getDiscuss() {
+		return discuss;
 	}
 }

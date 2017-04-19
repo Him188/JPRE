@@ -16,9 +16,9 @@ import com.him188.jpre.event.reply.ReplyGroupMessageEvent;
 import com.him188.jpre.event.reply.ReplyPrivateMessageEvent;
 import com.him188.jpre.event.request.AddFriendRequestEvent;
 import com.him188.jpre.event.request.AddGroupRequestEvent;
-import com.him188.jpre.event.send.SendDiscussMessageEvent;
-import com.him188.jpre.event.send.SendGroupMessageEvent;
-import com.him188.jpre.event.send.SendPrivateMessageEvent;
+import com.him188.jpre.event.send.DiscussMessagePreSendEvent;
+import com.him188.jpre.event.send.GroupMessagePreSendEvent;
+import com.him188.jpre.event.send.PrivateMessagePreSendEvent;
 import com.him188.jpre.plugin.Plugin;
 
 import java.lang.reflect.Constructor;
@@ -50,9 +50,9 @@ abstract public class Event {
 		registerEvent(ReplyGroupMessageEvent.class);
 		registerEvent(ReplyPrivateMessageEvent.class);
 
-		registerEvent(SendDiscussMessageEvent.class);
-		registerEvent(SendGroupMessageEvent.class);
-		registerEvent(SendPrivateMessageEvent.class);
+		registerEvent(DiscussMessagePreSendEvent.class);
+		registerEvent(GroupMessagePreSendEvent.class);
+		registerEvent(PrivateMessagePreSendEvent.class);
 
 		registerEvent(FriendAddEvent.class);
 

@@ -1,9 +1,9 @@
 package com.him188.jpre;
 
 import com.him188.jpre.event.message.MessageEvent;
-import com.him188.jpre.event.send.SendGroupMessageEvent;
+import com.him188.jpre.event.send.GroupMessagePreSendEvent;
 import com.him188.jpre.event.send.SendMessageEvent;
-import com.him188.jpre.event.send.SendPrivateMessageEvent;
+import com.him188.jpre.event.send.PrivateMessagePreSendEvent;
 import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
@@ -602,33 +602,33 @@ public class RobotQQ {
 		SendMessageEvent event;
 		switch (type) {
 			case TYPE_FRIEND:
-				event = new SendPrivateMessageEvent(this, QQ, context);
+				event = new PrivateMessagePreSendEvent(this, QQ, context);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, 0, ((SendPrivateMessageEvent) event).getQQ(), event.getMessage());
+				runCommand(SEND_MSG, this.getQQ(), type, subType, 0, ((PrivateMessagePreSendEvent) event).getQQ(), event.getMessage());
 				return intResult();
 			case TYPE_DISCUSS_TEMPORARY_SESSION:
 			case TYPE_GROUP_TEMPORARY_SESSION:
-				event = new SendPrivateMessageEvent(this, group, context);
+				event = new PrivateMessagePreSendEvent(this, group, context);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, ((SendPrivateMessageEvent) event).getQQ(), 0, event.getMessage());
+				runCommand(SEND_MSG, this.getQQ(), type, subType, ((PrivateMessagePreSendEvent) event).getQQ(), 0, event.getMessage());
 				return intResult();
 			case TYPE_GROUP:
 			case TYPE_DISCUSS:
-				event = new SendGroupMessageEvent(this, group, context);
+				event = new GroupMessagePreSendEvent(this, group, context);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
 					return -2;
 				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, ((SendGroupMessageEvent) event).getGroup(), 0, event.getMessage());
+				runCommand(SEND_MSG, this.getQQ(), type, subType, ((GroupMessagePreSendEvent) event).getGroup(), 0, event.getMessage());
 				return intResult();
 			default:
 				return -1;
