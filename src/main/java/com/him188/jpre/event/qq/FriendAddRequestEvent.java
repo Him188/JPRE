@@ -9,19 +9,13 @@ import com.him188.jpre.RobotQQ;
  * @author Him188
  */
 public class FriendAddRequestEvent extends QQEvent {
-	private final QQ requester;
-
 	private boolean accepted;
 
-	public FriendAddRequestEvent(RobotQQ robot, QQ qq, QQ requester) {
+	public FriendAddRequestEvent(RobotQQ robot, QQ qq) {
 		super(robot, qq);
-		this.requester = requester;
 	}
 
-	public QQ getRequester() {
-		return requester;
-	}
-
+	// TODO: 2017/4/19 接受请求
 	public boolean isAccepted() {
 		return accepted;
 	}

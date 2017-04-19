@@ -9,22 +9,11 @@ import com.him188.jpre.RobotQQ;
  * @author Him188
  */
 public class FriendAddResultEvent extends QQEvent {
-	private final QQ target;
 	private final boolean succeed;
 
-	public FriendAddResultEvent(RobotQQ robot, QQ qq, QQ target, boolean succeed) {
+	public FriendAddResultEvent(RobotQQ robot, QQ qq, boolean succeed) {
 		super(robot, qq);
-		this.target = target;
 		this.succeed = succeed;
-	}
-
-	/**
-	 * 获取添加对象 QQ
-	 *
-	 * @return 添加对象 QQ
-	 */
-	public QQ getTarget() {
-		return target;
 	}
 
 	/**

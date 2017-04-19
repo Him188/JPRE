@@ -4,12 +4,12 @@ import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
 
 /**
- * 被单向添加好友
+ * 被好友抖动
  *
  * @author Him188
  */
-public class FriendUnidirectionalAddEvent extends QQEvent {
-	public FriendUnidirectionalAddEvent(RobotQQ robot, QQ qq) {
+public class FriendShakeEvent extends QQEvent {
+	public FriendShakeEvent(RobotQQ robot, QQ qq) {
 		super(robot, qq);
 	}
 }

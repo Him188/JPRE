@@ -1,30 +1,21 @@
-package com.him188.jpre.event.tenpay;
+package com.him188.jpre.event.qq.tenpay;
 
+import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
 
 /**
+ * 收到财付通转账
+ *
  * @author Him188
  */
 public class ReceiveTransferEvent extends TenpayEvent {
-	private final RobotQQ robot;
-	private final long qq;
 	private final float amount;
 	private final String message;
 
-	public ReceiveTransferEvent(RobotQQ robot, long QQ, float amount, String message){
-		this.robot = robot;
-		qq = QQ;
+	public ReceiveTransferEvent(RobotQQ robot, QQ QQ, float amount, String message) {
+		super(robot, QQ);
 		this.amount = amount;
 		this.message = message;
-	}
-
-	@Override
-	public RobotQQ getRobot() {
-		return robot;
-	}
-
-	public long getQQ() {
-		return qq;
 	}
 
 	public String getMessage() {
