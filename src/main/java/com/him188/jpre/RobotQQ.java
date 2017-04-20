@@ -84,12 +84,12 @@ public class RobotQQ {
 	/**
 	 * 在框架记录页输出一行信息
 	 *
-	 * @param context 输出的内容
+	 * @param content 输出的内容
 	 *
 	 * @return unknown
 	 */
-	public static int output(String context) {
-		runCommand(OUTPUT, 0L, context);
+	public static int output(String content) {
+		runCommand(OUTPUT, 0L, content);
 		return intResult();
 	}
 
@@ -127,26 +127,26 @@ public class RobotQQ {
 	/**
 	 * Tean 加密算法
 	 *
-	 * @param context 内容
+	 * @param content 内容
 	 * @param key     key
 	 *
 	 * @return 加密结果
 	 */
-	public static String teaEncode(String context, String key) {
-		runCommand(TEA_ENCODE, 0L, context, key);
+	public static String teaEncode(String content, String key) {
+		runCommand(TEA_ENCODE, 0L, content, key);
 		return stringResult();
 	}
 
 	/**
 	 * Tean 解密算法
 	 *
-	 * @param context 内容
+	 * @param content 内容
 	 * @param key     key
 	 *
 	 * @return 解密结果
 	 */
-	public static String teaDecode(String context, String key) {
-		runCommand(TEA_DECODE, 0L, context, key);
+	public static String teaDecode(String content, String key) {
+		runCommand(TEA_DECODE, 0L, content, key);
 		return stringResult();
 	}
 
@@ -577,12 +577,12 @@ public class RobotQQ {
 	 *
 	 * @param type    类型. TYPE_ 开头常量
 	 * @param target  发送目标
-	 * @param context 消息内容
+	 * @param content 消息内容
 	 *
 	 * @return unknown
 	 */
-	public int reply(int type, long target, String context) {
-		runCommand(REPLY, this.getQQ(), type, target, context);
+	public int reply(int type, long target, String content) {
+		runCommand(REPLY, this.getQQ(), type, target, content);
 		return intResult();
 	}
 
@@ -594,15 +594,15 @@ public class RobotQQ {
 	 * @param subType 子类型, 无特殊说明情况下为 0
 	 * @param group   群号/讨论组号/临时会话号. 发送好友消息时为 0
 	 * @param QQ      QQ. 发送非好友消息时为 0
-	 * @param context 消息内容
+	 * @param content 消息内容
 	 *
 	 * @return unknown
 	 */
-	public int sendMessage(int type, int subType, long group, long QQ, String context) {
+	public int sendMessage(int type, int subType, long group, long QQ, String content) {
 		SendMessageEvent event;
 		switch (type) {
 			case TYPE_FRIEND:
-				event = new PrivateMessagePreSendEvent(this, QQ, context);
+				event = new PrivateMessagePreSendEvent(this, QQ, content);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
@@ -612,7 +612,7 @@ public class RobotQQ {
 				return intResult();
 			case TYPE_DISCUSS_TEMPORARY_SESSION:
 			case TYPE_GROUP_TEMPORARY_SESSION:
-				event = new PrivateMessagePreSendEvent(this, group, context);
+				event = new PrivateMessagePreSendEvent(this, group, content);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
@@ -622,7 +622,7 @@ public class RobotQQ {
 				return intResult();
 			case TYPE_GROUP:
 			case TYPE_DISCUSS:
-				event = new GroupMessagePreSendEvent(this, group, context);
+				event = new GroupMessagePreSendEvent(this, group, content);
 
 				frame.getPluginManager().callEvent(event);
 				if (event.isCancelled()) {
@@ -636,24 +636,24 @@ public class RobotQQ {
 
 	}
 
-	public int sendPrivateMessage(long QQ, String context) {
-		return sendMessage(TYPE_FRIEND, 0, 0, QQ, context);
+	public int sendPrivateMessage(long QQ, String content) {
+		return sendMessage(TYPE_FRIEND, 0, 0, QQ, content);
 	}
 
-	public int sendGroupMessage(long group, String context) {
-		return sendMessage(TYPE_GROUP, 0, group, 0, context);
+	public int sendGroupMessage(long group, String content) {
+		return sendMessage(TYPE_GROUP, 0, group, 0, content);
 	}
 
-	public int sendDiscussMessage(long discuss, String context) {
-		return sendGroupMessage(discuss, context);
+	public int sendDiscussMessage(long discuss, String content) {
+		return sendGroupMessage(discuss, content);
 	}
 
-	public int sendGroupTemporaryMessage(long session, String context) {
-		return sendGroupMessage(session, context);
+	public int sendGroupTemporaryMessage(long session, String content) {
+		return sendGroupMessage(session, content);
 	}
 
-	public int sendDiscussTemporaryMessage(long session, String context) {
-		return sendGroupMessage(session, context);
+	public int sendDiscussTemporaryMessage(long session, String content) {
+		return sendGroupMessage(session, content);
 	}
 
 
@@ -682,13 +682,13 @@ public class RobotQQ {
 	/**
 	 * 发说说
 	 *
-	 * @param context 内容
+	 * @param content 内容
 	 *
 	 * @return unknown
 	 */
 	@SuppressWarnings("SpellCheckingInspection")
-	public String addTaotao(String context) {
-		runCommand(ADD_TAOTAO, this.getQQ(), context);
+	public String addTaotao(String content) {
+		runCommand(ADD_TAOTAO, this.getQQ(), content);
 		return stringResult();
 	}
 
@@ -705,12 +705,12 @@ public class RobotQQ {
 	/**
 	 * 设置个性签名
 	 *
-	 * @param context 内容
+	 * @param content 内容
 	 *
 	 * @return unknown
 	 */
-	public String setSign(String context) {
-		runCommand(SET_SIGN, this.getQQ(), context);
+	public String setSign(String content) {
+		runCommand(SET_SIGN, this.getQQ(), content);
 		return stringResult();
 	}
 
