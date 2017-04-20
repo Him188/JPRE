@@ -16,6 +16,7 @@ import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.mpq.MPQDisableEvent;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
+import com.him188.jpre.event.qq.PrivateMessageEvent;
 import com.him188.jpre.network.packet.*;
 import com.him188.jpre.plugin.PluginDescription;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,6 +25,7 @@ import java.net.SocketAddress;
 import java.util.Arrays;
 
 import static com.him188.jpre.network.packet.PacketIds.CLIENT_EVENT;
+import static com.him188.jpre.network.packet.PacketIds.CLIENT_PING;
 
 /**
  * 连接到服务器的客户端 (MPQ)]
@@ -80,10 +82,10 @@ public class MPQClient {
 				switch (eid) {
 					case EventTypes.EXIT:
 					case EventTypes.DISABLE:
-						event = new MPQDisableEvent(this);
+						// TODO: 2017/4/20 close plugins
 						break;
 					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), PrivateMessageEvent.MESSAGE_TYPE_PRIVATE, 0, packet.getLong(), Utils.utf8Decode(packet.getString()));
+						event = new PrivateMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), , Utils.utf8Decode(packet.getString()));
 						break;// TODO: 2017/4/9 check them
 					case EventTypes.GROUP_MESSAGE:
 						event = new GroupMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
@@ -141,49 +143,14 @@ public class MPQClient {
 		}
 
 		switch (packet.getNetworkId()) {
-			case PING:
+			case CLIENT_PING:
 				sendPacket(new ServerPongPacket());
 				break;
+
 			default:
-				switch (packet.getNetworkId()) {
-					case ENABLE_PLUGIN:
-						sendPacket(new EnablePluginResultPacket(frame.enablePlugin(((EnablePluginPacket) packet).getName())));
-						break;
-					case LOAD_PLUGIN:
-						sendPacket(new LoadPluginResultPacket(frame.loadPlugin(((LoadPluginPacket) packet).getName())));
-						break;
-					case DISABLE_PLUGIN:
-						sendPacket(new DisablePluginResultPacket(frame.disablePlugin(((DisablePluginPacket) packet).getName())));
-						break;
-					case LOAD_PLUGIN_DESCRIPTION:
-						sendPacket(new LoadPluginDescriptionResultPacket(frame.loadPluginDescription(((LoadPluginDescriptionPacket) packet).getName())));
-						break;
-					case GET_PLUGIN_INFORMATION:
-						PluginDescription description = frame.getPluginManager().matchPluginDescription(((GetPluginInformationPacket) packet).getName());
-						if (description == null) {
-							sendPacket(new GetPluginInformationResultPacket("", "", "", "", 0, ""));
-							break;
-						}
-						sendPacket(new GetPluginInformationResultPacket(
-								description.getName(),
-								description.getAuthor(),
-								description.getVersion(),
-								description.getMainClass(),
-								description.getAPIVersion(),
-								description.getDescription()
-						));
-						break;
-					case SET_INFORMATION:
-						frame.init(((SetInformationPacket) packet).getDataFolder());
-						sendPacket(new SetInformationResultPacket(true));
-						break;
-					case COMMAND_RESULT:
-						RobotQQ.addResult(((CommandResultPacket) packet).getResult());
-						break;
-					default:
-						sendPacket(new InvalidIdPacket());
-						break;
-				}
+				sendPacket(new InvalidIdPacket());
+				break;
+
 		}
 	}
 
@@ -207,7 +174,6 @@ public class MPQClient {
 		this.getLastCtx().writeAndFlush(result);
 		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}
-
 
 
 	private ChannelHandlerContext lastCtx;

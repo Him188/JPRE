@@ -1,5 +1,9 @@
 package com.him188.jpre.event;
 
+import com.him188.jpre.event.frame.FrameQQAddEvent;
+import com.him188.jpre.event.frame.FrameQQCrashEvent;
+import com.him188.jpre.event.frame.FrameQQEvent;
+import com.him188.jpre.event.frame.FrameQQForceOfflineEvent;
 import com.him188.jpre.event.friend.FriendAddEvent;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
@@ -34,32 +38,13 @@ abstract public class Event {
 	private static int COUNT = 0;
 
 	static {
-		registerEvent(GroupAdminChangeEvent.class);
-		registerEvent(GroupFileUploadEvent.class);
-		registerEvent(GroupMemberDecreaseEvent.class);
-		registerEvent(GroupMemberIncreaseEvent.class);
-
-		registerEvent(DiscussMessageEvent.class);
-		registerEvent(GroupMessageEvent.class);
-		registerEvent(PrivateMessageEvent.class);
-
-		registerEvent(PluginDisableEvent.class);
-		registerEvent(PluginEnableEvent.class);
-// TODO: 2017/4/10
-		registerEvent(ReplyDiscussMessageEvent.class);
-		registerEvent(ReplyGroupMessageEvent.class);
-		registerEvent(ReplyPrivateMessageEvent.class);
-
-		registerEvent(DiscussMessagePreSendEvent.class);
-		registerEvent(GroupMessagePreSendEvent.class);
-		registerEvent(PrivateMessagePreSendEvent.class);
-
-		registerEvent(FriendAddEvent.class);
-
-		registerEvent(AddFriendRequestEvent.class);
-		registerEvent(AddGroupRequestEvent.class);
-
-		registerEvent(MPQDisableEvent.class);
+		for (Class aClass : new Class[]{
+				FrameQQEvent.class,
+				FrameQQCrashEvent.class,
+				FrameQQForceOfflineEvent.class,
+		}) {
+			registerEvent(aClass);
+		}
 	}
 
 	private boolean cancelled = false;

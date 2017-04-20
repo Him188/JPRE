@@ -1,15 +1,16 @@
-package com.him188.jpre.event.qq.taotao;
+package com.him188.jpre.event.group;
 
+import com.him188.jpre.Group;
 import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.HandlerList;
 
 /**
- * 评论了别人的说说
+ * 群聊消息
  *
  * @author Him188
  */
-public class TaoTaoCommentEvent extends TaoTaoEvent {
+public class GroupMessageEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {
@@ -19,8 +20,8 @@ public class TaoTaoCommentEvent extends TaoTaoEvent {
 
 	private final String message;
 
-	public TaoTaoCommentEvent(RobotQQ robot, QQ qq, String message) {
-		super(robot, qq);
+	public GroupMessageEvent(RobotQQ robot, Group group, QQ qq, String message) {
+		super(robot, group, qq);
 		this.message = message;
 	}
 

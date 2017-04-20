@@ -1,9 +1,5 @@
 package com.him188.jpre;
 
-import com.him188.jpre.event.message.MessageEvent;
-import com.him188.jpre.event.send.GroupMessagePreSendEvent;
-import com.him188.jpre.event.send.SendMessageEvent;
-import com.him188.jpre.event.send.PrivateMessagePreSendEvent;
 import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
@@ -41,6 +37,32 @@ public class RobotQQ {
 	@Override
 	public String toString() {
 		return "RobotQQ(QQ=" + getQQ() + ")";
+	}
+
+
+	/* QQ LIST */
+
+	private final Set<QQ> qqList = new HashSet<>();
+
+	public Set<QQ> getQQList() {
+		return qqList;
+	}
+
+	/**
+	 * 获取 QQ 实例, 不存在时自动创建
+	 *
+	 * @return QQ
+	 */
+	public QQ getQQ(long QQ) {
+		for (QQ robotQQ : qqList) {
+			if (robotQQ.getQQ() == QQ) {
+				return robotQQ;
+			}
+		}
+
+		QQ qq = new QQ(this, QQ);
+		qqList.add(qq);
+		return qq;
 	}
 
 
@@ -322,7 +344,7 @@ public class RobotQQ {
 	 *
 	 * @return 框架内所有QQ列表
 	 */
-	public static String getQQList() {
+	public static String getFrameQQList() {
 		runCommand(GET_QQ_LIST, 0L);
 		return stringResult();
 	}
@@ -1079,11 +1101,11 @@ public class RobotQQ {
 	}
 
 
-	/* ROBOT QQ LIST*/
+	/* ROBOT LIST*/
 
 	private static final Set<RobotQQ> list = new HashSet<>();
 
-	public static Set<RobotQQ> getList() {
+	public static Set<RobotQQ> getRobotList() {
 		return list;
 	}
 
@@ -1094,7 +1116,7 @@ public class RobotQQ {
 	 *
 	 * @return Robot
 	 *
-	 * @throws NullPointerException 当实例不存在且 {@code frameIfCreate} 为 null 时抛出
+	 * @throws IllegalArgumentException 当实例不存在且 {@code frameIfCreate} 为 null 时抛出
 	 */
 	public static RobotQQ getRobot(Frame frameIfCreate, long QQ) {
 		for (RobotQQ robotQQ : list) {

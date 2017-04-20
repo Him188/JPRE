@@ -9,6 +9,9 @@ abstract class User {
 	private final RobotQQ robot;
 
 	User(RobotQQ robot) {
+		if (robot == null) {
+			throw new IllegalArgumentException("Arg 'robot' cannot be null");
+		}
 		this.robot = robot;
 	}
 

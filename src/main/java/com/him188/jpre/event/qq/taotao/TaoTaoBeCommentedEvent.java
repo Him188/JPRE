@@ -5,6 +5,8 @@ import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.HandlerList;
 
 /**
+ * 说说被评论
+ *
  * @author Him188
  */
 public class TaoTaoBeCommentedEvent extends TaoTaoEvent {
