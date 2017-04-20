@@ -1,11 +1,21 @@
 package com.him188.jpre.event.jpre;
 
 import com.him188.jpre.RobotQQ;
+import com.him188.jpre.event.HandlerList;
 
 /**
+ * 插件菜单被点击
+ *
  * @author Him188
  */
 public class MenuActionEvent extends JPREEvent {
+	private static final HandlerList handlers = new HandlerList();
+
+	public static HandlerList getHandlers() {
+		return handlers;
+	}
+
+
 	private final ActionType type;
 
 	public enum ActionType {

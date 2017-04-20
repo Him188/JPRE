@@ -2,6 +2,7 @@ package com.him188.jpre.event.qq;
 
 import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * 他人请求添加机器人为好友
@@ -9,6 +10,13 @@ import com.him188.jpre.RobotQQ;
  * @author Him188
  */
 public class FriendAddRequestEvent extends QQEvent {
+	private static final HandlerList handlers = new HandlerList();
+
+	public static HandlerList getHandlers() {
+		return handlers;
+	}
+
+
 	private boolean accepted;
 
 	public FriendAddRequestEvent(RobotQQ robot, QQ qq) {

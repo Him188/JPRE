@@ -15,6 +15,7 @@ public class FrameRebootEvent extends FrameEvent {
 		return handlers;
 	}
 
+
 	public FrameRebootEvent(RobotQQ robot) {
 		super(robot);
 	}

@@ -3,6 +3,7 @@ package com.him188.jpre.event.group;
 import com.him188.jpre.Group;
 import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
+import com.him188.jpre.event.HandlerList;
 
 /**
  * 某人成为/被取消管理员
@@ -10,6 +11,13 @@ import com.him188.jpre.RobotQQ;
  * @author Him188
  */
 public class GroupAdminChangeEvent extends GroupEvent {
+	private static final HandlerList handlers = new HandlerList();
+
+	public static HandlerList getHandlers() {
+		return handlers;
+	}
+
+
 	public enum ChangeType {
 		PROMOTION, //成为管理员
 		DEMOTION,  //降职为普通成员
