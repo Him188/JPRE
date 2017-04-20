@@ -15,7 +15,7 @@ abstract public class QQEvent extends RobotEvent {
 		this.qq = qq;
 	}
 
-	public QQ getQq() {
+	public QQ getQQ() {
 		return qq;
 	}
 }
