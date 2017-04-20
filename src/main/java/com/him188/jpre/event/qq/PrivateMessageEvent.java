@@ -4,6 +4,8 @@ import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
 
 /**
+ * 私聊消息
+ *
  * @author Him188
  */
 public class PrivateMessageEvent extends QQEvent {
