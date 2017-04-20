@@ -24,4 +24,14 @@ public enum OnlineStatus {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public static OnlineStatus match(int id) {
+		for (OnlineStatus onlineStatus : OnlineStatus.values()) {
+			if (onlineStatus.getId() == id) {
+				return onlineStatus;
+			}
+		}
+
+		return STATUS_ONLINE;
+	}
 }

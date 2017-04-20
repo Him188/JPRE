@@ -17,10 +17,17 @@ public class FriendAddRequestEvent extends QQEvent {
 	}
 
 
+	private final String reason;
+
 	private boolean accepted;
 
-	public FriendAddRequestEvent(RobotQQ robot, QQ qq) {
+	public FriendAddRequestEvent(RobotQQ robot, QQ qq, String reason) {
 		super(robot, qq);
+		this.reason = reason;
+	}
+
+	public String getReason() {
+		return reason;
 	}
 
 	// TODO: 2017/4/19 接受请求

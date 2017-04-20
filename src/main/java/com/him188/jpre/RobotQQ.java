@@ -30,13 +30,18 @@ public class RobotQQ {
 		this.QQ = QQ;
 	}
 
+	/**
+	 * 获取该机器人的 QQ
+	 *
+	 * @return 机器人的 QQ
+	 */
 	public long getQQ() {
 		return QQ;
 	}
 
 	@Override
 	public String toString() {
-		return "RobotQQ(QQ=" + getQQ() + ")";
+		return "RobotQQ(QQ=" + getQQ() + ",Frame=" + frame.toString() + ")";
 	}
 
 
@@ -63,6 +68,31 @@ public class RobotQQ {
 		QQ qq = new QQ(this, QQ);
 		qqList.add(qq);
 		return qq;
+	}
+
+	/* Group LIST */
+
+	private final Set<Group> groupList = new HashSet<>();
+
+	public Set<Group> getGroupList() {
+		return groupList;
+	}
+
+	/**
+	 * 获取 Group 实例, 不存在时自动创建
+	 *
+	 * @return Group
+	 */
+	public Group getGroup(long Group) {
+		for (Group robotGroup : groupList) {
+			if (robotGroup.getGroup() == Group) {
+				return robotGroup;
+			}
+		}
+
+		Group group = new Group(this, Group);
+		groupList.add(group);
+		return group;
 	}
 
 
@@ -285,7 +315,6 @@ public class RobotQQ {
 		runCommand(ADD_QQ, 0L, QQ, password, autoLogin);
 		return booleanResult();
 	}
-
 
 
 	public static final int STATUS_ONLINE = 1;          //我在线上

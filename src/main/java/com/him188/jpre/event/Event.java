@@ -42,6 +42,7 @@ abstract public class Event {
 				FrameQQEvent.class,
 				FrameQQCrashEvent.class,
 				FrameQQForceOfflineEvent.class,
+				// TODO: 2017/4/20  !!!
 		}) {
 			registerEvent(aClass);
 		}

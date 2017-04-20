@@ -483,7 +483,7 @@ public final class PluginManager {
 			if (!event.isCancelled()) {
 				try {
 					switch (Event.getEventType(event.getClass())) {
-						case EventTypes.DISCUSS_MESSAGE:// TODO: 2017/4/16 remove that
+						case EventType.DISCUSS_MESSAGE:// TODO: 2017/4/16 remove that
 							if (event instanceof DiscussMessageEvent) {
 								if (((DiscussMessageEvent) event).getRepeat() == null || ((DiscussMessageEvent) event).getRepeat().isEmpty()) {
 									return false;
@@ -500,7 +500,7 @@ public final class PluginManager {
 								return true;
 							}
 							return false;
-						case EventTypes.GROUP_MESSAGE:
+						case EventType.GROUP_MESSAGE:
 							if (event instanceof GroupMessageEvent) {
 								if (((GroupMessageEvent) event).getRepeat() == null || ((GroupMessageEvent) event).getRepeat().isEmpty()) {
 									return false;
@@ -516,7 +516,7 @@ public final class PluginManager {
 								return true;
 							}
 							return false;
-						case EventTypes.PRIVATE_MESSAGE:
+						case EventType.PRIVATE_MESSAGE:
 							if (event instanceof PrivateMessageEvent) {
 								if (((PrivateMessageEvent) event).getRepeat() == null || ((PrivateMessageEvent) event).getRepeat().isEmpty()) {
 									return false;
@@ -532,14 +532,14 @@ public final class PluginManager {
 								return true;
 							}
 							return false;
-						case EventTypes.REQUEST_FRIEND_ADD:
+						case EventType.REQUEST_FRIEND_ADD:
 							if (event instanceof AddFriendRequestEvent) {
 								// TODO: 2017/4/9
 								//JPREMain.getCaller().friendAnswerAddRequest(((AddFriendRequestEvent) event).getResponseFlag(), ((AddFriendRequestEvent) event).isAccept(), ((AddFriendRequestEvent) event).getNickIfAccept());
 								return true;
 							}
 							return false;
-						case EventTypes.REQUEST_GROUP_ADD:
+						case EventType.REQUEST_GROUP_ADD:
 							if (event instanceof AddGroupRequestEvent) {
 								// TODO: 2017/4/9
 								//JPREMain.getCaller().groupAnswerJoinRequest(((AddGroupRequestEvent) event).getResponseFlag(), ((AddGroupRequestEvent) event).getType(), ((AddGroupRequestEvent) event).isAccept(), ((AddGroupRequestEvent) event).reasonIfRefused);

@@ -15,6 +15,11 @@ import java.io.File;
  */
 @SuppressWarnings("WeakerAccess")
 public final class Frame {
+	@Override
+	public String toString() {
+		return "Frame(JPRE=" + jpre.toString() + ",Client=" + client.toString()+ ")";
+	}
+
 	private final JPREMain jpre;
 	private MPQClient client;
 

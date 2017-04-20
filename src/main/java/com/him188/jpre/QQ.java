@@ -20,4 +20,9 @@ public class QQ extends User {
 	public boolean sendMessage(String content) {
 		return getRobot().sendPrivateMessage(getQQ(), content) != 0;
 	}
+
+	@Override
+	public String toString() {
+		return "QQ(" + qq + ")";
+	}
 }

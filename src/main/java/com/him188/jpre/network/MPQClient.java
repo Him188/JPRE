@@ -1,31 +1,36 @@
 package com.him188.jpre.network;
 
 import com.him188.jpre.Frame;
+import com.him188.jpre.OnlineStatus;
 import com.him188.jpre.RobotQQ;
 import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
-import com.him188.jpre.event.EventTypes;
+import com.him188.jpre.event.EventType;
 import com.him188.jpre.event.group.GroupAdminChangeEvent;
 import com.him188.jpre.event.group.GroupFileUploadEvent;
 import com.him188.jpre.event.group.GroupMemberDecreaseEvent;
 import com.him188.jpre.event.group.GroupMemberIncreaseEvent;
+import com.him188.jpre.event.group.GroupMessageEvent;
 import com.him188.jpre.event.message.DiscussMessageEvent;
 import com.him188.jpre.event.message.GroupMessageEvent;
 import com.him188.jpre.event.message.PrivateMessageEvent;
 import com.him188.jpre.event.mpq.MPQDisableEvent;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
-import com.him188.jpre.event.qq.PrivateMessageEvent;
+import com.him188.jpre.event.qq.*;
 import com.him188.jpre.network.packet.*;
-import com.him188.jpre.plugin.PluginDescription;
 import io.netty.channel.ChannelHandlerContext;
 
+import javax.lang.model.element.PackageElement;
+import java.awt.*;
 import java.net.SocketAddress;
 import java.util.Arrays;
 
 import static com.him188.jpre.network.packet.PacketIds.CLIENT_EVENT;
 import static com.him188.jpre.network.packet.PacketIds.CLIENT_PING;
+
+import static com.him188.jpre.event.EventType.*;
 
 /**
  * 连接到服务器的客户端 (MPQ)]
@@ -53,6 +58,11 @@ public class MPQClient {
 		this.lastCtx = initCtx;
 	}
 
+	@Override
+	public String toString() {
+		return "MPQClient(Address=" + address.toString() + ")";
+	}
+
 	public boolean is(SocketAddress address) {
 		return this.address == address;
 	}
@@ -78,35 +88,57 @@ public class MPQClient {
 		switch (pid) {
 			case CLIENT_EVENT:
 				Event event = null;
-				int eid = packet.getInt();
-				switch (eid) {
-					case EventTypes.EXIT:
-					case EventTypes.DISABLE:
-						// TODO: 2017/4/20 close plugins
-						break;
-					case EventTypes.PRIVATE_MESSAGE:
-						event = new PrivateMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), , Utils.utf8Decode(packet.getString()));
-						break;// TODO: 2017/4/9 check them
-					case EventTypes.GROUP_MESSAGE:
-						event = new GroupMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
-						break;
-					case EventTypes.DISCUSS_MESSAGE:
-						event = new DiscussMessageEvent(RobotQQ.getRobot(getFrame(), packet.getLong()), 0, packet.getLong(), packet.getLong(), Utils.utf8Decode(packet.getString()));
-						break;
-					case EventTypes.GROUP_UPLOAD:
-						event = new GroupFileUploadEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getString());
-						break;
-					case EventTypes.GROUP_ADMIN:
-						event = new GroupAdminChangeEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong());
-						break;
-					case EventTypes.GROUP_MEMBER_DECREASE:
-						event = new GroupMemberDecreaseEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getLong());
-						break;
-					case EventTypes.GROUP_MEMBER_INCREASE:
-						event = new GroupMemberIncreaseEvent(packet.getInt(), packet.getInt(), packet.getLong(), packet.getLong(), packet.getLong());
-						break;
-					// TODO: 2017/4/11 add all
+
+				EventType type = EventType.match(packet.getInt());
+				if (type == null) {
+					sendPacket(new InvalidIdPacket());
+					break;
 				}
+
+				RobotQQ robot = RobotQQ.getRobot(this.getFrame(), packet.getLong());
+
+				switch (type) {
+					case UNKNOWN:
+						sendPacket(new InvalidIdPacket());
+						break;
+					case MESSAGE_FRIEND:
+						event = new PrivateMessageEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						break;
+					case MESSAGE_GROUP:
+						event = new GroupMessageEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), packet.getString());
+						break;
+					// TODO: 2017/4/20 DISCUSSION, TEMPORARY event
+					case FRIEND_ADD_RESULT:
+						event = new FriendAddResultEvent(robot, robot.getQQ(packet.getLong()), true);
+						break;
+					case FRIEND_ADD_REQUEST:
+						event = new FriendAddRequestEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						break;
+					case FRIEND_STATUS_CHANGE:
+						event = new FriendStatusChangeEvent(robot, robot.getQQ(packet.getLong()), OnlineStatus.match(packet.getInt()));
+						break;
+					case FRIEND_DELETE:
+						event = new FriendDeleteEvent(robot, robot.getQQ(packet.getLong()));
+						break;
+					case FRIEND_SIGN_CHANGE:
+						event = new FriendSignChangeEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						break;
+					case FRIEND_TAOTAO_BE_COMMENT:
+						event = new FriendTaotaoCommitEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						break;
+					case FRIEND_TYPING:
+						event = new FriendTypingEvent(robot, robot.getQQ(packet.getLong()));
+						break;
+					case FRIEND_FIRST_CONVESATION:
+						event = new FriendFirstConversationEvent(robot, robot.getQQ(packet.getLong()));
+						break;
+					case FRIEND_SHAKE:
+						event = new FriendShakeEvent(robot, robot.getQQ(packet.getLong()));
+						break;
+
+					// TODO: 2017/4/20 !!! group event
+				}
+
 				if (event == null) {
 					sendPacket(new InvalidEventPacket());
 					break;

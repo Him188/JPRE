@@ -3,7 +3,7 @@ package com.him188.jpre.event;
 /**
  * @author Him188
  */
-public enum EventTypes {
+public enum EventType {
 	UNKNOWN(-1),
 
 	MESSAGE_FRIEND(1),
@@ -12,7 +12,7 @@ public enum EventTypes {
 	MESSAGE_GROUP_TEMPORARY(4),
 	MESSAGE_DISCUSSION_TEMPORARY(5),
 
-	FRIEND_ADD(1000),
+	FRIEND_ADD_RESULT(1000),
 	FRIEND_ADD_REQUEST(1001),
 	FRIEND_STATUS_CHANGE(1002),
 	FRIEND_DELETE(1003),
@@ -57,12 +57,22 @@ public enum EventTypes {
 
 	private final int id;
 
-	EventTypes(int id) {
+	EventType(int id) {
 		this.id = id;
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public static EventType match(int id) {
+		for (EventType eventType : EventType.values()) {
+			if (eventType.getId() == id) {
+				return eventType;
+			}
+		}
+
+		return null;
 	}
 }
 
