@@ -106,4 +106,6 @@ public interface Plugin {
 	 * @return 配置文件路径
 	 */
 	File getDataFolder();
+
+	void setPluginManager(PluginManager pluginManager);
 }

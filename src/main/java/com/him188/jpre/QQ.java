@@ -12,13 +12,13 @@ public class QQ extends User {
 		this.qq = qq;
 	}
 
-	public long getQQ() {
+	public long getNumber() {
 		return qq;
 	}
 
 	@Override
 	public boolean sendMessage(String content) {
-		return getRobot().sendPrivateMessage(getQQ(), content) != 0;
+		return getRobot().sendPrivateMessage(this, content);
 	}
 
 	@Override

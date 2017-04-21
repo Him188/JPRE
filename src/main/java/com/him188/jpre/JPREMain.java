@@ -95,7 +95,7 @@ public final class JPREMain {
 	private static void printAbout() {
 		System.out.println("MPQ JavaPluginRuntimeEnvironment");
 		System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);
-		System.out.println("Author: Him188 & LamGC");
+		System.out.println("Author: Him188 & LamGC & Other fiends");
 		System.out.println("GitHub: https://github.com/Him188/CQ-JPRE\n");
 	}
 }

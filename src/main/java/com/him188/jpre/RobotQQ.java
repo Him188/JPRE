@@ -1,5 +1,8 @@
 package com.him188.jpre;
 
+import com.him188.jpre.event.group.SendDiscussionMessageEvent;
+import com.him188.jpre.event.qq.SendGroupMessageEvent;
+import com.him188.jpre.event.qq.SendPrivateMessageEvent;
 import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
@@ -23,6 +26,10 @@ public class RobotQQ {
 	private final Frame frame;
 	public final long QQ;
 
+	public Frame getFrame() {
+		return frame;
+	}
+
 	public RobotQQ(Frame frame, long QQ) {
 		Objects.requireNonNull(frame);
 
@@ -35,13 +42,13 @@ public class RobotQQ {
 	 *
 	 * @return 机器人的 QQ
 	 */
-	public long getQQ() {
+	public long getQQNumber() {
 		return QQ;
 	}
 
 	@Override
 	public String toString() {
-		return "RobotQQ(QQ=" + getQQ() + ",Frame=" + frame.toString() + ")";
+		return "RobotQQ(QQ=" + getQQNumber() + ",Frame=" + frame.toString() + ")";
 	}
 
 
@@ -58,9 +65,9 @@ public class RobotQQ {
 	 *
 	 * @return QQ
 	 */
-	public QQ getQQ(long QQ) {
+	public QQ getQQNumber(long QQ) {
 		for (QQ robotQQ : qqList) {
-			if (robotQQ.getQQ() == QQ) {
+			if (robotQQ.getNumber() == QQ) {
 				return robotQQ;
 			}
 		}
@@ -85,7 +92,7 @@ public class RobotQQ {
 	 */
 	public Group getGroup(long Group) {
 		for (Group robotGroup : groupList) {
-			if (robotGroup.getGroup() == Group) {
+			if (robotGroup.getNumber() == Group) {
 				return robotGroup;
 			}
 		}
@@ -93,6 +100,31 @@ public class RobotQQ {
 		Group group = new Group(this, Group);
 		groupList.add(group);
 		return group;
+	}
+	
+	/* Discussion LIST */
+
+	private final Set<Discussion> discussionList = new HashSet<>();
+
+	public Set<Discussion> getDiscussionList() {
+		return discussionList;
+	}
+
+	/**
+	 * 获取 Discussion 实例, 不存在时自动创建
+	 *
+	 * @return Discussion
+	 */
+	public Discussion getDiscussion(long Discussion) {
+		for (Discussion robotDiscussion : discussionList) {
+			if (robotDiscussion.getNumber() == Discussion) {
+				return robotDiscussion;
+			}
+		}
+
+		Discussion discussion = new Discussion(this, Discussion);
+		discussionList.add(discussion);
+		return discussion;
 	}
 
 
@@ -388,7 +420,7 @@ public class RobotQQ {
 	 * @return 页面操作用参数 Bkn 或 G_tk
 	 */
 	public String getGtkBkn() {
-		runCommand(ADD_QQ, this.getQQ());
+		runCommand(ADD_QQ, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -398,7 +430,7 @@ public class RobotQQ {
 	 * @return 页面操作用参数长 Bkn 或长 G_tk
 	 */
 	public String getBKN32() {
-		runCommand(GET_BKN32, this.getQQ());
+		runCommand(GET_BKN32, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -408,7 +440,7 @@ public class RobotQQ {
 	 * @return 页面操作用参数长 Ldw
 	 */
 	public String getLdw() {
-		runCommand(GET_LDW, this.getQQ());
+		runCommand(GET_LDW, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -418,7 +450,7 @@ public class RobotQQ {
 	 * @return 取得对应的会话秘钥
 	 */
 	public String getSessionKey() {
-		runCommand(GET_SESSION_KEY, this.getQQ());
+		runCommand(GET_SESSION_KEY, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -428,7 +460,7 @@ public class RobotQQ {
 	 * @return 页面登录用的 ClientKey
 	 */
 	public String getClientKey() {
-		runCommand(GET_CLIENT_KEY, this.getQQ());
+		runCommand(GET_CLIENT_KEY, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -438,7 +470,7 @@ public class RobotQQ {
 	 * @return 页面登录用的长 ClientKey
 	 */
 	public String getLongClientKey() {
-		runCommand(GET_LONG_CLIENT_KEY, this.getQQ());
+		runCommand(GET_LONG_CLIENT_KEY, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -448,7 +480,7 @@ public class RobotQQ {
 	 * @return 页面操作用的 Cookies
 	 */
 	public String getCookies() {
-		runCommand(GET_COOKIES, this.getQQ());
+		runCommand(GET_COOKIES, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -458,7 +490,7 @@ public class RobotQQ {
 	 * @return 框架内设置的信息发送前缀
 	 */
 	public String getPrefix() {
-		runCommand(GET_PREFIX, this.getQQ());
+		runCommand(GET_PREFIX, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -468,7 +500,7 @@ public class RobotQQ {
 	 * @param QQ QQ
 	 */
 	public void unBan(long QQ) {
-		runCommand(D_BAN, this.getQQ(), QQ);
+		runCommand(D_BAN, this.getQQNumber(), QQ);
 	}
 
 	/**
@@ -477,7 +509,7 @@ public class RobotQQ {
 	 * @param QQ QQ
 	 */
 	public void ban(long QQ) {
-		runCommand(BAN, this.getQQ(), QQ);
+		runCommand(BAN, this.getQQNumber(), QQ);
 	}
 
 	/**
@@ -490,7 +522,7 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public boolean shutUp(long group, long QQ, int time) {
-		runCommand(SHUT_UP, this.getQQ(), group, QQ, time);
+		runCommand(SHUT_UP, this.getQQNumber(), group, QQ, time);
 		return booleanResult();
 	}
 
@@ -513,7 +545,7 @@ public class RobotQQ {
 	 * @param content 公告内容
 	 */
 	public void setNotice(long group, String title, String content) {
-		runCommand(SET_NOTICE, this.getQQ(), group, title, content);
+		runCommand(SET_NOTICE, this.getQQNumber(), group, title, content);
 	}
 
 	/**
@@ -524,7 +556,7 @@ public class RobotQQ {
 	 * @return 群公告
 	 */
 	public String getNotice(long group) {
-		runCommand(GET_NOTICE, this.getQQ(), group);
+		runCommand(GET_NOTICE, this.getQQNumber(), group);
 		return stringResult();
 	}
 
@@ -537,7 +569,7 @@ public class RobotQQ {
 	 * @return 群名片
 	 */
 	public String getNameCard(long group, long QQ) {
-		runCommand(GET_NAME_CARD, this.getQQ(), group, QQ);
+		runCommand(GET_NAME_CARD, this.getQQNumber(), group, QQ);
 		return stringResult();
 	}
 
@@ -547,7 +579,7 @@ public class RobotQQ {
 	 * @param discuss 讨论组号
 	 */
 	public void quitDiscussGroup(long discuss) {
-		runCommand(QUIT_DG, this.getQQ(), discuss);
+		runCommand(QUIT_DG, this.getQQNumber(), discuss);
 	}
 
 	/**
@@ -556,7 +588,7 @@ public class RobotQQ {
 	 * @param QQ QQ
 	 */
 	public void deleteFriend(long QQ) {
-		runCommand(DEL_FRIEND, this.getQQ(), QQ);
+		runCommand(DEL_FRIEND, this.getQQNumber(), QQ);
 	}
 
 	/**
@@ -568,7 +600,7 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public boolean kick(long group, long QQ) {
-		runCommand(KICK, this.getQQ(), group, QQ);
+		runCommand(KICK, this.getQQNumber(), group, QQ);
 		return booleanResult();
 	}
 
@@ -579,7 +611,7 @@ public class RobotQQ {
 	 * @param reason 理由
 	 */
 	public void joinGroup(long group, String reason) {
-		runCommand(JOIN_GROUP, this.getQQ(), group, reason);
+		runCommand(JOIN_GROUP, this.getQQNumber(), group, reason);
 	}
 
 	/**
@@ -588,7 +620,7 @@ public class RobotQQ {
 	 * @param group 群号
 	 */
 	public void quitGroup(long group) {
-		runCommand(QUIT_GROUP, this.getQQ(), group);
+		runCommand(QUIT_GROUP, this.getQQNumber(), group);
 	}
 
 	/**
@@ -599,7 +631,7 @@ public class RobotQQ {
 	 * @return GUID | null
 	 */
 	public String uploadImage(String file) {
-		runCommand(UPLOAD, this.getQQ(), file, 0);
+		runCommand(UPLOAD, this.getQQNumber(), file, 0);
 		return stringResult();
 	}
 
@@ -611,7 +643,7 @@ public class RobotQQ {
 	 * @return GUID | null
 	 */
 	public String uploadImage(int image) {
-		runCommand(UPLOAD, this.getQQ(), "", image);
+		runCommand(UPLOAD, this.getQQNumber(), "", image);
 		return stringResult();
 	}
 
@@ -633,68 +665,52 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public int reply(int type, long target, String content) {
-		runCommand(REPLY, this.getQQ(), type, target, content);
+		runCommand(REPLY, this.getQQNumber(), type, target, content);
 		return intResult();
 	}
 
-	/**
-	 * 发送消息. 将会触发事件 ({@link MessageEvent})
-	 * 注:好友图片发送暂不支持(2015年5月23日
-	 *
-	 * @param type    类型. TYPE_ 开头常量
-	 * @param subType 子类型, 无特殊说明情况下为 0
-	 * @param group   群号/讨论组号/临时会话号. 发送好友消息时为 0
-	 * @param QQ      QQ. 发送非好友消息时为 0
-	 * @param content 消息内容
-	 *
-	 * @return unknown
-	 */
-	public int sendMessage(int type, int subType, long group, long QQ, String content) {
-		SendMessageEvent event;
-		switch (type) {
-			case TYPE_FRIEND:
-				event = new PrivateMessagePreSendEvent(this, QQ, content);
+	public boolean sendPrivateMessage(long QQ, String content) {
+		return sendPrivateMessage(getQQNumber(QQ), content);
+	}
 
-				frame.getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					return -2;
-				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, 0, ((PrivateMessagePreSendEvent) event).getQQ(), event.getMessage());
-				return intResult();
-			case TYPE_DISCUSS_TEMPORARY_SESSION:
-			case TYPE_GROUP_TEMPORARY_SESSION:
-				event = new PrivateMessagePreSendEvent(this, group, content);
-
-				frame.getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					return -2;
-				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, ((PrivateMessagePreSendEvent) event).getQQ(), 0, event.getMessage());
-				return intResult();
-			case TYPE_GROUP:
-			case TYPE_DISCUSS:
-				event = new GroupMessagePreSendEvent(this, group, content);
-
-				frame.getPluginManager().callEvent(event);
-				if (event.isCancelled()) {
-					return -2;
-				}
-				runCommand(SEND_MSG, this.getQQ(), type, subType, ((GroupMessagePreSendEvent) event).getGroup(), 0, event.getMessage());
-				return intResult();
-			default:
-				return -1;
+	public boolean sendPrivateMessage(QQ QQ, String content) {
+		SendPrivateMessageEvent event = new SendPrivateMessageEvent(this, QQ, content);
+		getFrame().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return false;
 		}
-
+		runCommand(SEND_MSG, this.getQQNumber(), TYPE_FRIEND, 0, 0, QQ.getNumber(), event.getMessage());
+		return booleanResult();
 	}
 
-	public int sendPrivateMessage(long QQ, String content) {
-		return sendMessage(TYPE_FRIEND, 0, 0, QQ, content);
+	public boolean sendGroupMessage(long group, String content) {
+		return sendGroupMessage(getGroup(group), content);
 	}
 
-	public int sendGroupMessage(long group, String content) {
-		return sendMessage(TYPE_GROUP, 0, group, 0, content);
+	public boolean sendGroupMessage(Group group, String content) {
+		SendGroupMessageEvent event = new SendGroupMessageEvent(this, group, content);
+		getFrame().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return false;
+		}
+		runCommand(SEND_MSG, this.getQQNumber(), TYPE_GROUP, 0, 0, event.getGroup().getNumber(), event.getMessage());
+		return booleanResult();
 	}
 
+	public boolean sendDiscussionMessage(long discussion, String content) {
+		return sendDiscussionMessage(getDiscussion(discussion), content);
+	}
+
+	public boolean sendDiscussionMessage(Discussion discussion, String content) {
+		SendDiscussionMessageEvent event = new SendDiscussionMessageEvent(this, discussion, content);
+		getFrame().getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			return false;
+		}
+		runCommand(SEND_MSG, this.getQQNumber(), TYPE_DISCUSS, 0, 0, event.getDiscussion().getNumber(), event.getMessage());
+		return booleanResult();
+	}
+/*
 	public int sendDiscussMessage(long discuss, String content) {
 		return sendGroupMessage(discuss, content);
 	}
@@ -706,15 +722,15 @@ public class RobotQQ {
 	public int sendDiscussTemporaryMessage(long session, String content) {
 		return sendGroupMessage(session, content);
 	}
-
+*/
 
 	/**
 	 * 判断是否处于被屏蔽群信息状态
 	 *
 	 * @return 是否处于被屏蔽群信息状态
 	 */
-	public boolean isBlocked() { // TODO: 2017/4/8  check if it is this.getQQ()
-		runCommand(IF_BLOCK, this.getQQ());
+	public boolean isBlocked() { // TODO: 2017/4/8  check if it is this.getNumber()
+		runCommand(IF_BLOCK, this.getQQNumber());
 		return booleanResult();
 	}
 
@@ -726,7 +742,7 @@ public class RobotQQ {
 	 * @return 群管列表
 	 */
 	public String getAdminList(long group) {
-		runCommand(GET_ADMIN_LIST, this.getQQ(), group);
+		runCommand(GET_ADMIN_LIST, this.getQQNumber(), group);
 		return stringResult();
 	}
 
@@ -739,7 +755,7 @@ public class RobotQQ {
 	 */
 	@SuppressWarnings("SpellCheckingInspection")
 	public String addTaotao(String content) {
-		runCommand(ADD_TAOTAO, this.getQQ(), content);
+		runCommand(ADD_TAOTAO, this.getQQNumber(), content);
 		return stringResult();
 	}
 
@@ -749,7 +765,7 @@ public class RobotQQ {
 	 * @return 个性签名
 	 */
 	public String getSign() {
-		runCommand(GET_SIGN, this.getQQ());
+		runCommand(GET_SIGN, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -761,7 +777,7 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public String setSign(String content) {
-		runCommand(SET_SIGN, this.getQQ(), content);
+		runCommand(SET_SIGN, this.getQQNumber(), content);
 		return stringResult();
 	}
 
@@ -772,7 +788,7 @@ public class RobotQQ {
 	 */
 	// TODO: 2017/4/9  解析 json
 	public String getGroupListA() {
-		runCommand(GET_GROUP_LIST_A, this.getQQ());
+		runCommand(GET_GROUP_LIST_A, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -782,7 +798,7 @@ public class RobotQQ {
 	 * @return 转码后的 JSON 格式文本信息
 	 */
 	public String getGroupListB() {
-		runCommand(GET_GROUP_LIST_B, this.getQQ());
+		runCommand(GET_GROUP_LIST_B, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -793,7 +809,7 @@ public class RobotQQ {
 	 */
 	// TODO: 2017/4/9  解析 json
 	public String getGroupMemberA() {
-		runCommand(GET_GROUP_MEMBER_A, this.getQQ());
+		runCommand(GET_GROUP_MEMBER_A, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -803,7 +819,7 @@ public class RobotQQ {
 	 * @return 转码后的 JSON 格式文本
 	 */
 	public String getGroupMemberB() {
-		runCommand(GET_GROUP_MEMBER_B, this.getQQ());
+		runCommand(GET_GROUP_MEMBER_B, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -813,7 +829,7 @@ public class RobotQQ {
 	 * @return 转码后的 JSON 文本
 	 */
 	public String getFriendList() {
-		runCommand(GET_FRIEND_LIST, this.getQQ());
+		runCommand(GET_FRIEND_LIST, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -825,7 +841,7 @@ public class RobotQQ {
 	 * @return 成功返回 Q 龄 失败返回 -1
 	 */
 	public int getQQAge(long QQ) {
-		runCommand(GET_QQ_AGE, this.getQQ(), QQ);
+		runCommand(GET_QQ_AGE, this.getQQNumber(), QQ);
 		return intResult();
 	}
 
@@ -837,7 +853,7 @@ public class RobotQQ {
 	 * @return 成功返回年龄 失败返回 -1
 	 */
 	public int getAge(long QQ) {
-		runCommand(GET_AGE, this.getQQ(), QQ);
+		runCommand(GET_AGE, this.getQQNumber(), QQ);
 		return intResult();
 	}
 
@@ -849,7 +865,7 @@ public class RobotQQ {
 	 * @return 成功返回邮箱 失败返回空
 	 */
 	public String getEmail(long QQ) {
-		runCommand(GET_EMAIL, this.getQQ(), QQ);
+		runCommand(GET_EMAIL, this.getQQNumber(), QQ);
 		return stringResult();
 	}
 
@@ -861,7 +877,7 @@ public class RobotQQ {
 	 * @return 1女 2男 失败返回 -1
 	 */
 	public int getGender(long QQ) {
-		runCommand(GET_GENDER, this.getQQ(), QQ);
+		runCommand(GET_GENDER, this.getQQNumber(), QQ);
 		return intResult();
 	}
 
@@ -873,7 +889,7 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public int sendTyping(long QQ) {
-		runCommand(SEND_TYPING, this.getQQ(), QQ);
+		runCommand(SEND_TYPING, this.getQQNumber(), QQ);
 		return intResult();
 	}
 
@@ -885,7 +901,7 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public int sendShake(long QQ) {
-		runCommand(SEND_SHAKE, this.getQQ(), QQ);
+		runCommand(SEND_SHAKE, this.getQQNumber(), QQ);
 		return intResult();
 	}
 
@@ -895,7 +911,7 @@ public class RobotQQ {
 	 * @param target 群号或 QQ 号
 	 */
 	public int crackIOSQQ(long target) {
-		runCommand(CRACK_IOS_QQ, this.getQQ(), target);
+		runCommand(CRACK_IOS_QQ, this.getQQNumber(), target);
 		return intResult();
 	}
 
@@ -908,7 +924,7 @@ public class RobotQQ {
 	 * @return 成功返回空 失败返回错误理由
 	 */
 	public String groupInvitation(long group, String QQList) {
-		runCommand(GROUP_INVITATION, this.getQQ(), QQList, group);
+		runCommand(GROUP_INVITATION, this.getQQNumber(), QQList, group);
 		return stringResult();
 	}
 
@@ -934,7 +950,7 @@ public class RobotQQ {
 	 * @return 讨论组 ID. 失败为 0
 	 */
 	public long createDiscussGroup() {
-		runCommand(CREATE_DG, this.getQQ());
+		runCommand(CREATE_DG, this.getQQNumber());
 		return longResult();
 	}
 
@@ -947,7 +963,7 @@ public class RobotQQ {
 	 * @return 成功返回空 失败返回理由
 	 */
 	public String kickFromDiscussGroup(long discuss, long QQ) {
-		runCommand(KICK_DG, this.getQQ(), discuss, QQ);
+		runCommand(KICK_DG, this.getQQNumber(), discuss, QQ);
 		return stringResult();
 	}
 
@@ -960,7 +976,7 @@ public class RobotQQ {
 	 * @return 成功返回空 失败返回理由
 	 */
 	public String discussGroupInvitation(long discuss, String QQList) {
-		runCommand(DG_INVITATION, this.getQQ(), discuss, QQList);
+		runCommand(DG_INVITATION, this.getQQNumber(), discuss, QQList);
 		return stringResult();
 	}
 
@@ -986,7 +1002,7 @@ public class RobotQQ {
 	 * @return 讨论组列表
 	 */
 	public String getDiscussGroupList() {
-		runCommand(GET_DG_LIST, this.getQQ());
+		runCommand(GET_DG_LIST, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -998,7 +1014,7 @@ public class RobotQQ {
 	 * @return 成功返回 guid 用于发送
 	 */
 	public String uploadVoice(int amrData) {
-		runCommand(UPLOAD_VOICE, this.getQQ(), amrData);
+		runCommand(UPLOAD_VOICE, this.getQQNumber(), amrData);
 		return stringResult();
 	}
 
@@ -1022,7 +1038,7 @@ public class RobotQQ {
 	 * @return 成功返回空 失败返回理由 (腾讯爸爸给出的)
 	 */
 	public String like(long QQ) {
-		runCommand(LIKE, this.getQQ(), QQ);
+		runCommand(LIKE, this.getQQNumber(), QQ);
 		return stringResult();
 	}
 
@@ -1149,7 +1165,7 @@ public class RobotQQ {
 	 */
 	public static RobotQQ getRobot(Frame frameIfCreate, long QQ) {
 		for (RobotQQ robotQQ : list) {
-			if (robotQQ.getQQ() == QQ) {
+			if (robotQQ.getQQNumber() == QQ) {
 				return robotQQ;
 			}
 		}

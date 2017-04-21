@@ -1,13 +1,10 @@
 package com.him188.jpre.network.packet;
 
-
-
-
 /**
  * @author Him188
  */
 public class LogPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.LOG;
+	public static final byte NETWORK_ID = PacketIds.SERVER_LOG;
 
 	private String log;
 
@@ -21,7 +18,8 @@ public class LogPacket extends Packet {
 
 	@Override
 	public void encode() {
-		return new Pack().putString(log).getData();
+		putString(log);
+		// TODO: 2017/4/21
 	}
 
 	@Override

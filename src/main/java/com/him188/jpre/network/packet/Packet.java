@@ -113,16 +113,19 @@ abstract public class Packet extends Pack {
 		PACKETS_COUNT = 0;
 
 		try {
-			registerPacket(ClientPingPacket.class);
-			registerPacket(ServerPongPacket.class);
-			registerPacket(EventResultPacket.class);
-			registerPacket(GetPluginInformationPacket.class);
-			registerPacket(GetPluginInformationResultPacket.class);
-			registerPacket(InvalidEventPacket.class);
-			registerPacket(InvalidIdPacket.class);
-			registerPacket(LogPacket.class);
-			registerPacket(SetInformationPacket.class);
-			registerPacket(SetInformationResultPacket.class);
+			for (Class aClass : new Class[]{
+					ClientPingPacket.class,
+					CommandResultPacket.class,
+					GetPluginListPacket.class,
+					GetPluginInformationPacket.class,
+					ServerPongPacket.class,
+					EventResultPacket.class,
+					InvalidEventPacket.class,
+					InvalidIdPacket.class,
+					LogPacket.class,
+			}) {
+				registerPacket(aClass);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}// TODO: 2017/4/17  

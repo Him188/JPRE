@@ -110,7 +110,6 @@ public final class PluginManager {
 	 */
 	public Plugin getPlugin(String name) {
 		for (Plugin plugin : plugins) {
-			System.out.println(plugin.toString());
 			if (plugin.getName()
 					.equals(name) ||
 					plugin.getFileName().equals(name)) {
@@ -219,9 +218,10 @@ public final class PluginManager {
 		}
 
 		try {
-			Constructor<?> constructor = mainClass.getConstructor(PluginManager.class);
+			Constructor<?> constructor = mainClass.getConstructor();
 			constructor.setAccessible(true);
-			Plugin plugin = (Plugin) constructor.newInstance(this);
+			Plugin plugin = (Plugin) constructor.newInstance();
+			plugin.setPluginManager(this);
 			plugins.add(plugin);
 			plugin.setPluginDescription(description);
 			plugin.onLoad();

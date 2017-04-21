@@ -16,19 +16,25 @@ import java.util.jar.JarFile;
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class JavaPlugin extends PluginDescription implements Plugin {
-	private final Logger logger;
-	private final PluginManager owner;
+	private Logger logger;
+	private PluginManager owner;
 	private boolean enabled;
 
 	public PluginManager getPluginManager() {
 		return owner;
 	}
 
-	public JavaPlugin(PluginManager owner) {
-		super(null, null, null, 0, null, null, null, null);
+	public final void setPluginManager(PluginManager owner) {
+		if (this.owner != null) {
+			return;
+		}
 		this.owner = owner;
-
 		logger = new PluginLogger(owner.getFrame().getClient());
+	}
+
+	public JavaPlugin() {
+		super(null, null, null, 0, null, null, null, null);
+
 		new File(getDataFolder() + File.pathSeparator).mkdir();
 	}
 

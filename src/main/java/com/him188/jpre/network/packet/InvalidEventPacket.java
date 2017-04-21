@@ -6,7 +6,7 @@ package com.him188.jpre.network.packet;
  * @author Him188
  */
 public class InvalidEventPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_INVALID_ID;
+	public static final byte NETWORK_ID = PacketIds.SERVER_INVALID_EVENT;
 
 	@Override
 	public void encode() {

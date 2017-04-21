@@ -13,12 +13,12 @@ public class Group extends User {
 		this.group = group;
 	}
 
-	public long getGroup() {
+	public long getNumber() {
 		return group;
 	}
 
 	@Override
 	public boolean sendMessage(String content) {
-		return getRobot().sendGroupMessage(getGroup(), content) != 0;
+		return getRobot().sendGroupMessage(this, content);
 	}
 }

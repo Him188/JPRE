@@ -40,8 +40,8 @@ public final class Frame {
 
 	public Frame(JPREMain jpre) {
 		this.jpre = jpre;
-		pluginManager = new PluginManager(this);
 		scheduler = new Scheduler(this);
+		pluginManager = new PluginManager(this);
 	}
 
 	private PluginManager pluginManager;

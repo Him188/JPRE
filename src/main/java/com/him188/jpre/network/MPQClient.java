@@ -93,89 +93,89 @@ public final class MPQClient {
 						sendPacket(new InvalidIdPacket());
 						break;
 					case MESSAGE_FRIEND:
-						event = new PrivateMessageEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						event = new PrivateMessageEvent(robot, robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					case MESSAGE_GROUP:
-						event = new GroupMessageEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), packet.getString());
+						event = new GroupMessageEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					// TODO: 2017/4/20 DISCUSSION, TEMPORARY event
 					case FRIEND_ADD_RESULT:
-						event = new FriendAddResultEvent(robot, robot.getQQ(packet.getLong()), true);
+						event = new FriendAddResultEvent(robot, robot.getQQNumber(packet.getLong()), true);
 						break;
 					case FRIEND_ADD_REQUEST:
-						event = new FriendAddRequestEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						event = new FriendAddRequestEvent(robot, robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					case FRIEND_STATUS_CHANGE:
-						event = new FriendStatusChangeEvent(robot, robot.getQQ(packet.getLong()), OnlineStatus.match(packet.getInt()));
+						event = new FriendStatusChangeEvent(robot, robot.getQQNumber(packet.getLong()), OnlineStatus.match(packet.getInt()));
 						break;
 					case FRIEND_DELETE:
-						event = new FriendDeleteEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FriendDeleteEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRIEND_SIGN_CHANGE:
-						event = new FriendSignChangeEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						event = new FriendSignChangeEvent(robot, robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					case FRIEND_TAOTAO_BE_COMMENT:
-						event = new FriendTaotaoCommitEvent(robot, robot.getQQ(packet.getLong()), packet.getString());
+						event = new FriendTaotaoCommitEvent(robot, robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					case FRIEND_TYPING:
-						event = new FriendTypingEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FriendTypingEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRIEND_FIRST_CONVESATION:
-						event = new FriendFirstConversationEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FriendFirstConversationEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRIEND_SHAKE:
-						event = new FriendShakeEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FriendShakeEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 
 					case GROUP_JOIN_REQUEST:
-						event = new GroupJoinRequestEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupJoinRequestEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_INVITATION_REQUEST:
-						event = new GroupInvitationRequestEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupInvitationRequestEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_INVITATION:
-						event = new GroupInvitationEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupInvitationEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_JOIN:
-						event = new GroupJoinEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupJoinEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_QUIT:
-						event = new GroupQuitEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupQuitEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_KICK:
-						event = new GroupKickEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupKickEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_DISSOLUTION:
-						event = new GroupDissolutionEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupDissolutionEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_ADMIN_CHANGE:
-						event = new GroupAdminChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), packet.getBoolean() ? GroupAdminChangeEvent.ChangeType.PROMOTION : GroupAdminChangeEvent.ChangeType.DEMOTION);
+						event = new GroupAdminChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), packet.getBoolean() ? GroupAdminChangeEvent.ChangeType.PROMOTION : GroupAdminChangeEvent.ChangeType.DEMOTION);
 						break;
 					case GROUP_CARD_CHANGE:
-						event = new GroupCardChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), packet.getString());
+						event = new GroupCardChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 					//case GROUP_NAME_CHANGE:
 					case GROUP_NOTIFICATION_CHANGE:
-						event = new GroupNotificationChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), packet.getString());
+						event = new GroupNotificationChangeEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), packet.getString());
 						break;
 
 					case GROUP_MUTE:
-						event = new GroupMuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), robot.getQQ(packet.getLong()), packet.getInt());
+						event = new GroupMuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), robot.getQQNumber(packet.getLong()), packet.getInt());
 						break;
 					case GROUP_UNMUTE:
-						event = new GroupUnmuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupUnmuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_WHOLE_MUTE:
-						event = new GroupWholeMuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupWholeMuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_WHOLE_UNMUTE:
-						event = new GroupWholeUnmuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupWholeUnmuteEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_ANONYMOUS_ENABLE:
-						event = new GroupAnonymousEnableEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupAnonymousEnableEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 					case GROUP_ANONYMOUS_DISABLE:
-						event = new GroupAnonymousDisableEvent(robot, robot.getGroup(packet.getLong()), robot.getQQ(packet.getLong()));
+						event = new GroupAnonymousDisableEvent(robot, robot.getGroup(packet.getLong()), robot.getQQNumber(packet.getLong()));
 						break;
 
 					case FRAME_STARTUP:
@@ -185,23 +185,23 @@ public final class MPQClient {
 						event = new FrameRebootEvent(robot);
 						break;
 					case FRAME_QQ_ADD:
-						event = new FrameQQAddEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FrameQQAddEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRAME_QQ_LOGIN:
-						event = new FrameQQLoginEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FrameQQLoginEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRAME_QQ_OFFLINE:
-						event = new FrameQQOfflineEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FrameQQOfflineEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRAME_QQ_FORCE_OFFLINE:
-						event = new FrameQQForceOfflineEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FrameQQForceOfflineEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 					case FRAME_QQ_CRASH:
-						event = new FrameQQCrashEvent(robot, robot.getQQ(packet.getLong()));
+						event = new FrameQQCrashEvent(robot, robot.getQQNumber(packet.getLong()));
 						break;
 
 					case TENPAY_RECEIVE_TRANSFER:
-						event = new TenpayReceiveTransferEvent(robot, robot.getQQ(packet.getLong()), packet.getInt(), packet.getString());
+						event = new TenpayReceiveTransferEvent(robot, robot.getQQNumber(packet.getLong()), packet.getInt(), packet.getString());
 						break;
 				}
 
