@@ -115,16 +115,11 @@ abstract public class Packet extends Pack {
 		try {
 			registerPacket(ClientPingPacket.class);
 			registerPacket(ServerPongPacket.class);
-			registerPacket(CommandResultPacket.class);
 			registerPacket(EventResultPacket.class);
 			registerPacket(GetPluginInformationPacket.class);
 			registerPacket(GetPluginInformationResultPacket.class);
 			registerPacket(InvalidEventPacket.class);
 			registerPacket(InvalidIdPacket.class);
-			registerPacket(LoadPluginDescriptionPacket.class);
-			registerPacket(LoadPluginDescriptionResultPacket.class);
-			registerPacket(LoadPluginPacket.class);
-			registerPacket(LoadPluginResultPacket.class);
 			registerPacket(LogPacket.class);
 			registerPacket(SetInformationPacket.class);
 			registerPacket(SetInformationResultPacket.class);
