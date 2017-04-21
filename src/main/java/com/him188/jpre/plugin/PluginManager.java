@@ -67,18 +67,26 @@ public final class PluginManager {
 	}
 
 
+	/* Constructor */
+
+	public PluginManager(Frame frame) {
+		this.frame = frame;
+		loadPlugins();
+
+		enablePlugins();
+	}
+
+
+	/* Declarations */
+
 	private final Frame frame;
 
 	public Frame getFrame() {
 		return frame;
 	}
 
-	public PluginManager(Frame frame) {
-		this.frame = frame;
-	}
-
 	private Map<Plugin, List<Handler>> listeners = new HashMap<>();
-	private List<Plugin> plugins = new ArrayList<>();
+	private HashSet<Plugin> plugins = new HashSet<>();
 	private Map<String, PluginDescription> descriptions = new HashMap<>();
 
 
@@ -111,6 +119,43 @@ public final class PluginManager {
 		}
 
 		return null;
+	}
+
+	/**
+	 * 从磁盘读取插件
+	 */
+	public void loadPlugins() {
+		File[] list = listPlugins();
+		for (File file : list) {
+			try {
+				loadPlugin(new JarFile(file));
+			} catch (IOException e) {
+				e.printStackTrace();
+				// TODO: 2017/4/21 exception
+			}
+		}
+	}
+
+	/**
+	 * 重新加载插件
+	 *
+	 * @param reloadFromDisk 从磁盘中重新读取插件. 可用于添加插件
+	 */
+	public void reloadPlugins(boolean reloadFromDisk) {
+		disablePlugins();
+		if (reloadFromDisk) {
+			plugins.clear();
+			loadPlugins();
+		}
+	}
+
+	/**
+	 * 获取 plugins 目录下所有 .jar 为后缀的文件
+	 *
+	 * @return plugins 目录下所有 .jar 为后缀的文件
+	 */
+	public File[] listPlugins() {
+		return new File(getFrame().getDataFolder() + "/config").listFiles((dir, name) -> name.toLowerCase().endsWith(".jar"));
 	}
 
 	/**
@@ -194,7 +239,7 @@ public final class PluginManager {
 	 *
 	 * @return 插件列表
 	 */
-	public List<Plugin> getPlugins() {
+	public HashSet<Plugin> getPlugins() {
 		return plugins;
 	}
 
@@ -469,7 +514,7 @@ public final class PluginManager {
 	}
 
 
-	/* Private methods*/
+	/* Private methods */
 
 	// TODO: 2017/4/11 Restart server
 	private void unregisterAllEvents() {
