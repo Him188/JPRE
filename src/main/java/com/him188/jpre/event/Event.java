@@ -1,186 +1,12 @@
 package com.him188.jpre.event;
 
-import com.him188.jpre.event.frame.FrameQQAddEvent;
-import com.him188.jpre.event.frame.FrameQQCrashEvent;
-import com.him188.jpre.event.frame.FrameQQEvent;
-import com.him188.jpre.event.frame.FrameQQForceOfflineEvent;
-import com.him188.jpre.event.friend.FriendAddEvent;
-import com.him188.jpre.event.group.GroupAdminChangeEvent;
-import com.him188.jpre.event.group.GroupFileUploadEvent;
-import com.him188.jpre.event.group.GroupMemberDecreaseEvent;
-import com.him188.jpre.event.group.GroupMemberIncreaseEvent;
-import com.him188.jpre.event.message.DiscussMessageEvent;
-import com.him188.jpre.event.message.GroupMessageEvent;
-import com.him188.jpre.event.message.PrivateMessageEvent;
-import com.him188.jpre.event.mpq.MPQDisableEvent;
-import com.him188.jpre.event.plugin.PluginDisableEvent;
-import com.him188.jpre.event.plugin.PluginEnableEvent;
-import com.him188.jpre.event.reply.ReplyDiscussMessageEvent;
-import com.him188.jpre.event.reply.ReplyGroupMessageEvent;
-import com.him188.jpre.event.reply.ReplyPrivateMessageEvent;
-import com.him188.jpre.event.request.AddFriendRequestEvent;
-import com.him188.jpre.event.request.AddGroupRequestEvent;
-import com.him188.jpre.event.send.DiscussMessagePreSendEvent;
-import com.him188.jpre.event.send.GroupMessagePreSendEvent;
-import com.him188.jpre.event.send.PrivateMessagePreSendEvent;
-import com.him188.jpre.plugin.Plugin;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * @author Him188
  */
 abstract public class Event {
-	private static final Class<?>[] REGISTERED_EVENTS = new Class<?>[64];
-	private static final int[] REGISTERED_TYPES = new int[64];
-	private static int COUNT = 0;
-
-	static {
-		for (Class aClass : new Class[]{
-				FrameQQEvent.class,
-				FrameQQCrashEvent.class,
-				FrameQQForceOfflineEvent.class,
-				FrameQQAddEvent.class,
-				FrameQQCrashEvent.class,
-				FrameQQLoginEvent.class,
-				FrameRebootEvent.class,
-				FrameStartupEvent.class,
-				FrameEvent.class,
-				AdminGroupEvent.class,
-				GroupAdminChangeEvent.class,
-				GroupAnonymousDisableEvent.class,
-				GroupAnonymousEnableEvent.class,
-				GroupCardChangeEvent.class,
-				GroupDissolutionEvent.class,
-				GroupEvent.class,
-				GroupInvitationEvent.class,
-				GroupInvitationRequestEvent.class,
-				GroupJoinEvent.class,
-				GroupJoinRequestEvent.class,
-				GroupKickEvent.class,
-				GroupMessageEvent.class,
-				GroupMuteEvent.class,
-				GroupNotificationChangeEvent.class,
-				GroupQuitEvent.class,
-				GroupUnmuteEvent.class,
-				GroupWholeMuteEvent.class,
-				GroupWholeUnmuteEvent.class
-		}) {
-			registerEvent(aClass);
-		}
-	}
-
-	private boolean cancelled = false;
+	/* Interception */
 
 	private boolean intercepted = false;
-
-	public static Class<?>[] getRegisteredEvents() {
-		return REGISTERED_EVENTS;
-	}
-
-	public static int[] getRegisteredTypes() {
-		return REGISTERED_TYPES;
-	}
-
-	public static Class<?> matchEvent(int type) {
-		for (int i = 0; i < REGISTERED_TYPES.length; i++) {
-			if (REGISTERED_TYPES[i] == type) {
-				return REGISTERED_EVENTS[i];
-			}
-		}
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Event matchEvent(int type, Object... args) {
-		for (int i = 0; i < REGISTERED_TYPES.length; i++) {
-			if (REGISTERED_TYPES[i] == type) {
-				try {
-					//can not use args.getClass(). if use, it will be Object[].class
-					Class<?>[] classes = new Class<?>[args.length];
-					for (int i1 = 0; i1 < args.length; i1++) {
-						classes[i1] = args[i1].getClass();
-					}
-					Constructor constructor;
-					if (classes.length == 0) {
-						constructor = REGISTERED_EVENTS[i].getConstructor();
-					} else {
-						constructor = REGISTERED_EVENTS[i].getConstructor(classes);
-					}
-
-					constructor.setAccessible(true);
-					return (Event) constructor.newInstance(args);
-				} catch (Exception e) {
-					return null;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * 注册事件.
-	 * 插件需要新增一个自定义事件时必须调用本方法. (建议在 {@link Plugin#onLoad} 中调用)
-	 *
-	 * @param eventClass Event class
-	 *
-	 * @return 当 {@code eventClass} 没有继承 {@link Event} 或 {@code eventClass} 已经被注册时为 false. 成功为 true
-	 */
-	public static boolean registerEvent(Class<?> eventClass) {
-		if (!eventClass.isAssignableFrom(Event.class)) {
-			return false;
-		}
-
-		for (Class registeredEvent : REGISTERED_EVENTS) {
-			if (registeredEvent.equals(eventClass)) {
-				return false;
-			}
-		}
-
-		try {
-			REGISTERED_TYPES[COUNT] = getEventType(eventClass);
-		} catch (Exception e) {
-			REGISTERED_TYPES[COUNT] = 0;
-		}
-
-		REGISTERED_EVENTS[COUNT++] = eventClass;
-		return true;
-
-	}
-
-	public static int getEventType(Class<?> eventClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-		Method method = eventClass.getMethod("getEventType");
-		method.setAccessible(true);
-
-		return ((EventType) method.invoke(null)).getId();
-	}
-
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
-	@SuppressWarnings("SameParameterValue")
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-
-	/**
-	 * 取消这个事件.
-	 * 当事件被取消后, 插件可以自行进行回复,
-	 * 一些设置了忽略被取消事件的事件处理器 ({@link EventHandler#ignoreCancelled()} 为 false) 就不会收到事件,
-	 * 并且, 事件系统不会进行自动回复.
-	 * 例如:
-	 * <p>
-	 * 事件: {@link AddFriendRequestEvent}, 且设置为接受请求.
-	 * 如果不取消事件, 事件系统最终会同意该请求.
-	 * 如果取消事件, 事件系统不会进行处理. 注意! 是不会处理, 而不是拒绝!
-	 */
-	public void setCancelled() {
-		setCancelled(true);
-	}
 
 	/**
 	 * 拦截这个事件. 不会影响事件处理, 仅仅只是起到标识作用.
@@ -199,9 +25,43 @@ abstract public class Event {
 		this.intercepted = intercepted;
 	}
 
+
+	/* Cancellation*/
+
+	private boolean cancelled = false;
+
+	public boolean isCancelled() {
+		return cancelled;
+	}
+
+	@SuppressWarnings("SameParameterValue")
+	public void setCancelled(boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
+	/**
+	 * 取消这个事件.
+	 * 当事件被取消后, 插件可以自行进行回复,
+	 * 一些设置了忽略被取消事件的事件处理器 ({@link EventHandler#ignoreCancelled()} 为 false) 就不会收到事件,
+	 * 并且, 事件系统不会进行自动回复.
+	 * 例如:
+	 * <p>
+	 * 事件: {@link com.him188.jpre.event.qq.FriendAddRequestEvent}, 且设置为接受请求.
+	 * 如果不取消事件, 事件系统最终会同意该请求.
+	 * 如果取消事件, 事件系统不会进行处理. 注意! 是不会处理, 而不是拒绝!
+	 */
+	public void setCancelled() {
+		setCancelled(true);
+	}
+
+
+	/* Others */
+
 	/**
 	 * 当所有事件处理器都处理过事件后(即事件处理已经达到尾声时), 本方法被调用
 	 * JPRE自带的所有事件中, 都没有复写本方法. 本方法只是留给插件自定义事件用.
+	 * <p>
+	 * 详细过程请查看 {@link com.him188.jpre.plugin.PluginManager#callEvent(Event)}
 	 */
 	public void close() {
 
@@ -209,10 +69,6 @@ abstract public class Event {
 
 	@Override
 	public String toString() {
-		try {
-			return getClass().getSimpleName() + "(Id=" + getEventType(getClass()) + ")";
-		} catch (Exception e) {
-			return getClass().getSimpleName() + "(Id=null)";
-		}
+		return getClass().getSimpleName() + "(cancelled=" + cancelled + ",intercepted=" + intercepted + ")";
 	}
 }
