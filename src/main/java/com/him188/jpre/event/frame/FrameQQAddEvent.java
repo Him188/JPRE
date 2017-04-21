@@ -2,6 +2,7 @@ package com.him188.jpre.event.frame;
 
 import com.him188.jpre.QQ;
 import com.him188.jpre.RobotQQ;
+import com.him188.jpre.event.EventType;
 import com.him188.jpre.event.HandlerList;
 
 /**
@@ -16,6 +17,12 @@ public class FrameQQAddEvent extends FrameQQEvent {
 		return handlers;
 	}
 
+
+	public static final EventType EVENT_TYPE = EventType.FRAME_QQ_ADD;
+
+	public static EventType getEventType() {
+		return EVENT_TYPE;
+	}
 
 	public FrameQQAddEvent(RobotQQ robot, QQ qq) {
 		super(robot, qq);

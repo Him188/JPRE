@@ -103,8 +103,7 @@ abstract public class Event {
 	 *
 	 * @param eventClass Event class
 	 *
-	 * @return 当 {@code eventClass} 没有继承 {@link Event} 或 {@code eventClass} 已经被注册 或 {@code eventClass} 中不存在 {@code
-	 * getEventType()} 方法时为 false. 成功为 true
+	 * @return 当 {@code eventClass} 没有继承 {@link Event} 或 {@code eventClass} 已经被注册时为 false. 成功为 true
 	 */
 	public static boolean registerEvent(Class<?> eventClass) {
 		if (!eventClass.isAssignableFrom(Event.class)) {
@@ -119,18 +118,20 @@ abstract public class Event {
 
 		try {
 			REGISTERED_TYPES[COUNT] = getEventType(eventClass);
-			REGISTERED_EVENTS[COUNT++] = eventClass;
-			return true;
 		} catch (Exception e) {
-			return false;
+			REGISTERED_TYPES[COUNT] = 0;
 		}
+
+		REGISTERED_EVENTS[COUNT++] = eventClass;
+		return true;
+
 	}
 
 	public static int getEventType(Class<?> eventClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 		Method method = eventClass.getMethod("getEventType");
 		method.setAccessible(true);
 
-		return (int) method.invoke(null);
+		return ((EventType) method.invoke(null)).getId();
 	}
 
 	public boolean isCancelled() {
