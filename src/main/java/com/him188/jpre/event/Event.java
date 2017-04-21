@@ -42,7 +42,31 @@ abstract public class Event {
 				FrameQQEvent.class,
 				FrameQQCrashEvent.class,
 				FrameQQForceOfflineEvent.class,
-				// TODO: 2017/4/20  !!!
+				FrameQQAddEvent.class,
+				FrameQQCrashEvent.class,
+				FrameQQLoginEvent.class,
+				FrameRebootEvent.class,
+				FrameStartupEvent.class,
+				FrameEvent.class,
+				AdminGroupEvent.class,
+				GroupAdminChangeEvent.class,
+				GroupAnonymousDisableEvent.class,
+				GroupAnonymousEnableEvent.class,
+				GroupCardChangeEvent.class,
+				GroupDissolutionEvent.class,
+				GroupEvent.class,
+				GroupInvitationEvent.class,
+				GroupInvitationRequestEvent.class,
+				GroupJoinEvent.class,
+				GroupJoinRequestEvent.class,
+				GroupKickEvent.class,
+				GroupMessageEvent.class,
+				GroupMuteEvent.class,
+				GroupNotificationChangeEvent.class,
+				GroupQuitEvent.class,
+				GroupUnmuteEvent.class,
+				GroupWholeMuteEvent.class,
+				GroupWholeUnmuteEvent.class
 		}) {
 			registerEvent(aClass);
 		}
