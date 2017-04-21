@@ -67,7 +67,6 @@ abstract public class Event {
 				GroupUnmuteEvent.class,
 				GroupWholeMuteEvent.class,
 				GroupWholeUnmuteEvent.class
-				// TODO: 2017/4/20  !!!
 		}) {
 			registerEvent(aClass);
 		}
