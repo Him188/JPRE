@@ -20,9 +20,12 @@ public interface PacketIds {
 	//send by server:
 	byte SERVER_PONG = 7;
 	byte SERVER_COMMAND = 8;
+	byte SERVER_STATIC_COMMAND = 14;
 	byte SERVER_INVALID_EVENT = 9;
 	byte SERVER_EVENT_RESULT = 10;
 	byte SERVER_INVALID_ID = 11;
 	byte SERVER_LOG = 12;
 	byte SERVER_GET_PLUGIN_INFORMATION_RESULT = 13;
+
+	//max id: 14
 }

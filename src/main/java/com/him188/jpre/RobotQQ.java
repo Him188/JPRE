@@ -6,6 +6,7 @@ import com.him188.jpre.event.qq.SendPrivateMessageEvent;
 import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.NetworkPacketHandler;
 import com.him188.jpre.network.packet.CommandPacket;
+import com.him188.jpre.network.packet.StaticCommandPacket;
 import com.him188.jpre.plugin.Plugin;
 import com.him188.jpre.scheduler.Task;
 
@@ -101,7 +102,7 @@ public class RobotQQ {
 		groupList.add(group);
 		return group;
 	}
-	
+
 	/* Discussion LIST */
 
 	private final Set<Discussion> discussionList = new HashSet<>();
@@ -138,7 +139,7 @@ public class RobotQQ {
 	 * @param card  群名片
 	 */
 	public static void cacheNameCard(long group, long QQ, String card) {
-		runCommand(CACHE_NAME_CARD, 0L, group, QQ, card);
+		staticRunCommand(CACHE_NAME_CARD, 0L, group, QQ, card);
 	}
 
 	/**
@@ -149,8 +150,8 @@ public class RobotQQ {
 	 * @return 图片下载链接
 	 */
 	public static String guidGetPicLink(String guid) {
-		runCommand(GUID_GET_PIC_LINK, 0L, guid);
-		return stringResult();
+		staticRunCommand(GUID_GET_PIC_LINK, 0L, guid);
+		return staticStringResult();
 	}
 
 	/**
@@ -161,8 +162,8 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public static int send(String data) {
-		runCommand(SEND, 0L, data);
-		return intResult();
+		staticRunCommand(SEND, 0L, data);
+		return staticIntResult();
 	}
 
 	/**
@@ -173,8 +174,8 @@ public class RobotQQ {
 	 * @return unknown
 	 */
 	public static int output(String content) {
-		runCommand(OUTPUT, 0L, content);
-		return intResult();
+		staticRunCommand(OUTPUT, 0L, content);
+		return staticIntResult();
 	}
 
 	/**
@@ -183,8 +184,8 @@ public class RobotQQ {
 	 * @return 本插件(JPRE)启用状态
 	 */
 	public static boolean isEnabled() {
-		runCommand(IS_ENABLE, 0L);
-		return booleanResult();
+		staticRunCommand(IS_ENABLE, 0L);
+		return staticBooleanResult();
 	}
 
 	/**
@@ -195,8 +196,8 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public static boolean login(long QQ) {
-		runCommand(LOGIN, 0L, QQ);
-		return booleanResult();
+		staticRunCommand(LOGIN, 0L, QQ);
+		return staticBooleanResult();
 	}
 
 	/**
@@ -205,7 +206,7 @@ public class RobotQQ {
 	 * @param QQ QQ
 	 */
 	public static void logout(long QQ) {
-		runCommand(LOGOUT, 0L, QQ);
+		staticRunCommand(LOGOUT, 0L, QQ);
 	}
 
 	/**
@@ -217,8 +218,8 @@ public class RobotQQ {
 	 * @return 加密结果
 	 */
 	public static String teaEncode(String content, String key) {
-		runCommand(TEA_ENCODE, 0L, content, key);
-		return stringResult();
+		staticRunCommand(TEA_ENCODE, 0L, content, key);
+		return staticStringResult();
 	}
 
 	/**
@@ -230,8 +231,8 @@ public class RobotQQ {
 	 * @return 解密结果
 	 */
 	public static String teaDecode(String content, String key) {
-		runCommand(TEA_DECODE, 0L, content, key);
-		return stringResult();
+		staticRunCommand(TEA_DECODE, 0L, content, key);
+		return staticStringResult();
 	}
 
 	/**
@@ -242,8 +243,8 @@ public class RobotQQ {
 	 * @return 用户名
 	 */
 	public static String getNick(long QQ) {
-		runCommand(GET_NICK, 0L, QQ);
-		return stringResult();
+		staticRunCommand(GET_NICK, 0L, QQ);
+		return staticStringResult();
 	}
 
 	/**
@@ -254,8 +255,8 @@ public class RobotQQ {
 	 * @return QQ 等级
 	 */
 	public static String getQQLevel(long QQ) {
-		runCommand(GET_QQ_LEVEL, 0L, QQ);
-		return stringResult();
+		staticRunCommand(GET_QQ_LEVEL, 0L, QQ);
+		return staticStringResult();
 	}
 
 	/**
@@ -266,8 +267,8 @@ public class RobotQQ {
 	 * @return GID
 	 */
 	public static String getGId(long groupNumber) {
-		runCommand(GN_GET_GID, 0L, groupNumber);
-		return stringResult();
+		staticRunCommand(GN_GET_GID, 0L, groupNumber);
+		return staticStringResult();
 	}
 
 	/**
@@ -278,8 +279,8 @@ public class RobotQQ {
 	 * @return 群号
 	 */
 	public static long getGroupNumber(String gid) {
-		runCommand(GID_GET_GN, 0L, gid);
-		return longResult();
+		staticRunCommand(GID_GET_GN, 0L, gid);
+		return staticLongResult();
 	}
 
 	/**
@@ -288,8 +289,8 @@ public class RobotQQ {
 	 * @return 框架版本号(发布时间戳)
 	 */
 	public static int getVersion() {
-		runCommand(GET_VERSION, 0L);
-		return intResult();
+		staticRunCommand(GET_VERSION, 0L);
+		return staticIntResult();
 	}
 
 	/**
@@ -298,8 +299,8 @@ public class RobotQQ {
 	 * @return 框架版本名
 	 */
 	public static String getVersionName() {
-		runCommand(GET_VERSION_NAME, 0L);
-		return stringResult();
+		staticRunCommand(GET_VERSION_NAME, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -308,8 +309,8 @@ public class RobotQQ {
 	 * @return 当前框架内部时间戳, 周期性与服务器时间同步
 	 */
 	public static int getTimeStamp() {
-		runCommand(GET_TIME_STAMP, 0L);
-		return intResult();
+		staticRunCommand(GET_TIME_STAMP, 0L);
+		return staticIntResult();
 	}
 
 	/**
@@ -320,8 +321,8 @@ public class RobotQQ {
 	 */
 	//LONG PACKET WARNING!!!
 	public static String getLog() {
-		runCommand(GET_LOG, 0L);
-		return stringResult();
+		staticRunCommand(GET_LOG, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -330,8 +331,8 @@ public class RobotQQ {
 	 * @return 框架内随机一个在线且可以使用的QQ
 	 */
 	public static String getRandomOnlineQQ() {
-		runCommand(GET_RANDOM_ONLINE_QQ, 0L);
-		return stringResult();
+		staticRunCommand(GET_RANDOM_ONLINE_QQ, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -344,30 +345,22 @@ public class RobotQQ {
 	 * @return 是否成功
 	 */
 	public static boolean addQQ(long QQ, long password, boolean autoLogin) {
-		runCommand(ADD_QQ, 0L, QQ, password, autoLogin);
-		return booleanResult();
+		staticRunCommand(ADD_QQ, 0L, QQ, password, autoLogin);
+		return staticBooleanResult();
 	}
-
-
-	public static final int STATUS_ONLINE = 1;          //我在线上
-	public static final int STATUS_Q_ME = 2;            //Q 我吧
-	public static final int STATUS_LEAVE = 3;           //离开
-	public static final int STATUS_WORKING = 4;         //忙碌
-	public static final int STATUS_DO_NOT_DISTURB = 5;  //请勿打扰
-	public static final int STATUS_HIDE = 6;            //隐身
 
 	/**
 	 * 设置在线状态和附加信息
 	 *
 	 * @param QQ              QQ
-	 * @param status          状态. STATUS_ 开头常量
+	 * @param status          状态.
 	 * @param additionMessage 附加消息. 最大 255 字节
 	 *
 	 * @return 是否成功
 	 */
-	public static boolean setOnlineStatus(long QQ, int status, String additionMessage) {
-		runCommand(SET_OL_STATUS, 0L, QQ, status, additionMessage);
-		return booleanResult();
+	public static boolean setOnlineStatus(long QQ, OnlineStatus status, String additionMessage) {
+		staticRunCommand(SET_OL_STATUS, 0L, QQ, status.getId(), additionMessage);
+		return staticBooleanResult();
 	}
 
 	/**
@@ -376,8 +369,8 @@ public class RobotQQ {
 	 * @return 机器码
 	 */
 	public static String getMachineCode() {
-		runCommand(GET_MC, 0L);
-		return stringResult();
+		staticRunCommand(GET_MC, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -386,8 +379,8 @@ public class RobotQQ {
 	 * @return 框架所在目录
 	 */
 	public static String getRunPath() {
-		runCommand(GET_RUN_PATH, 0L);
-		return stringResult();
+		staticRunCommand(GET_RUN_PATH, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -396,8 +389,8 @@ public class RobotQQ {
 	 * @return 当前框架内在线可用的QQ列表
 	 */
 	public static String getOnlineQQList() {
-		runCommand(GET_ONLINE_QQ_LIST, 0L);
-		return stringResult();
+		staticRunCommand(GET_ONLINE_QQ_LIST, 0L);
+		return staticStringResult();
 	}
 
 	/**
@@ -406,8 +399,8 @@ public class RobotQQ {
 	 * @return 框架内所有QQ列表
 	 */
 	public static String getFrameQQList() {
-		runCommand(GET_QQ_LIST, 0L);
-		return stringResult();
+		staticRunCommand(GET_QQ_LIST, 0L);
+		return staticStringResult();
 	}
 
 
@@ -1068,12 +1061,11 @@ public class RobotQQ {
 
 	// TODO: 2017/4/8  other commands
 
-	/* STATIC(COMMAND SENDER) */
+	/* COMMAND SENDER */
 
-	// TODO: 2017/3/28 带上id, 避免顺序错误
-	private static ConcurrentLinkedQueue<Object> results = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<Object> results = new ConcurrentLinkedQueue<>();
 
-	private static int parseInt(String value) {
+	private int parseInt(String value) {
 		if (value.isEmpty()) {
 			return 0;
 		}
@@ -1086,7 +1078,7 @@ public class RobotQQ {
 		return Integer.parseInt(value);
 	}
 
-	private static long parseLong(String value) {
+	private long parseLong(String value) {
 		if (value.isEmpty()) {
 			return 0;
 		}
@@ -1099,26 +1091,23 @@ public class RobotQQ {
 		return Long.parseLong(value);
 	}
 
-	private static boolean booleanResult() {
+	private boolean booleanResult() {
 		return intResult() == 1;
 	}
 
-	private static int intResult() {
+	private int intResult() {
 		return 1;
 		// TODO: 2017/4/8 fix that
 		//return parseInt(stringResult());
 	}
 
-	private static long longResult() {
+	private long longResult() {
 		return parseLong(stringResult());
 	}
 
 
 	@SuppressWarnings("StatementWithEmptyBody")
-	private static String stringResult() {
-		// TODO: 2017/3/28 result修改为带id的map后优化此方法. 现在这个方法性能低且易出错.
-		// TODO: 2017/4/16 该为非static方法, 收到包时判定是哪个 RobotQQ 发来的
-
+	private String stringResult() {
 		Task task = JPREMain.getServerScheduler().scheduleTimingTask(() -> results.add(""), 500);//0.5s
 		//synchronized (MPQCaller.class) {//使正在等待返回值时, 指令不传达
 		while (results.isEmpty()) {
@@ -1133,16 +1122,88 @@ public class RobotQQ {
 		//}
 	}
 
-	private static void runCommand(CommandId id, Object... args) {
+	private void runCommand(CommandId id, Object... args) {
 		//synchronized (MPQCaller.class) {
 		for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {
-			connectedClient.sendPacket(new CommandPacket(id, args));
+			connectedClient.sendPacket(new CommandPacket(this, id, args));
 		}
 		//}
 	}
 
-	public static void addResult(Object result) {
+	public void addResult(Object result) {
 		results.add(result);
+	}
+
+
+	/* STATIC COMMAND SENDER */
+	private static ConcurrentLinkedQueue<Object> staticResults = new ConcurrentLinkedQueue<>();
+
+	private static int staticParseInt(String value) {
+		if (value.isEmpty()) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("false")) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("true")) {
+			return 1;
+		}
+		return Integer.parseInt(value);
+	}
+
+	private static long staticParseLong(String value) {
+		if (value.isEmpty()) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("false")) {
+			return 0;
+		}
+		if (value.equalsIgnoreCase("true")) {
+			return 1;
+		}
+		return Long.parseLong(value);
+	}
+
+	private static boolean staticBooleanResult() {
+		return staticIntResult() == 1;
+	}
+
+	private static int staticIntResult() {
+		return 1;
+		// TODO: 2017/4/8 fix that
+		//return parseInt(stringResult());
+	}
+
+	private static long staticLongResult() {
+		return staticParseLong(staticStringResult());
+	}
+
+	@SuppressWarnings("StatementWithEmptyBody")
+	private static String staticStringResult() {
+		Task task = JPREMain.getServerScheduler().scheduleTimingTask(() -> staticResults.add(""), 500);//0.5s
+		//synchronized (MPQCaller.class) {//使正在等待返回值时, 指令不传达
+		while (staticResults.isEmpty()) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		task.forceCancel();
+		return String.valueOf(staticResults.remove(0));
+		//}
+	}
+
+	private static void staticRunCommand(CommandId id, Object... args) {
+		//synchronized (MPQCaller.class) {
+		for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {
+			connectedClient.sendPacket(new StaticCommandPacket(id, args));
+		}
+		//}
+	}
+
+	public static void staticAddResult(Object result) {
+		staticResults.add(result);
 	}
 
 

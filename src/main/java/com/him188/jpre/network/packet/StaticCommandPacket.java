@@ -1,15 +1,13 @@
 package com.him188.jpre.network.packet;
 
 import com.him188.jpre.CommandId;
-import com.him188.jpre.RobotQQ;
 
 /**
  * @author Him188
  */
-public class CommandPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_COMMAND;
+public class StaticCommandPacket extends Packet {
+	public static final byte NETWORK_ID = PacketIds.SERVER_STATIC_COMMAND;
 
-	private final RobotQQ robot;
 	private final Object[] args;
 	private final CommandId id;
 
@@ -21,8 +19,7 @@ public class CommandPacket extends Packet {
 		return id;
 	}
 
-	public CommandPacket(RobotQQ robot, CommandId commandId, Object[] args) {
-		this.robot = robot;
+	public StaticCommandPacket(CommandId commandId, Object[] args) {
 		this.args = args;
 		id = commandId;
 	}
@@ -35,7 +32,6 @@ public class CommandPacket extends Packet {
 
 		clear();
 
-		putLong(robot.getQQNumber());
 		putByte(id.getId());
 		putRaw(args);
 	}
