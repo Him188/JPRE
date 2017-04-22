@@ -1,5 +1,7 @@
 package com.him188.jpre.event;
 
+import java.lang.reflect.Field;
+
 /**
  * @author Him188
  */
@@ -69,6 +71,16 @@ abstract public class Event {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "(cancelled=" + cancelled + ",intercepted=" + intercepted + ")";
+		StringBuilder result = new StringBuilder(getClass().getSimpleName() + "(cancelled=" + cancelled + ",intercepted=" + intercepted);
+		for (Field field : this.getClass().getFields()) {
+			field.setAccessible(true);
+			try {
+				result.append(",").append(field.getName()).append("=").append(field.get(this));
+			} catch (IllegalAccessException ignored) {
+			}
+		}
+
+		result.append(")");
+		return result.toString();
 	}
 }

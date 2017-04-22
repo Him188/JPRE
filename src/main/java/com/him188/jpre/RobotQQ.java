@@ -66,7 +66,7 @@ public class RobotQQ {
 	 *
 	 * @return QQ
 	 */
-	public QQ getQQNumber(long QQ) {
+	public QQ getQQ(long QQ) {
 		for (QQ robotQQ : qqList) {
 			if (robotQQ.getNumber() == QQ) {
 				return robotQQ;
@@ -664,7 +664,7 @@ public class RobotQQ {
 	}
 
 	public boolean sendPrivateMessage(long QQ, String content) {
-		return sendPrivateMessage(getQQNumber(QQ), content);
+		return sendPrivateMessage(getQQ(QQ), content);
 	}
 
 	public boolean sendPrivateMessage(QQ QQ, String content) {

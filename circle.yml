@@ -1,0 +1,5 @@
+# https://circleci.com/gh/Him188/JPRE
+
+machine:
+  java:
+      version: oraclejdk8

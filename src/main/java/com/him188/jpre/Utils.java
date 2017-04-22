@@ -115,4 +115,8 @@ public final class Utils {
 		System.arraycopy(array, 0, newArray, 0, array.length - amount);
 		return newArray;
 	}
+
+	public static boolean parseBoolean(String value) {
+		return value != null && (value.equalsIgnoreCase("true") || value.equals("1"));
+	}
 }
