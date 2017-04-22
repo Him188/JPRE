@@ -413,7 +413,7 @@ public class RobotQQ {
 	 * @return 页面操作用参数 Bkn 或 G_tk
 	 */
 	public String getGtkBkn() {
-		runCommand(ADD_QQ, this.getQQNumber());
+		runCommand(GET_GTK_BKN, this.getQQNumber());
 		return stringResult();
 	}
 
@@ -616,6 +616,7 @@ public class RobotQQ {
 		runCommand(QUIT_GROUP, this.getQQNumber(), group);
 	}
 
+	// TODO: 2017/4/22 上传图片修复 p.SetUtf8LenStr (Api_UploadPic (局_响应QQ, u.GetInt (), 到文本 (u.GetLong ()), u.GetByte ()))
 	/**
 	 * 上传图片
 	 *
@@ -631,11 +632,11 @@ public class RobotQQ {
 	/**
 	 * 上传图片
 	 *
-	 * @param image 图片字节集数据 (int???)
+	 * @param image 图片字节集数据
 	 *
 	 * @return GUID | null
 	 */
-	public String uploadImage(int image) {
+	public String uploadImage(byte[] image) {
 		runCommand(UPLOAD, this.getQQNumber(), "", image);
 		return stringResult();
 	}
@@ -1077,6 +1078,7 @@ public class RobotQQ {
 		}
 		return Integer.parseInt(value);
 	}
+	// TODO: 2017/4/22 make parser static
 
 	private long parseLong(String value) {
 		if (value.isEmpty()) {
@@ -1106,7 +1108,6 @@ public class RobotQQ {
 	}
 
 
-	@SuppressWarnings("StatementWithEmptyBody")
 	private String stringResult() {
 		Task task = JPREMain.getServerScheduler().scheduleTimingTask(() -> results.add(""), 500);//0.5s
 		//synchronized (MPQCaller.class) {//使正在等待返回值时, 指令不传达
@@ -1136,6 +1137,7 @@ public class RobotQQ {
 
 
 	/* STATIC COMMAND SENDER */
+
 	private static ConcurrentLinkedQueue<Object> staticResults = new ConcurrentLinkedQueue<>();
 
 	private static int staticParseInt(String value) {
@@ -1190,7 +1192,8 @@ public class RobotQQ {
 			}
 		}
 		task.forceCancel();
-		return String.valueOf(staticResults.remove(0));
+
+		return String.valueOf(staticResults.poll());
 		//}
 	}
 

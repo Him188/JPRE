@@ -125,6 +125,9 @@ public final class PluginManager {
 	 */
 	public void loadPlugins() {
 		File[] list = listPlugins();
+		if (list == null) {
+			return;
+		}
 		for (File file : list) {
 			try {
 				loadPlugin(new JarFile(file));

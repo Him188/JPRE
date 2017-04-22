@@ -82,7 +82,7 @@ public final class MPQClient {
 
 				EventType type = EventType.match(packet.getInt());
 				if (type == null) {
-					sendPacket(new InvalidIdPacket());
+					sendPacket(new EventResultPacket(false));
 					break;
 				}
 
@@ -90,7 +90,7 @@ public final class MPQClient {
 
 				switch (type) {
 					case UNKNOWN:
-						sendPacket(new InvalidIdPacket());
+						sendPacket(new EventResultPacket(false));
 						break;
 					case MESSAGE_FRIEND:
 						event = new PrivateMessageEvent(robot, robot.getQQNumber(packet.getLong()), packet.getString());
@@ -217,12 +217,12 @@ public final class MPQClient {
 				try {
 					pk = Packet.matchPacket(pid);
 				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-					sendPacket(new InvalidIdPacket());
+					sendPacket(new EventResultPacket(false));
 					return;
 				}
 				System.out.println("Packet: " + pk);
 				if (pk == null) {
-					sendPacket(new InvalidIdPacket());
+					sendPacket(new EventResultPacket(false));
 					return;
 				}
 				pk.setClient(this);
@@ -252,7 +252,7 @@ public final class MPQClient {
 				break;
 
 			default:
-				sendPacket(new InvalidIdPacket());
+				sendPacket(new EventResultPacket(false));
 				break;
 
 		}

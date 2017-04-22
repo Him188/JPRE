@@ -74,8 +74,12 @@ public class Pack {
 	}
 
 	public void putByte(byte value) {
+		if (this.data.length <= this.location + 1) {
+			byte[] newArray = new byte[this.data.length + 1];
+			System.arraycopy(this.data, 0, newArray, 0, this.data.length);
+			this.data = newArray;
+		}
 		this.data[location++] = value;
-
 	}
 
 	public void putString(String value) {
@@ -270,7 +274,7 @@ public class Pack {
 			case 9:
 				return getBytes(getInt());
 			default:
-				throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+				throw new IllegalArgumentException("wrong type of values");
 		}
 	}
 

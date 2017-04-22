@@ -113,7 +113,7 @@ abstract public class Packet extends Pack {
 		PACKETS_COUNT = 0;
 
 		try {
-			for (Class aClass : new Class[]{
+			for (Class<?> aClass : new Class<?>[]{
 					ClientPingPacket.class,
 					CommandResultPacket.class,
 					GetPluginListPacket.class,
@@ -121,10 +121,10 @@ abstract public class Packet extends Pack {
 					ServerPongPacket.class,
 					EventResultPacket.class,
 					InvalidEventPacket.class,
-					InvalidIdPacket.class,
 					LogPacket.class,
 			}) {
-				registerPacket(aClass);
+				//noinspection unchecked
+				registerPacket((Class<? extends Packet>) aClass);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

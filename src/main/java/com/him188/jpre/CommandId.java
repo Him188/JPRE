@@ -4,7 +4,7 @@ package com.him188.jpre;
  * @author Him188
  */
 public enum CommandId {
-	GET_GTK_BIN(1),
+	GET_GTK_BKN(1),
 	GET_BKN32(2),
 	GET_LDW(3),
 	GET_RUN_PATH(4),
