@@ -1,12 +1,13 @@
 package com.him188.jpre;
 
 /**
- * CQ码
- *
- * @author LamGC
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings("Duplicates")
 public final class Code {
+	// TODO: 2017/4/22 finish
+
 	/**
 	 * At 某个 qq
 	 *
