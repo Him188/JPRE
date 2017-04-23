@@ -103,36 +103,36 @@ public final class MPQClient {
 				long from = packet.getLong();
 				long active = packet.getLong();
 				long passive = packet.getLong();
-				String messsage = packet.getString();
+				String message = packet.getString();
 
 				switch (type) {
 					case UNKNOWN:
 						sendPacket(new EventResultPacket(false));
 						break;
 					case MESSAGE_FRIEND:
-						event = new PrivateMessageEvent(robot, robot.getQQ(active), messsage);
+						event = new PrivateMessageEvent(robot, robot.getQQ(active), message);
 						break;
 					case MESSAGE_GROUP:
-						event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), messsage);
+						event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
 						break;
 					// TODO: 2017/4/20 DISCUSSION, TEMPORARY event
 					case FRIEND_ADD_RESULT:
 						event = new FriendAddResultEvent(robot, robot.getQQ(active), true);
 						break;
 					case FRIEND_ADD_REQUEST:
-						event = new FriendAddRequestEvent(robot, robot.getQQ(active), messsage);
+						event = new FriendAddRequestEvent(robot, robot.getQQ(active), message);
 						break;
 					case FRIEND_STATUS_CHANGE:
-						event = new FriendStatusChangeEvent(robot, robot.getQQ(active), OnlineStatus.match(Integer.parseInt(messsage)));
+						event = new FriendStatusChangeEvent(robot, robot.getQQ(active), OnlineStatus.match(Integer.parseInt(message)));
 						break;
 					case FRIEND_DELETE:
 						event = new FriendDeleteEvent(robot, robot.getQQ(active));
 						break;
 					case FRIEND_SIGN_CHANGE:
-						event = new FriendSignChangeEvent(robot, robot.getQQ(active), messsage);
+						event = new FriendSignChangeEvent(robot, robot.getQQ(active), message);
 						break;
 					case FRIEND_TAOTAO_BE_COMMENT:
-						event = new FriendTaotaoCommitEvent(robot, robot.getQQ(active), messsage);
+						event = new FriendTaotaoCommitEvent(robot, robot.getQQ(active), message);
 						break;
 					case FRIEND_TYPING:
 						event = new FriendTypingEvent(robot, robot.getQQ(active));
@@ -166,18 +166,18 @@ public final class MPQClient {
 						event = new GroupDissolutionEvent(robot, robot.getGroup(from), robot.getQQ(active));
 						break;
 					case GROUP_ADMIN_CHANGE:
-						event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), Utils.parseBoolean(messsage) ? GroupAdminChangeEvent.ChangeType.PROMOTION : GroupAdminChangeEvent.ChangeType.DEMOTION);
+						event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), Utils.parseBoolean(message) ? GroupAdminChangeEvent.ChangeType.PROMOTION : GroupAdminChangeEvent.ChangeType.DEMOTION);
 						break;
 					case GROUP_CARD_CHANGE: // TODO: 2017/4/22  check active and passive 
-						event = new GroupCardChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), messsage);
+						event = new GroupCardChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
 						break;
 					//case GROUP_NAME_CHANGE:
 					case GROUP_NOTIFICATION_CHANGE:
-						event = new GroupNotificationChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), messsage);
+						event = new GroupNotificationChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
 						break;
 
 					case GROUP_MUTE:
-						event = new GroupMuteEvent(robot, robot.getGroup(from), robot.getQQ(passive), robot.getQQ(active), Integer.parseInt(messsage));
+						event = new GroupMuteEvent(robot, robot.getGroup(from), robot.getQQ(passive), robot.getQQ(active), Integer.parseInt(message));
 						break;
 					case GROUP_UNMUTE:
 						event = new GroupUnmuteEvent(robot, robot.getGroup(from), robot.getQQ(passive), robot.getQQ(active));
@@ -218,7 +218,7 @@ public final class MPQClient {
 						break;
 
 					case TENPAY_RECEIVE_TRANSFER:
-						event = new TenpayReceiveTransferEvent(robot, robot.getQQ(active), Integer.parseInt(messsage), packet.getString());
+						event = new TenpayReceiveTransferEvent(robot, robot.getQQ(active), Integer.parseInt(message), packet.getString());
 						break;
 				}
 
