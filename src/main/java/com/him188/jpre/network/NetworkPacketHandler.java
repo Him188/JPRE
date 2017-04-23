@@ -36,7 +36,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 	}
 
 
-	private static ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -55,9 +55,9 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 					while ((data = dataTemp.poll()) != null) {
 						realData = Utils.arrayAppend(realData, data);
 					}
+					final byte[] finalRealData = realData;
 					for (MPQClient client : clients) {
 						if (client.is(ctx.channel().remoteAddress())) {
-							final byte[] finalRealData = realData;
 							client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(finalRealData));
 						}
 					}
