@@ -49,6 +49,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 			System.out.println("[Network] Data packet received: " + Arrays.toString(data));
 
 			if (data.length >= 2) {
+
+				// TODO: 2017/4/24 修改为包长度模式
 				if (data[data.length - 2] == (byte) 127 && data[data.length - 1] == (byte) 127) {
 					dataTemp.add(Utils.arrayDelete(data, 2));
 					byte[] realData = new byte[0];
