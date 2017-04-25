@@ -2,7 +2,7 @@ package com.him188.jpre.network;
 
 import com.him188.jpre.Frame;
 import com.him188.jpre.JPREMain;
-import com.him188.jpre.Utils;
+import com.him188.jpre.binary.Pack;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
@@ -24,7 +23,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 		return jpre;
 	}
 
-	NetworkPacketHandler(JPREMain jpre){
+	NetworkPacketHandler(JPREMain jpre) {
 		this.jpre = jpre;
 	}
 
@@ -36,8 +35,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 	}
 
 
-	private ConcurrentLinkedQueue<byte[]> dataTemp = new ConcurrentLinkedQueue<>();
-
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		super.channelRead(ctx, msg);
@@ -45,30 +42,73 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
-		synchronized (this){
+		synchronized (this) {
 			System.out.println("[Network] Data packet received: " + Arrays.toString(data));
+			handlePacket(ctx, data);
+		}
+	}
 
-			if (data.length >= 2) {
+	private boolean _reading;
+	private byte[] _readingData;
+	private int _wantLength;
+	private int _currentLength;
 
-				// TODO: 2017/4/24 修改为包长度模式
-				if (data[data.length - 2] == (byte) 127 && data[data.length - 1] == (byte) 127) {
-					dataTemp.add(Utils.arrayDelete(data, 2));
-					byte[] realData = new byte[0];
-					while ((data = dataTemp.poll()) != null) {
-						realData = Utils.arrayAppend(realData, data);
-					}
-					final byte[] finalRealData = realData;
-					for (MPQClient client : clients) {
-						if (client.is(ctx.channel().remoteAddress())) {
-							client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(finalRealData));
-						}
-					}
-					return;
-				}
+	private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
+		while (true) {
+			if (data.length == 0) {
+				return;
 			}
 
-			dataTemp.add(data);
+			if (_reading) {
+				_currentLength += data.length;
+				if (_currentLength < _wantLength) return;
+
+				_reading = false; //当前包已处理完毕, 第二个包又会有 int length, 需重新读取
+				_currentLength = 0;
+				_readingData = concatArray(_readingData, data);
+
+				byte[][] out = removeArray(_readingData, _wantLength);
+
+				processPacket(ctx, new Pack(out[0]));
+				data = out[1];
+				continue;
+				//长度不够, 继续读取
+			}
+
+			Pack stream = new Pack(data);
+			_wantLength = stream.getInt();
+			_readingData = stream.getLast();
+			_reading = true;
+			_currentLength = 0;
 		}
+	}
+
+	private void processPacket(ChannelHandlerContext ctx, Pack pack) {
+		for (MPQClient client : clients) {
+			if (client.is(ctx.channel().remoteAddress())) {
+				client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(pack));
+			}
+		}
+	}
+
+	private static byte[] concatArray(byte[] original, byte[] target) {
+		byte[] newArray = new byte[original.length + target.length];
+		System.arraycopy(original, 0, newArray, 0, original.length);
+		System.arraycopy(target, 0, newArray, original.length - 1, target.length);
+		return newArray;
+	}
+
+	private static byte[][] removeArray(byte[] original, int length) {
+		byte[] newArray = new byte[original.length - length];
+		System.arraycopy(original, 0, newArray, 0, length);
+
+		byte[] deletedArray = new byte[length];
+		System.arraycopy(original, length - 1, deletedArray, 0, length);
+
+		byte[][] result = {{}, {}};
+		result[0] = newArray;
+		result[1] = deletedArray;
+		return result;
 	}
 
 	@Override

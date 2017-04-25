@@ -19,7 +19,7 @@ public class LogPacket extends Packet {
 	@Override
 	public void encode() {
 		putString(log);
-		// TODO: 2017/4/21
+		// TODO: 2017/4/21 转换字节发送
 	}
 
 	@Override

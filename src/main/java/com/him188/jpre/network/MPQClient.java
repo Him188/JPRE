@@ -69,12 +69,8 @@ public final class MPQClient {
 
 	/**
 	 * 数据包处理
-	 *
-	 * @param data 数据
 	 */
-	public void dataReceive(byte[] data) {
-		Pack packet = new Pack(data);
-
+	public void dataReceive(Pack packet) {
 		byte pid = packet.getByte();
 		switch (pid) {
 			case CLIENT_EVENT:
