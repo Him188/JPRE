@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
@@ -137,7 +136,7 @@ public final class Utils {
 		int found;
 		loop:
 		while (true) {
-			found = Arrays.binarySearch(array, search[0]);
+			found = binarySearch(array, search[0]);
 			for (int i = 1; i < search.length; i++) {
 				try {
 					if (array[found + i] != search[i]) {
@@ -151,6 +150,16 @@ public final class Utils {
 		}
 
 		return found;
+	}
+
+
+	public static int binarySearch(byte[] a, byte key) {
+		for (int i = 0; i < a.length; i++) {
+			if (a[i] == key) {
+				return i;
+			}
+		}
+		return -a.length;
 	}
 
 	/**

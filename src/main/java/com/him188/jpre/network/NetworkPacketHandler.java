@@ -56,9 +56,10 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 	//synchronized by "synchronized (this)" in #channelRead0
 	private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
 		temp = Utils.arrayAppend(temp, data);
+		System.out.println("Now temp: " + Arrays.toString(temp));
 		while (temp.length != 0) {
 			int position = Utils.arraySearch(temp, Protocol.SIGNATURE);
-			if (position == -1) {
+			if (position <0) {
 				return;//收到的是子包, 数据未结尾
 			}
 
