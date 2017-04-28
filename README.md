@@ -1,4 +1,4 @@
-#JPRE#  
+#JPRE
 ——能让你使用 Java 开发 [MyPCQQ]("http://mypcqq.cc") 机器人插件的公益项目  
   
 ## 开源  
@@ -14,7 +14,7 @@ Jenkins(直接下载): [JPRE(Java)]("baidu.com")
 - Java: @Him188(主要), @LamGC(部分), 其他朋友们(@XianD, @SoleMemory)
 - C#: @Him188
 
-## **词汇注明: **  
+## 词汇注明:   
 - JPRE:  
 指的就是本项目的 Java 部分(将在文章中讲解项目结构)，即 JavaPluginRuntimeEnvironment (翻译为中文: Java 插件运行环境)的简写    
 - MPQ:  
@@ -29,7 +29,7 @@ MyPCQQ 的简写，MPQ是一款QQ机器人应用，其官方提供一个给出 A
 
 ## 说明  
    
-#### **项目运行模式**   
+#### 项目运行模式   
 MPQ 官方框架支持 StdCall 方式的 Windows 动态链接库(DLL)，我们为了强劲的性能，选择了C#(感谢@somebody编写的MPQ C# 插件模板 [查看论坛原文]("TODO") )  
   
 **项目核心工作方式为网络通讯(TCP)**  
@@ -40,7 +40,7 @@ MPQ插件启动时连接JPRE，JPRE随即加载并启动插件
 上述内容基本解释了JPRE与MPQ插件通信过程
 *详细网络过程请参阅 Java: `com.him188.jpre.network`包; C#: `Plugin.Network`命名空间*
 
-#### **详细说明**  
+#### 详细说明
 **特别提示**  
 - 本文中所提到的所有 [插件] 若未明确标识，其意均指 MPQ 插件，而不是 Minecraft: Pocket Edition 服务端的插件  
 
