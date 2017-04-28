@@ -4,8 +4,9 @@ package com.him188.jpre.network.packet;
  * @author Him188
  */
 public class EventResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_EVENT_RESULT;
+	public static final byte NETWORK_ID = Protocol.SERVER_EVENT_RESULT;
 
+	// TODO: 2017/4/28 int 返回值 
 	private final boolean cancelled;
 
 	/**
@@ -32,7 +33,7 @@ public class EventResultPacket extends Packet {
 		}
 
 		clear();
-		putBoolean(cancelled);
+		putRawWithType(cancelled);
 	}
 
 	@Override

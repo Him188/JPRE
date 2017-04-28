@@ -3,7 +3,9 @@ package com.him188.jpre.network.packet;
 /**
  * @author Him188
  */
-public interface PacketIds {
+public interface Protocol {
+	byte[] SIGNATURE = {127, 127, 127, 127};
+
 	//receive from client:
 	// TODO: 2017/4/21  restart the server
 	byte CLIENT_RELOAD = 1;

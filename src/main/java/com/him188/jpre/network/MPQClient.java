@@ -12,18 +12,15 @@ import com.him188.jpre.event.group.*;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
 import com.him188.jpre.event.qq.*;
 import com.him188.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
-import com.him188.jpre.network.packet.EventResultPacket;
-import com.him188.jpre.network.packet.InvalidEventPacket;
-import com.him188.jpre.network.packet.Packet;
-import com.him188.jpre.network.packet.ServerPongPacket;
+import com.him188.jpre.network.packet.*;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.SocketAddress;
 import java.util.Arrays;
 
-import static com.him188.jpre.network.packet.PacketIds.CLIENT_EVENT;
-import static com.him188.jpre.network.packet.PacketIds.CLIENT_PING;
+import static com.him188.jpre.network.packet.Protocol.CLIENT_EVENT;
+import static com.him188.jpre.network.packet.Protocol.CLIENT_PING;
 
 /**
  * 连接到服务器的客户端 (MPQ)]
@@ -290,6 +287,7 @@ public final class MPQClient {
 			return;
 		}
 		System.arraycopy(data, 0, result, 1, data.length);
+		result = Utils.arrayAppend(result, Protocol.SIGNATURE);
 		this.getLastCtx().writeAndFlush(result);
 		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}

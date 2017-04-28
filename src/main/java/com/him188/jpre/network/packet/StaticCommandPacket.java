@@ -6,7 +6,7 @@ import com.him188.jpre.CommandId;
  * @author Him188
  */
 public class StaticCommandPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_STATIC_COMMAND;
+	public static final byte NETWORK_ID = Protocol.SERVER_STATIC_COMMAND;
 
 	private final Object[] args;
 	private final CommandId id;

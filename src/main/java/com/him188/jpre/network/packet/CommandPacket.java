@@ -7,7 +7,7 @@ import com.him188.jpre.RobotQQ;
  * @author Him188
  */
 public class CommandPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_COMMAND;
+	public static final byte NETWORK_ID = Protocol.SERVER_COMMAND;
 
 	private final RobotQQ robot;
 	private final Object[] args;

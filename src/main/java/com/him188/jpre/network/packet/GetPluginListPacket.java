@@ -7,7 +7,7 @@ import java.util.List;
  * @author Him188
  */
 public class GetPluginListPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.CLIENT_GET_PLUGIN_LIST;
+	public static final byte NETWORK_ID = Protocol.CLIENT_GET_PLUGIN_LIST;
 
 	private List<String> result;
 

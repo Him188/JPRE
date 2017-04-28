@@ -1,4 +1,4 @@
-import com.him188.jpre.network.packet.PacketIds;
+import com.him188.jpre.network.packet.Protocol;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -12,7 +12,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<byte[]> {
 		System.out.println("Client channelActive..");
 		new Thread(() -> {
 			while (true) {
-				ctx.writeAndFlush(Unpooled.copiedBuffer(new byte[]{PacketIds.CLIENT_EVENT, 0, 0, 0, 0, 127, 127}));
+				ctx.writeAndFlush(Unpooled.copiedBuffer(new byte[]{Protocol.CLIENT_EVENT, 0, 0, 0, 0, 127, 127}));
 				try {
 					Thread.sleep(1);
 				} catch (InterruptedException e) {

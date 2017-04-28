@@ -4,7 +4,7 @@ package com.him188.jpre.network.packet;
  * @author Him188
  */
 public class LogPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_LOG;
+	public static final byte NETWORK_ID = Protocol.SERVER_LOG;
 
 	private String log;
 

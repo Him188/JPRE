@@ -4,6 +4,7 @@ import com.him188.jpre.Frame;
 import com.him188.jpre.JPREMain;
 import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Pack;
+import com.him188.jpre.network.packet.Protocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -51,13 +52,12 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	private byte[] temp = new byte[0];
 
-	private static final byte[] SIGNATURE = {127, 127, 127, 127};
 
 	//synchronized by "synchronized (this)" in #channelRead0
 	private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
-		temp = concatArray(temp, data);
+		temp = Utils.arrayAppend(temp, data);
 		while (temp.length != 0) {
-			int position = Utils.arraySearch(temp, SIGNATURE);
+			int position = Utils.arraySearch(temp, Protocol.SIGNATURE);
 			if (position == -1) {
 				return;//收到的是子包, 数据未结尾
 			}
@@ -80,26 +80,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 				client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(pack));
 			}
 		}
-	}
-
-	private static byte[] concatArray(byte[] original, byte[] target) {
-		byte[] newArray = new byte[original.length + target.length];
-		System.arraycopy(original, 0, newArray, 0, original.length);
-		System.arraycopy(target, 0, newArray, original.length, target.length);
-		return newArray;
-	}
-
-	private static byte[][] removeArray(byte[] original, int length) {
-		byte[] newArray = new byte[original.length - length];
-		System.arraycopy(original, 0, newArray, 0, length - 1);
-
-		byte[] deletedArray = new byte[length];
-		System.arraycopy(original, length - 1, deletedArray, 0, length);
-
-		byte[][] result = {{}, {}};
-		result[0] = newArray;
-		result[1] = deletedArray;
-		return result;
 	}
 
 	@Override

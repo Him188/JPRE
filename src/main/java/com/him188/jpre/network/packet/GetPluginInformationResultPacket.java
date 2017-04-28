@@ -5,7 +5,7 @@ package com.him188.jpre.network.packet;
  * @author Him188
  */
 public class GetPluginInformationResultPacket extends Packet {
-	public static final byte NETWORK_ID = PacketIds.SERVER_GET_PLUGIN_INFORMATION_RESULT;
+	public static final byte NETWORK_ID = Protocol.SERVER_GET_PLUGIN_INFORMATION_RESULT;
 
 	private final String name;
 	private final String author;
