@@ -1,3 +1,4 @@
+import com.him188.jpre.binary.Binary;
 import com.him188.jpre.binary.Pack;
 
 /**
@@ -6,6 +7,8 @@ import com.him188.jpre.binary.Pack;
  */
 public class TestPacket {
 	public static void main(String[] args){
+		System.out.println(Binary.toInt(new byte []{0, 0, 0, -4}));
+
 		Pack pack = new Pack(new byte[]{3, 0, 0, 0, 2, -35, -72, -28, 118, 0, 0, 0, 0, -94, 63, 3, 62, 0, 0, 0, 0, -94, 63, 3, 62, 0, 0, 0, 0, -94, 63, 3, 62, 0, 0, 0, 0, 0, 0, 0, 0, 127, 127});
 		System.out.println(pack.getByte());
 		System.out.println(pack.getInt());

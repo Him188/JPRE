@@ -2,6 +2,7 @@ package com.him188.jpre.binary;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.him188.jpre.binary.Binary.*;
@@ -26,6 +27,10 @@ public class Pack {
 		setData(data);
 	}
 
+	@Override
+	public String toString() {
+		return "Pack(data=" + Arrays.toString(data) + ",location=" + location + ")";
+	}
 
 	public void setData(byte[] data) {
 		this.data = data;

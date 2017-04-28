@@ -2,6 +2,7 @@ package com.him188.jpre.network;
 
 import com.him188.jpre.Frame;
 import com.him188.jpre.JPREMain;
+import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Pack;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -48,42 +49,32 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 		}
 	}
 
-	private boolean _reading;
-	private byte[] _readingData;
-	private int _wantLength;
-	private int _currentLength;
+	private byte[] temp = new byte[0];
 
+	private static final byte[] SIGNATURE = {127, 127, 127, 127};
+
+	//synchronized by "synchronized (this)" in #channelRead0
 	private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
-		while (true) {
-			if (data.length == 0) {
-				return;
+		temp = concatArray(temp, data);
+		while (temp.length != 0) {
+			int position = Utils.arraySearch(temp, SIGNATURE);
+			if (position == -1) {
+				return;//收到的是子包, 数据未结尾
 			}
 
-			if (_reading) {
-				_currentLength += data.length;
-				if (_currentLength < _wantLength) return;
-
-				_reading = false; //当前包已处理完毕, 第二个包又会有 int length, 需重新读取
-				_currentLength = 0;
-				_readingData = concatArray(_readingData, data);
-
-				byte[][] out = removeArray(_readingData, _wantLength);
-
-				processPacket(ctx, new Pack(out[0]));
-				data = out[1];
-				continue;
-				//长度不够, 继续读取
-			}
-
-			Pack stream = new Pack(data);
-			_wantLength = stream.getInt();
-			_readingData = stream.getLast();
-			_reading = true;
-			_currentLength = 0;
+			byte[] d = Utils.arrayGetCenter(temp, 0, position);
+			temp = Utils.arrayDelete(temp, position);
+			processPacket(ctx, d);
 		}
 	}
 
+	//TODO 改为 public, 并将 ctx 改为插件可扩展的消息源以实现多源化
+	private void processPacket(ChannelHandlerContext ctx, byte[] data) {
+		processPacket(ctx, new Pack(data));
+	}
+
 	private void processPacket(ChannelHandlerContext ctx, Pack pack) {
+		System.out.println(pack);
 		for (MPQClient client : clients) {
 			if (client.is(ctx.channel().remoteAddress())) {
 				client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(pack));
@@ -94,13 +85,13 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 	private static byte[] concatArray(byte[] original, byte[] target) {
 		byte[] newArray = new byte[original.length + target.length];
 		System.arraycopy(original, 0, newArray, 0, original.length);
-		System.arraycopy(target, 0, newArray, original.length - 1, target.length);
+		System.arraycopy(target, 0, newArray, original.length, target.length);
 		return newArray;
 	}
 
 	private static byte[][] removeArray(byte[] original, int length) {
 		byte[] newArray = new byte[original.length - length];
-		System.arraycopy(original, 0, newArray, 0, length);
+		System.arraycopy(original, 0, newArray, 0, length - 1);
 
 		byte[] deletedArray = new byte[length];
 		System.arraycopy(original, length - 1, deletedArray, 0, length);

@@ -7,6 +7,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
@@ -110,13 +111,68 @@ public final class Utils {
 		return newArray;
 	}
 
-	public static byte[] arrayDelete(byte[] array, int amount) {
-		byte[] newArray = new byte[array.length - amount];
-		System.arraycopy(array, 0, newArray, 0, array.length - amount);
+	public static byte[] arrayDelete(byte[] array, int length) {
+		byte[] newArray = new byte[array.length - length];
+		System.arraycopy(array, 0, newArray, 0, array.length - length);
 		return newArray;
 	}
 
 	public static boolean parseBoolean(String value) {
 		return value != null && (value.equalsIgnoreCase("true") || value.equals("1"));
+	}
+
+	/**
+	 * 寻找 {@code search} 在 {@code array} 中存在的位置, 不存在返回 -1
+	 *
+	 * @param array  数组
+	 * @param search 待寻找子数组
+	 *
+	 * @return {@code search} 在 {@code array} 中存在的位置, 不存在返回 -1
+	 */
+	public static int arraySearch(byte[] array, byte[] search) {
+		if (search.length == 0) {
+			return -1;
+		}
+
+		int found;
+		loop:
+		while (true) {
+			found = Arrays.binarySearch(array, search[0]);
+			for (int i = 1; i < search.length; i++) {
+				try {
+					if (array[found + i] != search[i]) {
+						continue loop;
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					return -1;
+				}
+			}
+			break;
+		}
+
+		return found;
+	}
+
+	/**
+	 * 获取数组中间
+	 *
+	 * @param array    数组
+	 * @param location 起始取出位置
+	 * @param length   取出长度
+	 *
+	 * @return 数组中间
+	 */
+	public static byte[] arrayGetCenter(byte[] array, int location, int length) {
+		if (length == 0) {
+			return new byte[0];
+		}
+		byte[] result = new byte[length];
+		try {
+			System.arraycopy(array, location, result, 0, length);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 }

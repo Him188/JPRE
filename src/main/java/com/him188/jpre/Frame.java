@@ -17,7 +17,7 @@ import java.io.File;
 public final class Frame {
 	@Override
 	public String toString() {
-		return "Frame(JPRE=" + jpre.toString() + ",Client=" + client.toString()+ ")";
+		return "Frame(JPRE=" + jpre.toString() + ",Client=" + client.toString() + ")";
 	}
 
 	private final JPREMain jpre;
@@ -62,6 +62,7 @@ public final class Frame {
 
 	/**
 	 * Stop the frame, network server and scheduler
+	 * // TODO: 2017/4/26  WHAT THE FUCK IS "NETWORK SERVER"??? IT SHOULD BE IN JPREMAIN!!
 	 */
 	public void shutdown(boolean shutdown) {
 		this.shutdown = shutdown;

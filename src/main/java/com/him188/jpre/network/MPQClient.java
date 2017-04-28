@@ -1,7 +1,9 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.*;
-import com.him188.jpre.binary.Binary;
+import com.him188.jpre.Frame;
+import com.him188.jpre.OnlineStatus;
+import com.him188.jpre.RobotQQ;
+import com.him188.jpre.Utils;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventType;
@@ -84,6 +86,7 @@ public final class MPQClient {
 
 				RobotQQ robot = RobotQQ.getRobot(this.getFrame(), packet.getLong());
 
+				packet.getInt(); // sub type
 				/*
 				* .版本 2
 				* .参数 参_机器人QQ, 文本型, , 多QQ登录情况下用于识别是哪个Q
@@ -279,15 +282,14 @@ public final class MPQClient {
 	public void sendPacket(Packet packet) {
 		packet.encode();
 		byte[] data = packet.getAll();
-		byte[] result = new byte[data.length + 4 + 1];//数据包长度, 数据包ID
+		byte[] result = new byte[data.length + 1];//数据包ID
 		try {
-			System.arraycopy(Binary.toBytes(data.length + 1), 0, result, 0, 4); //+1: 数据包ID
-			result[4] = Packet.getNetworkId(packet); //数据包长度占用 0 1 2 3
+			result[0] = Packet.getNetworkId(packet);
 		} catch (Throwable e) {
 			e.printStackTrace();
 			return;
 		}
-		System.arraycopy(data, 0, result, 5, data.length);
+		System.arraycopy(data, 0, result, 1, data.length);
 		this.getLastCtx().writeAndFlush(result);
 		System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
 	}
