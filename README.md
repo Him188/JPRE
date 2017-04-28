@@ -3,8 +3,8 @@
 ——能让你使用 Java 开发 [MyPCQQ]("http://mypcqq.cc") 机器人插件的公益项目  
   
 ## 开源  
-GitHub: [JPRE(Java)]("http://github.com/him188/jpre") / [MPQ插件(C#)]("http:/github.com/him188/jpre-mpq")  
-  
+GitHub: [JPRE(Java)(你现在阅读的就是)]("http://github.com/him188/jpre") / [MPQ插件(C#)]("http:/github.com/him188/jpre-mpq")  
+
 ## 下载
 *项目仍在努力开发中，敬请期待*  
 Circleci(需要登录): [JPRE(Java)]("baidu.com")  
@@ -21,13 +21,6 @@ Jenkins(直接下载): [JPRE(Java)]("baidu.com")
 - MPQ:  
 MyPCQQ 的简写，MPQ是一款QQ机器人应用，其官方提供一个给出 API 的机器人框架，框架支持加载插件(此处暂不详解MPQ插件)，你可以在MPQ官网中获取更多详细帮助: [点击进入官网]("http://mypcqq.cc")   
 
-## 结构  
-*两个$包围的内容为随实际情况变化的目录*  
-- JPRE 核心 Jar 放置位置: `$Nukkit根目录$/plugins/`  
-- Nukkit JPRE 插件放置位置: `$Nukkit根目录$/plugins/`  
-- JPRE 独立插件放置位置: `$Nukkit根目录$/plugins/jpre/jpreplugins/`  
-- MPQ 插件放置位置:  `$MPQ根目录$/Plugin/`
-
 ## 说明  
    
 #### 项目运行模式   
@@ -42,16 +35,11 @@ MPQ插件启动时连接JPRE，JPRE随即加载并启动插件
 *详细网络过程请参阅 Java: `com.him188.jpre.network`包; C#: `Plugin.Network`命名空间*
 
 #### 详细说明
-**特别提示**  
-- 本文中所提到的所有 [插件] 若未明确标识，其意均指 MPQ 插件，而不是 Minecraft: Pocket Edition 服务端的插件  
-
 **正文**  
 *正文内容可能不适合不具备编程基础的读者阅读*   
   
 JPRE 允许你使用 Java 调用 MPQ API，并且能处理 MPQ 发生的事件。  
-JPRE的插件管理器，事件等与 Nukkit 服务端比较相似，若你熟悉 Nukkit 服务端插件开发，你也可以很快学会 JPRE 插件开发.  
 从前几个标题中已经可以看出，JPRE是一个独立的应用程序，可以不依赖于其他应用运行  
-为了使开发者能在 Nukkit 中简易地使用到 JPRE 提供的所有功能， 我们开发了 Nukkit 插件，插件的作用是加载 JPRE 核心 Jar，并开放 API 让其他 Nukkit 插件使用。
 
 ## 如何开发 JPRE 插件
 待添加
