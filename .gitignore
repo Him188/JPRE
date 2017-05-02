@@ -9,3 +9,7 @@ target/
 
 src/test/test.txt
 src/test/test.xml
+
+*.bak
+*.e
+*.ec
