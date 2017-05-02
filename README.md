@@ -1,50 +1,48 @@
 
-# **该项目正在重写, 请耐心等待**
-# **This project is rewriting, please wait**
+#JPRE  
+——能让你使用 Java 开发 [MyPCQQ]("http://mypcqq.cc") 机器人插件的公益项目  
+  
+## 开源  
+GitHub: [JPRE(Java)(你现在阅读的就是)]("http://github.com/him188/jpre") / [MPQ插件(C#)]("http:/github.com/him188/jpre-mpq")  
 
-## These following content is outdated:
-##  JavaPluginRuntimeEnvironment  (JPRE)
+## 下载
+*项目仍在努力开发中，敬请期待*  
+Circleci(需要登录): [JPRE(Java)]("baidu.com")  
+Jenkins(直接下载): [JPRE(Java)]("baidu.com")  
 
-##### Java插件运行环境 - 让你能使用 Java 开发MPQ插件
+## 作者  
+**本项目最初由 @LamGC 发起，我(Him188)后来参加开发**  
+- Java: @Him188(主要), @LamGC(部分), 其他朋友们(@XianD, @SoleMemory)
+- C#: @Him188
 
-`
-JPRE依赖于易语言版MPQ运行, 而不含有独立的机器人系统.
-本项目有 2 个部分, 一个部分是你现在看到的 JPRE. 另一个部分是MPQ插件.  
-MPQ插件启动的时候会通过TCP客户端与JPRE建立连接, 使JPRE加载Java插件.  
-MPQ插件接受到MPQ事件后, 会以数据包的形式传递给JPRE, JPRE再依据事件优先级传递给Java插件.  
-`
+## 词汇注明:   
+- JPRE:  
+指的就是本项目的 Java 部分(将在文章中讲解项目结构)，即 JavaPluginRuntimeEnvironment (翻译为中文: Java 插件运行环境)的简写    
+- MPQ:  
+MyPCQQ 的简写，MPQ是一款QQ机器人应用，其官方提供一个给出 API 的机器人框架，框架支持加载插件(此处暂不详解MPQ插件)，你可以在MPQ官网中获取更多详细帮助: [点击进入官网]("http://mypcqq.cc")   
 
-#### 丰富的MPQ功能支持  
-易语言能做的, Java也能做  
-Java能做的, 易语言不一定能做  
-1.  **表情** 所有表情的代码   
-2.  **语音** 移植语音, 并提供直接接受语音到内存的便捷方法  
-3.  **日志** 日志系统齐全, 可选择输出到运行环境日志或MPQ日志  
-4.  **资料** 支持账号信息, 群员信息, 文件信息等的解析  
+## 说明  
+   
+#### 项目运行模式   
+MPQ 官方框架支持 StdCall 方式的 Windows 动态链接库(DLL)，我们为了强劲的性能，选择了C#(感谢@somebody编写的MPQ C# 插件模板 [查看论坛原文]("TODO") )  
+  
+**项目核心工作方式为网络通讯(TCP)**  
+JPRE为服务端，MPQ插件为客户端  
+MPQ插件启动时连接JPRE，JPRE随即加载并启动插件  
 
-#### 强大的事件系统
-相较MPQ, 我们拥有更强大的事件系统:
-事件采用 “事件监视器” 进行注册和处理
-1. **取消事件**  取消事件后其他事件监视器默认不接受事件
-2. **拦截事件**  拦截事件是一种标识符
-3. **方法标签**  采用方法标签方式声明事件监视器, 简单又好用
-4. **简单注册** 一句代码即可自动注册整个类的事件检测器 (并且不需要在插件信息中定义)
-5. **允许重复** 一个插件可以注册多个事件监视器来进行不同种类工作
+**JPRE调用API会以网络数据包的形式传送到MPQ插件; MPQ插件收到事件会以同样的方式传递给JPRE**  
+上述内容基本解释了JPRE与MPQ插件通信过程
+*详细网络过程请参阅 Java: `com.him188.jpre.network`包; C#: `Plugin.Network`命名空间*
 
-#### 多样配置方法支持  
-JPRE已经为开发者准备了配置保存方法, 目前支持的配置方法:
-- Yaml (<a href="http://mvnrepository.com/artifact/org.yaml/snakeyaml">SnakeYAML</a>)
-- Json (<a href="https://github.com/google/gson">Gson</a>)
+#### 详细说明
+**正文**  
+*正文内容可能不适合不具备编程基础的读者阅读*   
+  
+JPRE 允许你使用 Java 调用 MPQ API，并且能处理 MPQ 发生的事件。  
+从前几个标题中已经可以看出，JPRE是一个独立的应用程序，可以不依赖于其他应用运行  
 
-#### 开发者支持
-- 本项目是开源项目, 所有有关插件开发的类中都已写上详细的 Javadoc, 方便开发者参考.
+## 如何开发 JPRE 插件
+待添加
+
 - 提供示例插件: <a href="https://github.com/Him188/CQ-JPRE/">待添加</a>
 - **详细开发文档**: <a href="https://github.com/Him188/CQ-JPRE/blob/master/Development.md">查看</a>
-  
-#### 协助我们
-- 你的支持就是我们持续更新的动力, 如果你愿意并且条件允许, 请捐助任意数额到我的支付宝账号: Him188, 并备注JPRE, 谢谢！
-- 在使用过程中遇到任何问题, 或是有好的建议, 请提交 issue, 或通过QQ与我们交谈:
-
-#### 联系我们
-- JPRE (主要开发): Him188  QQ1040400290
-- MPQ插件(主要开发): LamGC  QQ807288702
