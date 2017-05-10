@@ -61,8 +61,7 @@ public final class Frame {
 	private boolean shutdown;
 
 	/**
-	 * Stop the frame, network server and scheduler
-	 * // TODO: 2017/4/26  WHAT THE FUCK IS "NETWORK SERVER"??? IT SHOULD BE IN JPREMAIN!!
+	 * Stop the frame and scheduler
 	 */
 	public void shutdown(boolean shutdown) {
 		this.shutdown = shutdown;

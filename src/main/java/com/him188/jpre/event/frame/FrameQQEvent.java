@@ -8,10 +8,15 @@ import com.him188.jpre.RobotQQ;
  */
 public abstract class FrameQQEvent extends FrameEvent {
 	private final QQ qq;
+	private final RobotQQ robotQQ;
 
 	public FrameQQEvent(RobotQQ robot, QQ qq) {
-		super(robot);
+		this.robotQQ = robot;
 		this.qq = qq;
+	}
+
+	public RobotQQ getRobotQQ() {
+		return robotQQ;
 	}
 
 	public QQ getQQ() {

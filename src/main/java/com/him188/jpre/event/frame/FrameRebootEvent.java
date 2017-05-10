@@ -14,9 +14,4 @@ public class FrameRebootEvent extends FrameEvent {
 	public static HandlerList getHandlers() {
 		return handlers;
 	}
-
-
-	public FrameRebootEvent(RobotQQ robot) {
-		super(robot);
-	}
 }

@@ -72,7 +72,7 @@ public enum EventType {
 			}
 		}
 
-		return null;
+		return UNKNOWN;
 	}
 }
 

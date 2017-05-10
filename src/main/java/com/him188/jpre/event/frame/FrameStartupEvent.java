@@ -15,8 +15,4 @@ public class FrameStartupEvent extends FrameEvent {
 		return handlers;
 	}
 
-
-	public FrameStartupEvent(RobotQQ robot) {
-		super(robot);
-	}
 }
