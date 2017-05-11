@@ -2,51 +2,53 @@ package com.him188.jpre.network.packet;
 
 import com.him188.jpre.CommandId;
 import com.him188.jpre.RobotQQ;
+import com.him188.jpre.Utils;
 
 /**
  * @author Him188
  */
 public class CommandPacket extends Packet {
-	public static final byte NETWORK_ID = Protocol.SERVER_COMMAND;
+    public static final byte NETWORK_ID = Protocol.SERVER_COMMAND;
 
-	private final RobotQQ robot;
-	private final Object[] args;
-	private final CommandId id;
+    private final RobotQQ robot;
+    private final Object[] args;
+    private final CommandId id;
 
-	public Object[] getArgs() {
-		return args;
-	}
+    public Object[] getArgs() {
+        return args;
+    }
 
-	public CommandId getId() {
-		return id;
-	}
+    public CommandId getId() {
+        return id;
+    }
 
-	public CommandPacket(RobotQQ robot, CommandId commandId, Object[] args) {
-		this.robot = robot;
-		this.args = args;
-		id = commandId;
-	}
+    public CommandPacket(RobotQQ robot, CommandId commandId, Object[] args) {
+        this.robot = robot;
+        this.args = Utils.convertLongToString(args);
+        id = commandId;
+    }
 
-	@Override
-	public void encode() {
-		if (setEncoded(true)) {
-			return;
-		}
+    @Override
+    public void encode() {
+        if (setEncoded(true)) {
+            return;
+        }
 
-		clear();
+        clear();
 
-		putLong(robot.getQQNumber());
-		putByte(id.getId());
-		putRaw(args);
-	}
+        putLong(robot.getQQNumber());
+        putByte(id.getId());
+        putInt(args.length);
+        putRawWithType(args);
+    }
 
-	@Override
-	public void decode() {
+    @Override
+    public void decode() {
 
-	}
+    }
 
-	@Override
-	public byte getNetworkId() {
-		return 0;
-	}
+    @Override
+    public byte getNetworkId() {
+        return 0;
+    }
 }

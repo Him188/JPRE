@@ -29,6 +29,11 @@ public final class JPREMain {
     private JPREMain() {
     }
 
+    @Override
+    public String toString() {
+        return "JPREMain";
+    }
+
     /* Server Scheduler */
     private static ServerScheduler serverScheduler;
 

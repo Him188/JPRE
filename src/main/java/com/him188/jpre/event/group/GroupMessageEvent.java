@@ -7,8 +7,10 @@ import com.him188.jpre.event.HandlerList;
 
 /**
  * 群聊消息
+ * Called when receive group message
  *
  * @author Him188
+ * @since JPRE 1.0.0
  */
 public class GroupMessageEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();

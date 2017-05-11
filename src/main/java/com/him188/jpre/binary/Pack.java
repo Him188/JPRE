@@ -229,7 +229,8 @@ public class Pack {
 	}
 
 	public int getInt() {
-		return toInt(getBytes(4));
+		//return toInt(getBytes(4));
+		return (int) getLong();
 	}
 
 	public long getLong() {

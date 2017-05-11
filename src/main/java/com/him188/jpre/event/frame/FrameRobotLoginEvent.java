@@ -9,15 +9,14 @@ import com.him188.jpre.event.HandlerList;
  *
  * @author Him188
  */
-public class FrameQQLoginEvent extends FrameQQEvent {
+public class FrameRobotLoginEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();
+
+	public FrameRobotLoginEvent(RobotQQ robot) {
+		super(robot);
+	}
 
 	public static HandlerList getHandlers() {
 		return handlers;
-	}
-
-
-	public FrameQQLoginEvent(RobotQQ robot, QQ qq) {
-		super(robot, qq);
 	}
 }

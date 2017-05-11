@@ -39,14 +39,15 @@ import java.util.zip.ZipEntry;
  * 2. {@link #loadPlugin(String)}: 加载插件
  * 3. {@code {@link #getPlugin(String)}.enable() }: 启动插件
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
 public final class PluginManager {
 	/* Popular methods */
 
 	/**
-	 * 调用事件.
+	 * 调用(触发) 事件.
 	 *
 	 * @param event 事件
 	 *
@@ -131,7 +132,7 @@ public final class PluginManager {
 		for (File file : list) {
 			try {
 				loadPlugin(new JarFile(file));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: 2017/4/21 exception
 			}
@@ -157,7 +158,7 @@ public final class PluginManager {
 	 * @return plugins 目录下所有 .jar 为后缀的文件
 	 */
 	public File[] listPlugins() {
-		return new File(getFrame().getDataFolder() + "/config").listFiles((dir, name) -> name.toLowerCase().endsWith(".jar"));
+		return new File(getFrame().getDataFolder() + "/plugins/").listFiles((dir, name) -> name.toLowerCase().endsWith(".jar"));
 	}
 
 	/**
@@ -191,6 +192,10 @@ public final class PluginManager {
 	 */
 	public boolean loadPlugin(JarFile file) throws PluginLoadException {
 		PluginDescription description = descriptions.get(file.getName());
+		if (description == null) {
+			description = loadPluginDescription(file);
+		}
+
 		if (description.getMainClass().isEmpty()) {
 			throw new PluginLoadException("Could not load plugin description: " + description.getName());
 		}

@@ -1,9 +1,6 @@
 package com.him188.jpre.network;
 
-import com.him188.jpre.Frame;
-import com.him188.jpre.OnlineStatus;
-import com.him188.jpre.RobotQQ;
-import com.him188.jpre.Utils;
+import com.him188.jpre.*;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventType;
@@ -14,6 +11,7 @@ import com.him188.jpre.event.qq.*;
 import com.him188.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
 import com.him188.jpre.network.packet.*;
 import io.netty.channel.ChannelHandlerContext;
+import sun.misc.Unsafe;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.SocketAddress;
@@ -30,18 +28,7 @@ import static com.him188.jpre.network.packet.Protocol.CLIENT_PING;
  */
 @SuppressWarnings("WeakerAccess")
 public final class MPQClient {
-    /* Frame */
-
-    private final Frame frame;
-
-    public Frame getFrame() {
-        return frame;
-    }
-
-
-    private SocketAddress address;
-
-    public MPQClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
+    MPQClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
         frame.setClient(this);
         this.frame = frame;
         this.address = address;
@@ -57,6 +44,18 @@ public final class MPQClient {
         return this.address == address;
     }
 
+    /* Frame */
+
+    private final Frame frame;
+
+    public Frame getFrame() {
+        return frame;
+    }
+
+
+    /* Address */
+    private SocketAddress address;
+
     /**
      * 获取 IP 地址
      *
@@ -65,6 +64,9 @@ public final class MPQClient {
     public SocketAddress getAddress() {
         return address;
     }
+
+
+    /* Network */
 
     /**
      * 数据包处理
@@ -81,7 +83,6 @@ public final class MPQClient {
                     break;
                 }
 
-                // [byte] int long int long long long string
                 long robotQQ = packet.getLong();
                 RobotQQ robot = null;
                 if (robotQQ != 0) {
@@ -115,6 +116,9 @@ public final class MPQClient {
                         break;
                     case MESSAGE_GROUP:
                         event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
+                        if (message.contains("测试") || message.contains("Test")) {
+                            robot.sendGroupMessage(from, "Hello! " + Code.at(active) + ", 你刚刚发送了长度为 " + message.length() + " 的消息: " + message);
+                        }
                         break;
                     // TODO: 2017/4/20 DISCUSSION, TEMPORARY event
                     case FRIEND_ADD_RESULT:
@@ -203,19 +207,24 @@ public final class MPQClient {
                         event = new FrameRebootEvent();
                         break;
                     case FRAME_QQ_ADD:
-                        event = new FrameQQAddEvent(robot, robot.getQQ(active));
+                        robot = RobotQQ.getRobot(this.getFrame(), active);
+                        event = new FrameRobotAddEvent(robot);
                         break;
                     case FRAME_QQ_LOGIN:
-                        event = new FrameQQLoginEvent(robot, robot.getQQ(active));
+                        robot = RobotQQ.getRobot(this.getFrame(), active);
+                        event = new FrameRobotLoginEvent(robot);
                         break;
                     case FRAME_QQ_OFFLINE:
-                        event = new FrameQQOfflineEvent(robot, robot.getQQ(active));
+                        robot = RobotQQ.getRobot(this.getFrame(), active);
+                        event = new FrameRobotOfflineEvent(robot);
                         break;
                     case FRAME_QQ_FORCE_OFFLINE:
-                        event = new FrameQQForceOfflineEvent(robot, robot.getQQ(active));
+                        robot = RobotQQ.getRobot(this.getFrame(), active);
+                        event = new FrameRobotForceOfflineEvent(robot);
                         break;
                     case FRAME_QQ_CRASH:
-                        event = new FrameQQCrashEvent(robot, robot.getQQ(active));
+                        robot = RobotQQ.getRobot(this.getFrame(), active);
+                        event = new FrameRobotCrashEvent(robot);
                         break;
 
                     case TENPAY_RECEIVE_TRANSFER:

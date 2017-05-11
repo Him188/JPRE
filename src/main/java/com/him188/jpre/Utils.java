@@ -102,6 +102,14 @@ public final class Utils {
         }
     }
 
+    public static String GBKDecode(String encodedString) {
+        try {
+            return new String(encodedString.getBytes("GBK"), "UTF-8");
+        } catch (UnsupportedEncodingException ignored) {
+            //will not happen
+            return null;
+        }
+    }
 
     public static byte[] arrayAppend(byte[] original, byte[] append) {
         byte[] newArray = new byte[original.length + append.length];
@@ -194,8 +202,7 @@ public final class Utils {
         return result;
     }
 
-    public static boolean isZeroArray(byte[] array)
-    {
+    public static boolean isZeroArray(byte[] array) {
         for (byte b : array) {
             if (b != 0) {
                 return false;
@@ -204,11 +211,16 @@ public final class Utils {
         return true;
     }
 
-
-    public static byte[] convertSignedByte(byte[] bytes){
-        for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = bytes[i] > 0 ? bytes[i] : (byte) (bytes[i] + 1);
+    /**
+     * 将数组中所有 long 类型值转换为 String. 供使用 MPQ API
+     */
+    public static Object[] convertLongToString(Object[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].getClass() == long.class || array[i] instanceof Long) {
+                array[i] = String.valueOf(array[i]);
+            }
         }
-        return bytes;
+
+        return array;
     }
 }

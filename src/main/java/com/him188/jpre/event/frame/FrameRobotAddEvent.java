@@ -5,19 +5,19 @@ import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.HandlerList;
 
 /**
- * QQ 被强制离线
+ * 添加了新 QQ
  *
  * @author Him188
  */
-public class FrameQQForceOfflineEvent extends FrameQQEvent {
+public class FrameRobotAddEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();
+
+	public FrameRobotAddEvent(RobotQQ robot) {
+		super(robot);
+	}
 
 	public static HandlerList getHandlers() {
 		return handlers;
 	}
 
-
-	public FrameQQForceOfflineEvent(RobotQQ robot, QQ qq) {
-		super(robot, qq);
-	}
 }

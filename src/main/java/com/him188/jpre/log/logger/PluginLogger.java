@@ -6,7 +6,7 @@ import com.him188.jpre.network.MPQClient;
 import com.him188.jpre.network.packet.LogPacket;
 
 /**
- * 插件日志记录器. (记录到MPQ的插件自带日志中)
+ * 插件日志记录器. (记录到 MPQ 的日志中)
  */
 public class PluginLogger implements Logger {
 	private final MPQClient client;

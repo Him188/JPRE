@@ -5,19 +5,18 @@ import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.HandlerList;
 
 /**
- * QQ 长时间无响应或掉线
+ * 主动使 QQ 离线
  *
  * @author Him188
  */
-public class FrameQQCrashEvent extends FrameQQEvent {
+public class FrameRobotOfflineEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();
+
+	public FrameRobotOfflineEvent(RobotQQ robot) {
+		super(robot);
+	}
 
 	public static HandlerList getHandlers() {
 		return handlers;
-	}
-
-
-	public FrameQQCrashEvent(RobotQQ robot, QQ qq) {
-		super(robot, qq);
 	}
 }

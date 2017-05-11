@@ -11,7 +11,7 @@ public class TestPacket {
     public static void main(String[] args) {
         System.out.println(Arrays.toString(convert(new byte[]{-1, -128, 0, 127})));
         System.out.println(Arrays.toString(Binary.toBytes(11001L)));
-        System.out.println((Binary.toLong(new byte[]{-7, 42, 0, 0, 0, 0, 0, 0})));
+        System.out.println((Binary.toInt(Binary.realReverse(new byte[]{-7, 42, 0, 0}))));
 
         System.out.println(0xff); // 1111 1111
     }
