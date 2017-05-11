@@ -6,7 +6,8 @@ import com.him188.jpre.RobotQQ;
 import com.him188.jpre.event.qq.QQEvent;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public abstract class GroupEvent extends QQEvent {
 

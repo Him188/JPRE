@@ -106,7 +106,6 @@ public final class Utils {
         try {
             return new String(encodedString.getBytes("GBK"), "UTF-8");
         } catch (UnsupportedEncodingException ignored) {
-            //will not happen
             return null;
         }
     }

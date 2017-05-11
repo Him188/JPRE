@@ -71,6 +71,7 @@ public final class MPQClient {
     /**
      * 数据包处理
      */
+    @SuppressWarnings("ConstantConditions")
     public void dataReceive(Pack packet) {
         byte pid = packet.getByte();
         switch (pid) {
@@ -105,7 +106,8 @@ public final class MPQClient {
                 long from = packet.getLong();
                 long active = packet.getLong();
                 long passive = packet.getLong();
-                String message = packet.getString();
+                //String message = Utils.GBKDecode(packet.getString());
+                String message =packet.getString();
 
                 switch (type) {
                     case UNKNOWN:
@@ -117,7 +119,7 @@ public final class MPQClient {
                     case MESSAGE_GROUP:
                         event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
                         if (message.contains("测试") || message.contains("Test")) {
-                            robot.sendGroupMessage(from, "Hello! " + Code.at(active) + ", 你刚刚发送了长度为 " + message.length() + " 的消息: " + message);
+                            robot.sendGroupMessage(from, "Hello! " + Code.at(active) + ", You just sent a message which has the length of " + message.length() + ", message context:  " + message);
                         }
                         break;
                     // TODO: 2017/4/20 DISCUSSION, TEMPORARY event
@@ -170,8 +172,11 @@ public final class MPQClient {
                     case GROUP_DISSOLUTION:
                         event = new GroupDissolutionEvent(robot, robot.getGroup(from), robot.getQQ(active));
                         break;
-                    case GROUP_ADMIN_CHANGE:
-                        event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), Utils.parseBoolean(message) ? GroupAdminChangeEvent.ChangeType.PROMOTION : GroupAdminChangeEvent.ChangeType.DEMOTION);
+                    case GROUP_ADMIN_PROMOTION:
+                        event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), GroupAdminChangeEvent.ChangeType.PROMOTION);
+                        break;
+                    case GROUP_ADMIN_DEMOTION:
+                        event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), GroupAdminChangeEvent.ChangeType.DEMOTION);
                         break;
                     case GROUP_CARD_CHANGE: // TODO: 2017/4/22  check active and passive
                         event = new GroupCardChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
