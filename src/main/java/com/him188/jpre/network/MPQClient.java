@@ -4,6 +4,7 @@ import com.him188.jpre.*;
 import com.him188.jpre.binary.Pack;
 import com.him188.jpre.event.Event;
 import com.him188.jpre.event.EventType;
+import com.him188.jpre.event.discussion.DiscussionMessageEvent;
 import com.him188.jpre.event.frame.*;
 import com.him188.jpre.event.group.*;
 import com.him188.jpre.event.network.DataPacketReceiveEvent;
@@ -122,7 +123,9 @@ public final class MPQClient {
                             robot.sendGroupMessage(from, "Hello! " + Code.at(active) + ", You just sent a message which has the length of " + message.length() + ", message context:  " + message);
                         }
                         break;
-                    // TODO: 2017/4/20 DISCUSSION, TEMPORARY event
+                    case MESSAGE_DISCUSSION:
+                        event = new DiscussionMessageEvent(robot, robot.getDiscussion(from), robot.getQQ(active), message);
+                        break;
                     case FRIEND_ADD_RESULT:
                         event = new FriendAddResultEvent(robot, robot.getQQ(active), true);
                         break;
