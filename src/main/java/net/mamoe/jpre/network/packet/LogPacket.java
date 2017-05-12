@@ -1,34 +1,35 @@
 package net.mamoe.jpre.network.packet;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class LogPacket extends Packet {
-	public static final byte NETWORK_ID = Protocol.SERVER_LOG;
+    public static final byte NETWORK_ID = Protocol.SERVER_LOG;
 
-	private String log;
+    private String log;
 
-	public LogPacket(String log){
-		this.log = log;
-	}
+    public LogPacket(String log){
+        this.log = log;
+    }
 
-	public String getLog() {
-		return log;
-	}
+    @Override
+    public void encode() {
+        if (setEncoded(true)) {
+            return;
+        }
 
-	@Override
-	public void encode() {
-		putString(log);
-		// TODO: 2017/4/21 转换字节发送
-	}
+        clear();
+        putString(log);
+    }
 
-	@Override
-	public void decode() {
+    @Override
+    public void decode() {
 
-	}
+    }
 
-	@Override
-	public byte getNetworkId() {
-		return NETWORK_ID;
-	}
+    @Override
+    public byte getNetworkId() {
+        return NETWORK_ID;
+    }
 }

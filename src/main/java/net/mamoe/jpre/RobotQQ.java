@@ -6,6 +6,8 @@ import net.mamoe.jpre.event.qq.SendPrivateMessageEvent;
 import net.mamoe.jpre.network.MPQClient;
 import net.mamoe.jpre.network.NetworkPacketHandler;
 import net.mamoe.jpre.network.packet.CommandPacket;
+import net.mamoe.jpre.network.packet.LogPacket;
+import net.mamoe.jpre.network.packet.Packet;
 import net.mamoe.jpre.network.packet.StaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.scheduler.Task;
@@ -394,6 +396,16 @@ public class RobotQQ {
 
 
     /**
+     * 向 MPQ 后台添加一条日志
+     *
+     * @param log 日志内容
+     */
+    public void log(String log) {
+        Packet logPacket = new LogPacket(log);
+        getFrame().getClient().sendPacket(logPacket);
+    }
+
+    /**
      * 计算得到页面操作用参数 Bkn 或 G_tk
      *
      * @return 页面操作用参数 Bkn 或 G_tk
@@ -510,7 +522,7 @@ public class RobotQQ {
      * @param group 群号
      * @return 是否成功
      */
-    public boolean shutUpWhole(long group) {
+    public boolean shutUpWhole(long group) { // TODO: 2017/5/12 check
         return shutUp(group, 0L, 0);
     }
 
@@ -521,8 +533,9 @@ public class RobotQQ {
      * @param title   公告标题
      * @param content 公告内容
      */
-    public void setNotice(long group, String title, String content) {
+    public boolean setNotice(long group, String title, String content) {
         runCommand(CommandId.SET_NOTICE, this.getQQNumber(), group, title, content);
+        return booleanResult();
     }
 
     /**
@@ -546,6 +559,18 @@ public class RobotQQ {
     public String getNameCard(long group, long QQ) {
         runCommand(CommandId.GET_NAME_CARD, this.getQQNumber(), group, QQ);
         return stringResult();
+    }
+
+    /**
+     * 设置群名片
+     *
+     * @param group 群号
+     * @param QQ    QQ
+     * @param card  群名片
+     */
+    public boolean setNameCard(long group, long QQ, String card) {
+        runCommand(CommandId.SET_NAME_CARD, this.getQQNumber(), group, QQ, card);
+        return booleanResult();
     }
 
     /**

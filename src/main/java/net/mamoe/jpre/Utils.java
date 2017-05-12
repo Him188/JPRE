@@ -1,12 +1,7 @@
 package net.mamoe.jpre;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
@@ -155,13 +150,17 @@ public final class Utils {
      * @return 数组中间
      */
     public static byte[] arrayGetCenter(byte[] array, int location, int length) {
-        if (length == 0) {
+        if (length <= 0) {
             return new byte[0];
         }
-        byte[] result = new byte[length];
+
+        byte[] result;
+
+        result = new byte[length];
+
         try {
             System.arraycopy(array, location, result, 0, length);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

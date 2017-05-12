@@ -8,6 +8,7 @@ import net.mamoe.jpre.Utils;
 import net.mamoe.jpre.binary.Pack;
 import net.mamoe.jpre.event.Event;
 import net.mamoe.jpre.event.EventType;
+import net.mamoe.jpre.event.discussion.DiscussionMessageEvent;
 import net.mamoe.jpre.event.frame.*;
 import net.mamoe.jpre.event.group.*;
 import net.mamoe.jpre.event.network.DataPacketReceiveEvent;
@@ -19,7 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.SocketAddress;
 import java.util.Arrays;
 
-import static net.mamoe.jpre.network.packet.Protocol.*;
+import static net.mamoe.jpre.network.packet.Protocol.CLIENT_EVENT;
+import static net.mamoe.jpre.network.packet.Protocol.CLIENT_PING;
 
 /**
  * 连接到服务器的客户端 (MPQ)
@@ -144,7 +146,7 @@ public final class MPQClient {
                     case FRIEND_TYPING:
                         event = new FriendTypingEvent(robot, robot.getQQ(active));
                         break;
-                    case FRIEND_FIRST_CONVESATION:
+                    case FRIEND_FIRST_CONVERSATION:
                         event = new FriendFirstConversationEvent(robot, robot.getQQ(active));
                         break;
                     case FRIEND_SHAKE:

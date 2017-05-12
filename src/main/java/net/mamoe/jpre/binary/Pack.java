@@ -193,19 +193,6 @@ public class Pack {
 
 
     /* Getter */
-    public byte[] getCenter(int location, int length) {
-        if (length == 0) {
-            return new byte[0];
-        }
-        byte[] result = new byte[length];
-        try {
-            System.arraycopy(data, location, result, 0, length);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
     public int getLastLength() {
         return data.length - location;
@@ -213,9 +200,34 @@ public class Pack {
 
 
     public byte[] getBytes(int length) {
-        byte[] result = getCenter(location, length);
+        byte[] result = arrayGetCenter(this.data, location, length);
 
         location += length;
+        return result;
+    }
+
+    private static byte[] arrayGetCenter(byte[] array, int location, int length) {
+        if (length <= 0) {
+            return new byte[0];
+        }
+
+        byte[] result;
+
+        try {
+            result = new byte[length];
+            System.arraycopy(array, location, result, 0, length);
+        } catch (Exception e) {
+            length = Binary.toInt(Binary.realReverse(Binary.toBytes(length)));
+
+            try {
+                result = new byte[length];
+                System.arraycopy(array, location, result, 0, length);
+            } catch (Exception e2){
+                e2.printStackTrace();
+                return new byte[0];
+            }
+        }
+
         return result;
     }
 

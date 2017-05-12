@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.Utils;
 import net.mamoe.jpre.event.*;
-import net.mamoe.jpre.event.*;
 import net.mamoe.jpre.exception.PluginEventException;
 import net.mamoe.jpre.exception.PluginLoadException;
 
@@ -440,6 +439,7 @@ public final class PluginManager {
 				registerEvent(listener, plugin, (Class<Event>) clazz, method);
 			}
 		} catch (Throwable e) {
+			// TODO: 2017/5/12  throw PluginEventException
 			e.printStackTrace();
 		}
 	}

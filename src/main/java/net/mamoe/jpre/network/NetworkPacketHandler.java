@@ -57,17 +57,21 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
      * Synchronized by {@code synchronized (this)} in {@link #channelRead0}
      */
     private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
-        temp = Utils.arrayAppend(temp, data);
-        //System.out.println("Now temp: " + Arrays.toString(temp));
-        while (temp.length != 0) {
-            int position = Utils.arraySearch(temp, Protocol.SIGNATURE);
-            if (position < 0) {
-                return;//收到的是子包, 数据未结尾
-            }
+        try {
+            temp = Utils.arrayAppend(temp, data);
+            //System.out.println("Now temp: " + Arrays.toString(temp));
+            while (temp.length != 0) {
+                int position = Utils.arraySearch(temp, Protocol.SIGNATURE);
+                if (position < 0) {
+                    return;//收到的是子包, 数据未结尾
+                }
 
-            byte[] d = Utils.arrayGetCenter(temp, 0, position);
-            temp = Utils.arrayDelete(temp, position+Protocol.SIGNATURE.length);
-            processPacket(ctx, d);
+                byte[] d = Utils.arrayGetCenter(temp, 0, position);
+                temp = Utils.arrayDelete(temp, position + Protocol.SIGNATURE.length);
+                processPacket(ctx, d);
+            }
+        }catch (Throwable e){
+            e.printStackTrace();
         }
     }
 
@@ -83,7 +87,13 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         System.out.println(pack);
         for (MPQClient client : clients) {
             if (client.is(ctx.channel().remoteAddress())) {
-                client.getFrame().getScheduler().scheduleTask(null, () -> client.dataReceive(pack));
+                client.getFrame().getScheduler().scheduleTask(null, () -> {
+                    try {
+                        client.dataReceive(pack);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
             }
         }
     }

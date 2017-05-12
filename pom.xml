@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>JPRE</name>
-    <groupId>net.mamoe.jpre</groupId>
+    <groupId>net.mamoe</groupId>
     <artifactId>jpre</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 

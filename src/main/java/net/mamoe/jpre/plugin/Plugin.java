@@ -1,7 +1,5 @@
 package net.mamoe.jpre.plugin;
 
-import net.mamoe.jpre.log.logger.Logger;
-
 import java.io.File;
 import java.util.jar.JarFile;
 
@@ -14,13 +12,6 @@ import java.util.jar.JarFile;
  */
 @SuppressWarnings("unused")
 public interface Plugin {
-    /**
-     * 获取日志记录器
-     *
-     * @return 日志记录器
-     */
-    Logger getLogger();
-
     /**
      * 获取插件信息
      *

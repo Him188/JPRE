@@ -2,8 +2,6 @@ package net.mamoe.jpre.plugin;
 
 import net.mamoe.jpre.config.Config;
 import net.mamoe.jpre.config.YamlConfig;
-import net.mamoe.jpre.log.logger.Logger;
-import net.mamoe.jpre.log.logger.PluginLogger;
 
 import java.io.*;
 import java.util.jar.JarFile;
@@ -18,7 +16,6 @@ import java.util.jar.JarFile;
  */
 @SuppressWarnings({"ResultOfMethodCallIgnored", "WeakerAccess", "unused", "UnusedReturnValue"})
 public abstract class JavaPlugin extends PluginDescription implements Plugin {
-    private Logger logger;
     private PluginManager owner;
     private boolean enabled;
 
@@ -33,7 +30,6 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
         }
 
         this.owner = owner;
-        logger = new PluginLogger(owner.getFrame().getClient());
     }
 
     public JavaPlugin() {
@@ -93,11 +89,6 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
     @SuppressWarnings("SameParameterValue")
     public boolean saveResource(String resourceFile, boolean forceReplace) {
         return saveResource(resourceFile, resourceFile, forceReplace);
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 
     @Override
