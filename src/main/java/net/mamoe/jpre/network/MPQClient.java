@@ -120,7 +120,9 @@ public final class MPQClient {
                     case MESSAGE_GROUP:
                         event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
                         break;
-                    // TODO: 2017/4/20 DISCUSSION, TEMPORARY event
+                    case MESSAGE_DISCUSSION:
+                        event = new DiscussionMessageEvent(robot, robot.getDiscussion(from), robot.getQQ(active), message);
+                        break;
                     case FRIEND_ADD_RESULT:
                         event = new FriendAddResultEvent(robot, robot.getQQ(active), true);
                         break;
@@ -142,7 +144,7 @@ public final class MPQClient {
                     case FRIEND_TYPING:
                         event = new FriendTypingEvent(robot, robot.getQQ(active));
                         break;
-                    case FRIEND_FIRST_CONVERSATION:
+                    case FRIEND_FIRST_CONVESATION:
                         event = new FriendFirstConversationEvent(robot, robot.getQQ(active));
                         break;
                     case FRIEND_SHAKE:
@@ -257,7 +259,6 @@ public final class MPQClient {
                 }
                 pk.setClient(this);
                 pk.setData(packet.getAll());
-                pk.getByte();
                 composePacket(pk);
                 break;
         }
@@ -280,12 +281,6 @@ public final class MPQClient {
         switch (packet.getNetworkId()) {
             case CLIENT_PING:
                 sendPacket(new ServerPongPacket());
-                break;
-
-            case CLIENT_COMMAND_RESULT:
-                CommandResultPacket resultPacket = (CommandResultPacket) packet;
-                RobotQQ robot = RobotQQ.getRobot(getFrame(), resultPacket.getRobot());
-                robot.addResult(resultPacket.getResult());
                 break;
 
             default:
