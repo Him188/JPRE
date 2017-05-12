@@ -32,7 +32,7 @@ MPQ插件启动时连接JPRE，JPRE随即加载并启动插件
 
 **JPRE调用API会以网络数据包的形式传送到MPQ插件; MPQ插件收到事件会以同样的方式传递给JPRE**  
 上述内容基本解释了JPRE与MPQ插件通信过程
-*详细网络过程请参阅 Java: `com.him188.jpre.network`包; C#: `Plugin.Network`命名空间*
+*详细网络过程请参阅 Java: `net.mamoe.jpre.network`包; C#: `Plugin.Network`命名空间*
 
 #### 详细说明
 **正文**  

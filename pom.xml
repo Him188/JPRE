@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>JPRE</name>
-    <groupId>com.him188.jpre</groupId>
+    <groupId>net.mamoe.jpre</groupId>
     <artifactId>jpre</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
@@ -87,7 +87,7 @@
                     <transformers>
                         <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.him188.jpre.JPREMain</mainClass>
+                            <mainClass>net.mamoe.jpre.JPREMain</mainClass>
                         </transformer>
                     </transformers>
                     <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml

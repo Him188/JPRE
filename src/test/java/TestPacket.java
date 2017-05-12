@@ -1,8 +1,4 @@
-import com.him188.jpre.binary.Binary;
-import com.him188.jpre.binary.Pack;
-
-import java.util.Arrays;
-import java.util.List;
+import net.mamoe.jpre.binary.Binary;
 
 /**
  * @author Him188 @ JPRE
@@ -10,7 +6,7 @@ import java.util.List;
  */
 public class TestPacket {
     public static void main(String[] args) {
-        System.out.println(Binary.toInt(Binary.realReverse(new byte[]{-38, 7, 0, 0})));
+        System.out.println(Binary.toInt(Binary.realReverse(new byte[]{2, 0, 0, 95})));
 
     }
 

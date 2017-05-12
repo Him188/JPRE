@@ -1,4 +1,4 @@
-import com.him188.jpre.network.packet.Protocol;
+import net.mamoe.jpre.network.packet.Protocol;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
