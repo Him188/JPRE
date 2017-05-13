@@ -80,7 +80,7 @@ public enum CommandId {
 
 
 
-	SendObjectMsg(73),
+	SEND_OBJECT_MSG(73),
 	;
 
 	private final byte id;

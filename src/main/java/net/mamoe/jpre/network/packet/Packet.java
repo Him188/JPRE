@@ -213,6 +213,6 @@ abstract public class Packet extends Pack {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "(Id:" + this.getNetworkId() + ")";
+		return this.getClass().getSimpleName() + "(Id=" + this.getNetworkId() + ")";
 	}
 }

@@ -1065,7 +1065,7 @@ public class RobotQQ {
      */
     public boolean sendObjectMessage(int msgType, long receiveGid, long receiveQq, // TODO: 2017/5/13 放到正确的位置
                                      String objectMsg, String objectMsgSubType) {
-        runCommand(CommandId.SendObjectMsg, this.getQQNumber(), msgType, receiveGid, receiveQq, objectMsg, objectMsgSubType);
+        runCommand(CommandId.SEND_OBJECT_MSG, this.getQQNumber(), msgType, receiveGid, receiveQq, objectMsg, objectMsgSubType);
         return booleanResult();
     }
 

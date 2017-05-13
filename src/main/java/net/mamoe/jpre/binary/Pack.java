@@ -5,6 +5,7 @@ import net.mamoe.jpre.exception.binary.BinaryException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static net.mamoe.jpre.binary.Binary.*;
@@ -307,6 +308,17 @@ public class Pack {
 
     public List<?> getList() {
         return getList(Object.class);
+    }
+
+    public LinkedList<Object> getRawList() {
+        LinkedList<Object> result = new LinkedList<>();
+        int count = getInt();
+        System.out.println("[Pack] getRawList: " + count);
+        for (int i = 0; i < count; i++) {
+            result.add(getRaw());
+        }
+
+        return result;
     }
 
     @SuppressWarnings({"unchecked", "unused"})

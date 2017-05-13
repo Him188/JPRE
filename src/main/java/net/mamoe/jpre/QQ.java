@@ -40,4 +40,8 @@ public class QQ extends User {
 	public String getNickName(){
 		return RobotQQ.getNick(this.getNumber()); // TODO: 2017/5/12  存储, 监听事件修改
 	}
+
+	public String like(){
+		return getRobot().like(this.getNumber());
+	}
 }

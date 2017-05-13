@@ -49,6 +49,6 @@ public class CommandPacket extends Packet {
 
     @Override
     public byte getNetworkId() {
-        return 0;
+        return NETWORK_ID;
     }
 }

@@ -180,6 +180,8 @@ public final class Utils {
      * 将数组中所有 long 类型值转换为 String. 供使用 MPQ API
      */
     public static Object[] convertLongToString(Object[] array) {
+        return array;
+        /*
         for (int i = 0; i < array.length; i++) {
             if (array[i].getClass() == long.class || array[i] instanceof Long) {
                 array[i] = String.valueOf(array[i]);
@@ -187,5 +189,6 @@ public final class Utils {
         }
 
         return array;
+        */
     }
 }
