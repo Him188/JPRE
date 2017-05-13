@@ -45,7 +45,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
         synchronized (this) {
-            System.out.println("[Network] Data packet received: " + Arrays.toString(data));
+            System.out.println("[Network] Data packet received: (" + data.length + ")" + Arrays.toString(data));
             handlePacket(ctx, data);
         }
     }
@@ -70,7 +70,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
                 temp = Utils.arrayDelete(temp, position + Protocol.SIGNATURE.length);
                 processPacket(ctx, d);
             }
-        }catch (Throwable e){
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }

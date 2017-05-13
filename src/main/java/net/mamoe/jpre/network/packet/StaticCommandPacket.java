@@ -32,7 +32,6 @@ public class StaticCommandPacket extends Packet {
 
 		clear();
 
-		putLong(0L);
 		putByte(id.getId());
 		putRaw(args);
 	}

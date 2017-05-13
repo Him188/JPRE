@@ -330,7 +330,10 @@ public final class PluginManager {
 			if (entry == null) {
 				entry = file.getEntry(resource);
 				if (entry == null) {
-					return null;
+					entry = file.getEntry("resource/" + resource);
+					if (entry == null) {
+						return null;
+					}
 				}
 			}
 

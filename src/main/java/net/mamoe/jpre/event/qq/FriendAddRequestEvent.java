@@ -7,35 +7,36 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 他人请求添加机器人为好友
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendAddRequestEvent extends QQEvent {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlers() {
-		return handlers;
-	}
+    public static HandlerList getHandlers() {
+        return handlers;
+    }
 
 
-	private final String reason;
+    private final String reason;
 
-	private boolean accepted;
+    private boolean accepted;
 
-	public FriendAddRequestEvent(RobotQQ robot, QQ qq, String reason) {
-		super(robot, qq);
-		this.reason = reason;
-	}
+    public FriendAddRequestEvent(RobotQQ robot, QQ qq, String reason) {
+        super(robot, qq);
+        this.reason = reason;
+    }
 
-	public String getReason() {
-		return reason;
-	}
+    public String getReason() {
+        return reason;
+    }
 
-	// TODO: 2017/4/19 接受请求
-	public boolean isAccepted() {
-		return accepted;
-	}
+    // TODO: 2017/4/19 接受请求
+    public boolean isAccepted() {
+        return accepted;
+    }
 
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
 }

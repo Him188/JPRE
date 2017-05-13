@@ -1,5 +1,7 @@
 package net.mamoe.jpre.binary;
 
+import net.mamoe.jpre.exception.binary.BinaryException;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +31,7 @@ public class Pack {
 
     @Override
     public String toString() {
-        return "Pack(data=" + Arrays.toString(data) + ",location=" + location + ")";
+        return "Pack(data=(" + data.length + ")" + Arrays.toString(data) + ",location=" + location + ")";
     }
 
     public void setData(byte[] data) {
@@ -88,6 +90,7 @@ public class Pack {
 
     public void putString(String value) {
         if (value == null) {
+            putInt(0);
             return;
         }
 
@@ -200,13 +203,17 @@ public class Pack {
 
 
     public byte[] getBytes(int length) {
-        byte[] result = arrayGetCenter(this.data, location, length);
-
-        location += length;
-        return result;
+        try {
+            byte[] result = arrayGetCenter(this.data, location, length);
+            location += length;
+            return result;
+        } catch (BinaryException e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
     }
 
-    private static byte[] arrayGetCenter(byte[] array, int location, int length) {
+    private static byte[] arrayGetCenter(byte[] array, int location, int length) throws BinaryException {
         if (length <= 0) {
             return new byte[0];
         }
@@ -222,9 +229,8 @@ public class Pack {
             try {
                 result = new byte[length];
                 System.arraycopy(array, location, result, 0, length);
-            } catch (Exception e2){
-                e2.printStackTrace();
-                return new byte[0];
+            } catch (Exception e2) {
+                throw new BinaryException("array=(" + array.length + ")" + Arrays.toString(array) + ",location=" + location + ",length=" + length, e2);
             }
         }
 

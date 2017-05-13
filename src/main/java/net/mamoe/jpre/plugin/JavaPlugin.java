@@ -175,6 +175,11 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
      * 重新读取 {@code config.yml}
      */
     public void reloadConfig() {
+        try {
+            new File(getDataFolder() + File.pathSeparator + "config.yml").createNewFile();
+        } catch (IOException ignored) {
+
+        }
         this.config = new YamlConfig(getDataFolder() + File.pathSeparator + "config.yml");
     }
 
