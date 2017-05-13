@@ -28,7 +28,7 @@ public enum CommandId {
 	KICK(22),
 	JOIN_GROUP(23),
 	QUIT_GROUP(24),
-	UPLOAD(25),
+	UPLOAD_PIC(25),
 	GUID_GET_PIC_LINK(26),
 	REPLY(27),
 	SEND_MSG(28),
@@ -76,6 +76,11 @@ public enum CommandId {
 	UPLOAD_VOICE(70),
 	GUID_GET_VOICE_LINK(71),
 	LIKE(72), //PAY ATTENTION TO SPEED
+
+
+
+
+	SendObjectMsg(73),
 	;
 
 	private final byte id;

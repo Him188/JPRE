@@ -6,6 +6,8 @@ package net.mamoe.jpre;
 public abstract class User {
 	abstract public boolean sendMessage(String content);
 
+	abstract public boolean sendObjectMessage(String content, String subType);
+
 	private final RobotQQ robot;
 
 	User(RobotQQ robot) {

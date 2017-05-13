@@ -522,8 +522,9 @@ public class RobotQQ {
      * @param group 群号
      * @return 是否成功
      */
-    public boolean shutUpWhole(long group) { // TODO: 2017/5/12 check
-        return shutUp(group, 0L, 0);
+    public boolean shutUpWhole(long group) { // TODO: 2017/5/12 it doesn't work. fix (unknown course)
+        runCommand(CommandId.SHUT_UP, this.getQQNumber(), group, "", 0);
+        return booleanResult();
     }
 
     /**
@@ -631,7 +632,7 @@ public class RobotQQ {
      * @return GUID | null
      */
     public String uploadImage(String file) {
-        runCommand(CommandId.UPLOAD, this.getQQNumber(), file, 0);
+        runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), file, 0);
         return stringResult();
     }
 
@@ -642,7 +643,7 @@ public class RobotQQ {
      * @return GUID | null
      */
     public String uploadImage(byte[] image) {
-        runCommand(CommandId.UPLOAD, this.getQQNumber(), "", image);
+        runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), "", image);
         return stringResult();
     }
 
@@ -708,6 +709,7 @@ public class RobotQQ {
         runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_DISCUSS, 0, 0L, event.getDiscussion().getNumber(), event.getMessage());
         return booleanResult();
     }
+    // TODO: 2017/5/13 临时会话消息
 /*
     public int sendDiscussMessage(long discuss, String content) {
 		return sendGroupMessage(discuss, content);
@@ -1045,6 +1047,57 @@ public class RobotQQ {
             }
         });
     }
+
+
+    /**
+     * 发送卡片信息. 推荐使用:
+     *
+     * 发送好友卡片信息: {@link #sendPrivateObjectMessage(long, String, String)}
+     * 发送群卡片信息: {@link #sendGroupObjectMessage(long, String, String)}
+     * 发送讨论组卡片信息: {@link #sendDiscussionObjectMessage(long, String, String)}
+     *
+     * @param msgType          收信对象类型. TYPE 开头常量. 1好友 2群 3讨论组 4群临时会话 5讨论组临时会话
+     * @param receiveGid       接受消息的群. 发群内, 临时会话必填 好友可不填
+     * @param receiveQq        接受消息的 QQ. 临时会话, 好友必填 发至群内可不填
+     * @param objectMsg        消息内容
+     * @param objectMsgSubType 结构子类型,  00 基本 02 点歌 其他不明
+     * @return 是否成功
+     */
+    public boolean sendObjectMessage(int msgType, long receiveGid, long receiveQq, // TODO: 2017/5/13 放到正确的位置
+                                     String objectMsg, String objectMsgSubType) {
+        runCommand(CommandId.SendObjectMsg, this.getQQNumber(), msgType, receiveGid, receiveQq, objectMsg, objectMsgSubType);
+        return booleanResult();
+    }
+
+    /**
+     * 调用 {@link #sendObjectMessage(int, long, long, String, String)}
+     * 本方法只是简化了调用参数
+     *
+     * @return 是否成功
+     */
+    public boolean sendPrivateObjectMessage(long qq, String objectMsg, String objectMsgSubType) {
+        return sendObjectMessage(TYPE_PRIVATE, 0L, qq, objectMsg, objectMsgSubType);
+    }
+
+    /**
+     * 调用 {@link #sendObjectMessage(int, long, long, String, String)}
+     * 本方法只是简化了调用参数
+     *
+     * @return 是否成功
+     */
+    public boolean sendGroupObjectMessage(long group, String objectMsg, String objectMsgSubType) {
+        return sendObjectMessage(TYPE_GROUP, group, 0L, objectMsg, objectMsgSubType);
+    }
+
+    /**
+     * 调用 {@link #sendObjectMessage(int, long, long, String, String)}
+     * 本方法只是简化了调用参数
+     *
+     * @return 是否成功
+     */
+    public boolean sendDiscussionObjectMessage(long discussion, String objectMsg, String objectMsgSubType) {
+        return sendObjectMessage(TYPE_DISCUSS, discussion, 0L, objectMsg, objectMsgSubType);
+    }// TODO: 2017/5/13 临时会话卡片信息
 
 
     // TODO: 2017/4/8  other commands

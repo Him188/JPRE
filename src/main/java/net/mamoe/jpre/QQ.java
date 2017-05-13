@@ -32,6 +32,11 @@ public class QQ extends User {
 		return getRobot().sendPrivateMessage(this, content);
 	}
 
+	@Override
+	public boolean sendObjectMessage(String content, String subType) {
+		return getRobot().sendPrivateObjectMessage(this.getNumber(), content, subType);
+	}
+
 	public String getNickName(){
 		return RobotQQ.getNick(this.getNumber()); // TODO: 2017/5/12  存储, 监听事件修改
 	}

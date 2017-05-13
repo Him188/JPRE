@@ -36,6 +36,11 @@ public class Group extends User {
         return getRobot().sendGroupMessage(this, content);
     }
 
+    @Override
+    public boolean sendObjectMessage(String content, String subType) {
+        return getRobot().sendGroupObjectMessage(this.getNumber(), content, subType);
+    }
+
     public boolean mute(QQ qq, int time) {
         return mute(qq.getNumber(), time);
     }

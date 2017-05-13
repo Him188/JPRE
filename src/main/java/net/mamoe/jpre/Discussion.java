@@ -21,6 +21,11 @@ public class Discussion extends User {
 	}
 
 	@Override
+	public boolean sendObjectMessage(String content, String subType) {
+		return getRobot().sendDiscussionObjectMessage(this.getNumber(), content, subType);
+	}
+
+	@Override
 	public String toString() {
 		return String.valueOf(number);
 	}
