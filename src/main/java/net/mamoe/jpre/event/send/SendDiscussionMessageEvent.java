@@ -1,13 +1,13 @@
-package net.mamoe.jpre.event.qq;
+package net.mamoe.jpre.event.send;
 
-import net.mamoe.jpre.QQ;
+import net.mamoe.jpre.Discussion;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
  * @author Him188
  */
-public class SendPrivateMessageEvent extends SendMessageEvent {
+public class SendDiscussionMessageEvent extends SendMessageEvent {
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {
@@ -15,17 +15,17 @@ public class SendPrivateMessageEvent extends SendMessageEvent {
 	}
 
 
-	private final QQ qq;
+	private final Discussion discussion;
 	private final String message;
 
-	public SendPrivateMessageEvent(RobotQQ robotQQ, QQ qq, String message) {
+	public SendDiscussionMessageEvent(RobotQQ robotQQ, Discussion discussion, String message) {
 		super(robotQQ);
-		this.qq = qq;
+		this.discussion = discussion;
 		this.message = message;
 	}
 
-	public QQ getQQ() {
-		return qq;
+	public Discussion getDiscussion() {
+		return discussion;
 	}
 
 	public String getMessage() {

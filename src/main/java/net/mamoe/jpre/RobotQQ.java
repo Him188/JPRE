@@ -1,8 +1,8 @@
 package net.mamoe.jpre;
 
-import net.mamoe.jpre.event.group.SendDiscussionMessageEvent;
-import net.mamoe.jpre.event.qq.SendGroupMessageEvent;
-import net.mamoe.jpre.event.qq.SendPrivateMessageEvent;
+import net.mamoe.jpre.event.send.SendDiscussionMessageEvent;
+import net.mamoe.jpre.event.send.SendGroupMessageEvent;
+import net.mamoe.jpre.event.send.SendPrivateMessageEvent;
 import net.mamoe.jpre.network.MPQClient;
 import net.mamoe.jpre.network.NetworkPacketHandler;
 import net.mamoe.jpre.network.packet.CommandPacket;
