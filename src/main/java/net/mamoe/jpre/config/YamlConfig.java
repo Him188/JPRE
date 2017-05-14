@@ -4,6 +4,7 @@ import net.mamoe.jpre.Utils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -15,25 +16,33 @@ import java.util.Map;
  *
  * @author Him188
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class YamlConfig extends Config {
 	private Map<String, Object> list;
 	private boolean useSynchronization;
 
 	public YamlConfig(String file) {
+		this(new File(file));
+	}
+
+	public YamlConfig(File file) {
 		this(file, false);
 	}
 
 	/**
-	 * 创建 Yaml 配置, 并从磁盘中读取
+	 * 创建 Yaml 配置, 不会从磁盘中读取
 	 *
 	 * @param file               文件名 (绝对路径)
 	 * @param useSynchronization 是否使用线程同步. true, HashTable 方式存放数据; false, HashMap 方式存放数据 当本配置需要在多线程环境中使用时, 请填 true
 	 */
 	@SuppressWarnings("WeakerAccess")
 	public YamlConfig(String file, boolean useSynchronization) {
+		this(new File(file), useSynchronization);
+	}
+
+	public YamlConfig(File file, boolean useSynchronization) {
 		super(file);
 		this.useSynchronization = useSynchronization;
-		reload();
 	}
 
 

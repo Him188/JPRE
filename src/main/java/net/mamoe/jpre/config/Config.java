@@ -1,5 +1,6 @@
 package net.mamoe.jpre.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,10 @@ import java.util.Map;
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 abstract public class Config {
-    protected String file;
+    protected File file;
 
     @SuppressWarnings("WeakerAccess")
-    public Config(String file) {
+    public Config(File file) {
         this.file = file;
     }
 

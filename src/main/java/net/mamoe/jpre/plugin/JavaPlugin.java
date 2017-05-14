@@ -46,11 +46,6 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
      */
     public boolean saveResource(String resourceFile, String savingFile, boolean forceReplace) {
         try {
-            InputStream resource = getPluginManager().getResourceFile(new JarFile(getFileName()), resourceFile);
-            if (resource == null) {
-                return false;
-            }
-
             File file = new File(getDataFolder() + File.separator + savingFile);
 
             if (file.exists()) {
@@ -58,6 +53,12 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
                     file.delete();
                 } else return false;
             }
+
+            InputStream resource = getPluginManager().getResourceFile(new JarFile(getFileName()), resourceFile);
+            if (resource == null) {
+                return false;
+            }
+
             file.createNewFile();
 
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file));
@@ -141,7 +142,7 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
 
     @Override
     public File getDataFolder() {
-        return new File(getPluginManager().getPluginDataFolder() + File.pathSeparator + getName());
+        return new File(getPluginManager().getPluginDataFolder() + File.separator + getName());
     }
 
 
@@ -175,12 +176,20 @@ public abstract class JavaPlugin extends PluginDescription implements Plugin {
      * 重新读取 {@code config.yml}
      */
     public void reloadConfig() {
+        File file = new File(getDataFolder() + File.separator + "config.yml");
         try {
-            new File(getDataFolder() + File.pathSeparator + "config.yml").createNewFile();
-        } catch (IOException ignored) {
-
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        this.config = new YamlConfig(getDataFolder() + File.pathSeparator + "config.yml");
+
+        if (this.config == null) {
+            this.config = new YamlConfig(file);
+        }
+
+        this.config.reload();
     }
 
     /**

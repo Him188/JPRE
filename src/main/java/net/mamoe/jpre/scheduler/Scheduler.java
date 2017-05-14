@@ -13,10 +13,9 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 本类内置了 {@link ScheduledThreadPoolExecutor} 和 {@link ThreadPoolExecutor},
  * 你可以在这里轻松地创建并管理延迟(循环)任务
- *
  * @author Him188
  */
-public class Scheduler {
+public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 	private Frame frame;
 
 	final ScheduledThreadPoolExecutor service = new ScheduledThreadPoolExecutor(10);

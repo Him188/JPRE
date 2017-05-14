@@ -14,12 +14,17 @@ import java.util.Map.Entry;
  *
  * @author Him188
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class JsonConfig extends Config {
     private Map<String, Object> list;
 
     private JsonToMap converter;
 
     public JsonConfig(String file) {
+        this(file, false);
+    }
+
+    public JsonConfig(File file) {
         this(file, false);
     }
 
@@ -31,6 +36,10 @@ public class JsonConfig extends Config {
      */
     @SuppressWarnings("WeakerAccess")
     public JsonConfig(String file, boolean useSynchronization) {
+        this(new File(file), useSynchronization);
+    }
+
+    public JsonConfig(File file, boolean useSynchronization) {
         super(file);
         converter = new JsonToMap();
         converter.setSynchronized(useSynchronization);
@@ -40,15 +49,6 @@ public class JsonConfig extends Config {
             System.out.println(k);
             System.out.println(v);
         });
-    }
-
-    private static String readFile(String fileName) {
-        try {
-            return Utils.readFile(fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     @Override
@@ -81,11 +81,15 @@ public class JsonConfig extends Config {
         try {
             //System.out.println(file);
             //noinspection ResultOfMethodCallIgnored
-            new File(file).createNewFile();
+            file.createNewFile();
         } catch (IOException ignored) {
 
         }
-        list = converter.toMap(readFile(file));
+        try {
+            list = converter.toMap(Utils.readFile(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
