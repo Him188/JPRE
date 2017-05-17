@@ -20,6 +20,10 @@ public abstract class Task implements Runnable {
 	/* Scheduler */
 	private Scheduler scheduler;
 
+	public void setScheduler(Scheduler scheduler) {
+		this.scheduler = scheduler;
+	}
+
 	public Scheduler getScheduler() {
 		return scheduler;
 	}

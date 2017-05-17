@@ -14,25 +14,25 @@ import static net.mamoe.jpre.binary.Binary.*;
  * @author Him188
  */
 @SuppressWarnings("WeakerAccess")
-public class Pack {
+public class BinaryStream {
     protected byte[] data;
     protected int location;
 
-    public Pack(Pack unpack) {
+    public BinaryStream(BinaryStream unpack) {
         this(unpack.getAll());
     }
 
-    public Pack() {
+    public BinaryStream() {
         this(new byte[]{});
     }
 
-    public Pack(byte[] data) {
+    public BinaryStream(byte[] data) {
         setData(data);
     }
 
     @Override
     public String toString() {
-        return "Pack(data=(" + data.length + ")" + Arrays.toString(data) + ",location=" + location + ")";
+        return "BinaryStream(data=(" + data.length + ")" + Arrays.toString(data) + ",location=" + location + ")";
     }
 
     public void setData(byte[] data) {
@@ -142,7 +142,7 @@ public class Pack {
             } else if (value.getClass().equals(Byte[].class)) {
                 putBytes((Byte[]) value);
             } else {
-                throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+                throw new IllegalArgumentException("[BinaryStream] putRaw: wrong type of values");
             }
         }
 
@@ -183,7 +183,7 @@ public class Pack {
                 putInt(((Byte[]) value).length);
                 putBytes((Byte[]) value);
             } else {
-                throw new IllegalArgumentException("[Pack] putRaw: wrong type of values");
+                throw new IllegalArgumentException("[BinaryStream] putRaw: wrong type of values");
             }
         }
 
@@ -313,7 +313,7 @@ public class Pack {
     public LinkedList<Object> getRawList() {
         LinkedList<Object> result = new LinkedList<>();
         int count = getInt();
-        System.out.println("[Pack] getRawList: " + count);
+        System.out.println("[BinaryStream] getRawList: " + count);
         for (int i = 0; i < count; i++) {
             result.add(getRaw());
         }

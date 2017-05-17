@@ -50,7 +50,7 @@ abstract public class Event {
      * 一些设置了忽略被取消事件的事件处理器 ({@link EventHandler#ignoreCancelled()} 为 false) 就不会收到事件,
      * 并且, 事件系统不会进行自动回复.
      * 例如:
-     * <p>
+     * <p> TODO 2017/05/16 javadoc
      * 事件: {@link FriendAddRequestEvent}, 且设置为接受请求.
      * 如果不取消事件, 事件系统最终会同意该请求.
      * 如果取消事件, 事件系统不会进行处理. 注意! 是不会处理, 而不是拒绝!
@@ -58,7 +58,6 @@ abstract public class Event {
     public void setCancelled() {
         setCancelled(true);
     }
-
 
 	/* Others */
 

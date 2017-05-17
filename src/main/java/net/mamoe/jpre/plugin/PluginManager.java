@@ -58,7 +58,11 @@ public final class PluginManager {
 		if (list != null && list.size() != 0) {
 
 			for (EventPriority i : EventPriority.PRIORITIES) {
-				list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
+				try {
+					list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
+				} catch (Throwable e){
+					e.printStackTrace();
+				}
 			}
 
 			event.close();

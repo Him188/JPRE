@@ -94,6 +94,16 @@ abstract public class Config {
     }
 
 
+    public char getChar(String key) {
+        return getChar(key, (char) 0);
+    }
+
+    public char getChar(String key, char defaultValue) {
+        return get(key, defaultValue);
+    }
+
+
+
     public boolean getBoolean(String key) {
         return getBoolean(key, false);
     }
@@ -131,7 +141,154 @@ abstract public class Config {
 
 
     @SuppressWarnings("unchecked")
-    public List<String> getStringList(String key) {
+    public <T> List<T> getList(String key, Class<T> type) {
         return get(key, new ArrayList<>());
     }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Long> getLongList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Long>() {
+                {
+                    ((List<Object>) value).forEach(value -> add(Long.parseLong(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Integer> getIntegerList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Integer>() {
+                {
+                    ((List<Object>) value).forEach(value -> add((int) Long.parseLong(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Double> getDoubleList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Double>() {
+                {
+                    ((List<Object>) value).forEach(value -> add(Double.parseDouble(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Float> getFloatList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Float>() {
+                {
+                    ((List<Object>) value).forEach(value -> add((float) Double.parseDouble(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Short> getShortList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Short>() {
+                {
+                    ((List<Object>) value).forEach(value -> add((short) Long.parseLong(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Byte> getByteList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Byte>() {
+                {
+                    ((List<Object>) value).forEach(value -> add(Byte.parseByte(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<String> getStringList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<String>() {
+                {
+                    ((List<Object>) value).forEach(value -> add(value.toString()));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Object> getObjectList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return (ArrayList<Object>) value;
+        }
+
+        return new ArrayList<>(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<Boolean> getBooleanList(String key) {
+        Object value = get(key);
+
+        if (value instanceof List) {
+            return new ArrayList<Boolean>() {
+                {
+                    ((List<Object>) value).forEach(value -> add(parseBoolean(value.toString())));
+                }
+            };
+        }
+
+        return new ArrayList<>(0);
+    }
+
+
+    private static boolean parseBoolean(String value) {
+        if (Boolean.parseBoolean(value)) {
+            return true;
+        }
+
+        try {
+            long longValue = Long.parseLong(value);
+
+            return longValue == 1L;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
+

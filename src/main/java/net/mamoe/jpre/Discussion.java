@@ -34,4 +34,6 @@ public class Discussion extends User {
 	public boolean equals(Object obj) {
 		return obj instanceof Discussion && ((Discussion) obj).getNumber() == this.getNumber();
 	}
+
+	// TODO: 2017/5/17 添加所有方法
 }

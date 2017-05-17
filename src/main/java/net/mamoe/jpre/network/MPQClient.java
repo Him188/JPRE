@@ -5,7 +5,7 @@ import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.OnlineStatus;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.Utils;
-import net.mamoe.jpre.binary.Pack;
+import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.event.Event;
 import net.mamoe.jpre.event.EventType;
 import net.mamoe.jpre.event.discussion.DiscussionMessageEvent;
@@ -75,7 +75,7 @@ public final class MPQClient {
      * 数据包处理
      */
     @SuppressWarnings("ConstantConditions")
-    public void dataReceive(Pack packet) {
+    public void dataReceive(BinaryStream packet) {
         byte pid = packet.getByte();
         switch (pid) {
             case CLIENT_EVENT:

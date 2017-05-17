@@ -108,6 +108,7 @@ public final class Utils {
             if (found < 0 || found > array.length) {
                 return -1;
             }
+
             for (int i = 1; i < search.length; i++) {
                 try {
                     if (array[found + i] != search[i]) {
@@ -123,16 +124,11 @@ public final class Utils {
         return found;
     }
 
-
     public static int binarySearch(byte[] a, byte key, int startPos) {
-
-        if (startPos > a.length) {
+        if (startPos > a.length || startPos < 0) {
             return -1;
         }
 
-        if (startPos < 0) {
-            return -1;
-        }
         for (int i = startPos; i < a.length; i++) {
             if (a[i] == key) {
                 return i;

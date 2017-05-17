@@ -3,7 +3,7 @@ package net.mamoe.jpre.network;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.JPREMain;
 import net.mamoe.jpre.Utils;
-import net.mamoe.jpre.binary.Pack;
+import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.network.packet.Protocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -80,16 +80,16 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         if (data.length == 0 || Utils.isZeroArray(data)) {
             return;
         }
-        processPacket(ctx, new Pack(data));
+        processPacket(ctx, new BinaryStream(data));
     }
 
-    private void processPacket(ChannelHandlerContext ctx, Pack pack) {
-        System.out.println(pack);
+    private void processPacket(ChannelHandlerContext ctx, BinaryStream stream) {
+        System.out.println(stream);
         for (MPQClient client : clients) {
             if (client.is(ctx.channel().remoteAddress())) {
                 client.getFrame().getScheduler().scheduleTask(null, () -> {
                     try {
-                        client.dataReceive(pack);
+                        client.dataReceive(stream);
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }

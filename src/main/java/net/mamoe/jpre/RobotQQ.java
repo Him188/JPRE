@@ -131,6 +131,7 @@ public class RobotQQ {
 
 	/* MPQ STATIC API */
 
+    // TODO: 2017/5/17  package-private api,
     /**
      * 将群名片加入高速缓存当中
      *
@@ -1107,6 +1108,10 @@ public class RobotQQ {
     private ConcurrentLinkedQueue<Object> results = new ConcurrentLinkedQueue<>();
 
     private static int parseInt(String value) {
+        if (value == null) {
+            return 0;
+        }
+
         if (value.isEmpty()) {
             return 0;
         }
@@ -1115,11 +1120,17 @@ public class RobotQQ {
         }
         if (value.equalsIgnoreCase("true")) {
             return 1;
+        }
+        if (value.equalsIgnoreCase("null")) {
+            return 0;
         }
         return Integer.parseInt(value);
     }
 
     private static long parseLong(String value) {
+        if (value == null) {
+            return 0;
+        }
         if (value.isEmpty()) {
             return 0;
         }
@@ -1128,6 +1139,9 @@ public class RobotQQ {
         }
         if (value.equalsIgnoreCase("true")) {
             return 1;
+        }
+        if (value.equalsIgnoreCase("null")) {
+            return 0;
         }
         return Long.parseLong(value);
     }

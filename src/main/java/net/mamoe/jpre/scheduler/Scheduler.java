@@ -52,6 +52,8 @@ public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
+
+		task.setScheduler(this);
 		task.setOwner(plugin);
 		service.schedule(task, delay, TimeUnit.MILLISECONDS);
 		return task;
@@ -79,6 +81,7 @@ public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
+		task.setScheduler(this);
 		task.setOwner(plugin);
 		service.scheduleWithFixedDelay(task, delay, period, TimeUnit.MILLISECONDS);
 		return task;
@@ -105,6 +108,7 @@ public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 		if (plugin != null && !plugin.isEnabled()) {
 			return null;
 		}
+		task.setScheduler(this);
 		task.setOwner(plugin);
 		pool.execute(task);
 		return task;

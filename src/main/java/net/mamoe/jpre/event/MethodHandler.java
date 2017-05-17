@@ -80,6 +80,7 @@ public class MethodHandler implements Handler {
 					method.invoke(listener, event);
 					return;
 				} catch (Exception e) {
+					e.printStackTrace();
 					return;
 				}
 			}

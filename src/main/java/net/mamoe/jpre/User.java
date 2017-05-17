@@ -3,7 +3,7 @@ package net.mamoe.jpre;
 /**
  * @author Him188
  */
-public abstract class User {
+public abstract class User { // TODO: 2017/5/17 Group/DiscussionTemporary 类
 	abstract public boolean sendMessage(String content);
 
 	abstract public boolean sendObjectMessage(String content, String subType);

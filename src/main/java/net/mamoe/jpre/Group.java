@@ -41,6 +41,8 @@ public class Group extends User {
         return getRobot().sendGroupObjectMessage(this.getNumber(), content, subType);
     }
 
+    // TODO: 2017/5/17 添加所有方法
+
     public boolean mute(QQ qq, int time) {
         return mute(qq.getNumber(), time);
     }

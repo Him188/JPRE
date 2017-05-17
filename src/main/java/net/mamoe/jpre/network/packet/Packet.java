@@ -1,7 +1,7 @@
 package net.mamoe.jpre.network.packet;
 
 
-import net.mamoe.jpre.binary.Pack;
+import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.network.MPQClient;
 
 import java.lang.reflect.Constructor;
@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
  * @author Him188
  */
 @SuppressWarnings("WeakerAccess")
-abstract public class Packet extends Pack {
+abstract public class Packet extends BinaryStream {
 	private boolean encoded;
 
 	public boolean isEncoded() {
