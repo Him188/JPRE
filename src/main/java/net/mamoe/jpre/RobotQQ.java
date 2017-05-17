@@ -132,6 +132,7 @@ public class RobotQQ {
 	/* MPQ STATIC API */
 
     // TODO: 2017/5/17  package-private api,
+
     /**
      * 将群名片加入高速缓存当中
      *
@@ -512,6 +513,7 @@ public class RobotQQ {
      * @param time  时间, 单位秒, 最大一个月. 为零时解除禁言
      * @return 是否成功
      */
+    // TODO: 2017/5/17 无效果
     public boolean shutUp(long group, long QQ, int time) {
         runCommand(CommandId.SHUT_UP, this.getQQNumber(), group, QQ, time);
         return booleanResult();
@@ -1052,7 +1054,7 @@ public class RobotQQ {
 
     /**
      * 发送卡片信息. 推荐使用:
-     *
+     * <p>
      * 发送好友卡片信息: {@link #sendPrivateObjectMessage(long, String, String)}
      * 发送群卡片信息: {@link #sendGroupObjectMessage(long, String, String)}
      * 发送讨论组卡片信息: {@link #sendDiscussionObjectMessage(long, String, String)}

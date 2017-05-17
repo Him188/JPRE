@@ -19,36 +19,41 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
  * @author Him188
  */
 public final class Network {
-	/**
-	 * 启动网路服务器. 会阻塞线程直到关闭网络服务器.
-	 *
-	 * @param port 端口号
-	 *
-	 * @throws InterruptedException 端口被占用时产生
-	 */
-	public static void start(JPREMain jpre, int port) throws InterruptedException {
-		EventLoopGroup bossGroup = new NioEventLoopGroup();
-		EventLoopGroup workerGroup = new NioEventLoopGroup();
-		try {
-			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup);
-			b.channel(NioServerSocketChannel.class);
-			//b.option(ChannelOption.SO_BACKLOG, 100);
-			//b.handler(new LoggingHandler(LogLevel.INFO));
-			b.childHandler(new ChannelInitializer<SocketChannel>() {
-				@Override
-				protected void initChannel(SocketChannel ch) throws Exception {
-					ChannelPipeline pipeline = ch.pipeline();
-					pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
-					pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
-					pipeline.addLast("handler", new NetworkPacketHandler(jpre));
-				}
-			});
+    private static ServerBootstrap server;
 
-			b.bind(port).sync().channel().closeFuture().sync();
-		} finally {
-			bossGroup.shutdownGracefully();
-			workerGroup.shutdownGracefully();
-		}
-	}
+    /**
+     * 启动网路服务器. 会阻塞线程直到关闭网络服务器.
+     *
+     * @param port 端口号
+     * @throws RuntimeException 服务器已经启动时抛出
+     */
+    public static void start(JPREMain jpre, int port) throws InterruptedException {
+        if (server != null) {
+            throw new RuntimeException("there is already a ServerBootstrap instance");
+        }
+
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            server = new ServerBootstrap();
+            server.group(bossGroup, workerGroup);
+            server.channel(NioServerSocketChannel.class);
+            //b.option(ChannelOption.SO_BACKLOG, 100);
+            //b.handler(new LoggingHandler(LogLevel.INFO));
+            server.childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel ch) throws Exception {
+                    ChannelPipeline pipeline = ch.pipeline();
+                    pipeline.addLast("bytesDecoder", new ByteArrayDecoder());
+                    pipeline.addLast("bytesEncoder", new ByteArrayEncoder());
+                    pipeline.addLast("handler", new NetworkPacketHandler(jpre));
+                }
+            });
+
+            server.bind(port).sync().channel().closeFuture().sync();
+        } finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
+    }
 }

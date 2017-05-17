@@ -64,9 +64,10 @@ public final class Frame {
 
     private boolean shutdown;
 
-    /**
-     * Stop the frame and scheduler
-     */
+    public void connect(){
+
+    }
+
     public void shutdown(boolean shutdown) {
         this.shutdown = shutdown;
         scheduler.shutdown();
@@ -103,6 +104,7 @@ public final class Frame {
         try {
             return pluginManager.loadPluginDescription(fileName) != null;
         } catch (Throwable e) {
+            e.printStackTrace();
             return false;
         }
     }

@@ -1,12 +1,12 @@
 package net.mamoe.jpre.network;
 
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.JPREMain;
 import net.mamoe.jpre.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.network.packet.Protocol;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,31 +111,38 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        if (!clients.isEmpty()) { //只允许一个MPQ连接
-            return;
-        }
-        // TODO: 2017/5/10 !!!Client 存储
-        MPQClient client = new MPQClient(new Frame(getJPREMain()), ctx.channel().remoteAddress(), ctx);
-        clients.add(client);
-
+        //if (!clients.isEmpty()) { //只允许一个MPQ连接
+        //    return;
+        //}
         System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
         super.channelActive(ctx);
+
+        for (MPQClient client : clients) {
+            // TODO: 2017/5/17 FRAME LOGIN EVENTS
+            if (client.is(ctx.channel().remoteAddress())) {
+                return;
+            }
+        }
+
+        Frame frame = new Frame(getJPREMain());
+        MPQClient client = new MPQClient(frame, ctx.channel().remoteAddress(), ctx);
+        clients.add(client);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        MPQClient found = null;
-        for (MPQClient client : clients) {
-            if (found != null) {
-                continue;
-            }
-            if (client.is(ctx.channel().remoteAddress())) {
-                found = client;
-            }
-        }
-        if (found != null) {
-            clients.remove(found);
-        }
+        //MPQClient found = null;
+        //for (MPQClient client : clients) {
+        //    if (found != null) {
+        //        continue;
+        //    }
+        //    if (client.is(ctx.channel().remoteAddress())) {
+        //        found = client;
+        //    }
+        //}
+        //if (found != null) {
+        //    clients.remove(found);
+        //}
         System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " disconnected.");
         super.channelInactive(ctx);
     }

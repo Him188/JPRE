@@ -81,7 +81,7 @@ public class JsonConfig extends Config {
         try {
             //System.out.println(file);
             //noinspection ResultOfMethodCallIgnored
-            file.createNewFile();
+            file.createNewFile(); // TODO: 2017/5/17 判断是否存在
         } catch (IOException ignored) {
 
         }
