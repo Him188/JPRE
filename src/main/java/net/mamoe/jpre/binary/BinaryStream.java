@@ -246,7 +246,7 @@ public class BinaryStream {
         return getBytes(1)[0];
     }
 
-    public int getInt() {
+    public int getInt() { // TODO: 2017/5/17 check it
         return toInt(realReverse(getBytes(4)));
         //return (int) getLong();
     }
