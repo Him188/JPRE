@@ -17,7 +17,8 @@ import java.util.List;
 /**
  * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     private JPREMain jpre;

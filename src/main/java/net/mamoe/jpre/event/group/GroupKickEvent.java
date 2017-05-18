@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 某人被管理员/群主移出群
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class GroupKickEvent extends AdminGroupEvent{
 	private static final HandlerList handlers = new HandlerList();

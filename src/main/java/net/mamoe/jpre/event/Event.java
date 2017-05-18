@@ -6,7 +6,8 @@ import net.mamoe.jpre.plugin.PluginManager;
 import java.lang.reflect.Field;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 abstract public class Event {
     /* Interception */

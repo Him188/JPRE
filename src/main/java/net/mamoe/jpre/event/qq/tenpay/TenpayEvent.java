@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.qq.QQEvent;
 /**
  * 财付通事件
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 abstract public class TenpayEvent extends QQEvent {
 	public TenpayEvent(RobotQQ robot, QQ qq) {

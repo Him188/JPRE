@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 好友评论机器人的说说 事件
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendTaotaoCommitEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();

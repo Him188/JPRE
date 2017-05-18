@@ -6,7 +6,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 插件菜单被点击
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  * @deprecated 暂未支持
  */
 @Deprecated

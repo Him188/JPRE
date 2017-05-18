@@ -9,7 +9,7 @@ import net.mamoe.jpre.event.HandlerList;
  * 群聊消息
  * Called when receive group message
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
 public class GroupMessageEvent extends GroupEvent {

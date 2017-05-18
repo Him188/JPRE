@@ -11,7 +11,8 @@ import java.util.List;
 import static net.mamoe.jpre.binary.Binary.*;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
 public class BinaryStream {

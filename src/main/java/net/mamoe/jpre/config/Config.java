@@ -8,7 +8,8 @@ import java.util.Map;
 /**
  * 配置接口
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 abstract public class Config {

@@ -11,7 +11,8 @@ import java.io.File;
 /**
  * 框架. JPRE 允许多个MPQ框架连接, 每次连接都会创建本类, 断开连接后 {@link #shutdown(boolean)}
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
 public final class Frame {

@@ -3,6 +3,13 @@ package net.mamoe.jpre;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+
+/**
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
+ */
+
+
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
     public static void writeFile(String fileName, String content) throws IOException {

@@ -27,7 +27,8 @@ import static net.mamoe.jpre.network.packet.Protocol.CLIENT_PING;
  * 连接到服务器的客户端 (MPQ)
  * MPQ 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
 public final class MPQClient {

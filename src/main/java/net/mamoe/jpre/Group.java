@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * QQ 群
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class Group extends User {
     private final long group;
