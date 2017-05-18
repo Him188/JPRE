@@ -1,7 +1,8 @@
 package net.mamoe.jpre;
 
 /**
- * @author XianD
+ * @author XianD @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public enum OnlineStatus {
 	STATUS_ONLINE(1),                       //我在线上

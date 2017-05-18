@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 机器人添加好友成功/失败
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendAddResultEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();

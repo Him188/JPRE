@@ -5,7 +5,8 @@ import net.mamoe.jpre.plugin.Plugin;
 /**
  * 插件自定义的事件
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class PluginEvent<T extends Plugin> extends Event {
 	private final T plugin;

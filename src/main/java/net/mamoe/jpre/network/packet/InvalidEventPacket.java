@@ -3,7 +3,8 @@ package net.mamoe.jpre.network.packet;
 /**
  * 无效事件(事件 ID 无效)
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class InvalidEventPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_INVALID_EVENT;

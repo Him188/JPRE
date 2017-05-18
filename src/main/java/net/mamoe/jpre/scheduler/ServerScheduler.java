@@ -5,7 +5,8 @@ import net.mamoe.jpre.Frame;
 /**
  * 插件请使用 {@link Frame#getScheduler()} ({@link Scheduler})
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public final class ServerScheduler extends Scheduler {
 	public ServerScheduler() {

@@ -1,7 +1,8 @@
 package net.mamoe.jpre.network.packet;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public interface Protocol {
 	byte[] SIGNATURE = {127, 127, 127, 127};

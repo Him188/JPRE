@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 好友在线状态改变
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendStatusChangeEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();

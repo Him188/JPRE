@@ -12,7 +12,8 @@ import java.util.Map.Entry;
  * Json 配置
  * 注意, 本类不会自动保存配置.
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JsonConfig extends Config {

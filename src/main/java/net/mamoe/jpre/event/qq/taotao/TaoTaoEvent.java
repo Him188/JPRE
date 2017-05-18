@@ -5,7 +5,8 @@ import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.qq.QQEvent;
 
 /**
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public abstract class TaoTaoEvent extends QQEvent {
 	public TaoTaoEvent(RobotQQ robot, QQ qq){

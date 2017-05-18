@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 评论了别人的说说
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class TaoTaoCommentEvent extends TaoTaoEvent {
 	private static final HandlerList handlers = new HandlerList();

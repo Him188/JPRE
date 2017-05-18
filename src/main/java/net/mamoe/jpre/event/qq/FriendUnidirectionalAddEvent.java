@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 被单向添加好友
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendUnidirectionalAddEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();

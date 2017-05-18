@@ -10,7 +10,8 @@ import java.lang.reflect.Method;
  * 由 {@link PluginManager#registerEvent(Listener, Plugin, Class, Method)} 自动创建
  * 一般不会在插件中使用
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class MethodHandler implements Handler {
 	private final Listener listener;

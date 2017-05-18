@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 某人退出了群
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class GroupQuitEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();

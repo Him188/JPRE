@@ -10,7 +10,8 @@ import net.mamoe.jpre.event.HandlerList;
  * <p>
  * 本类中 {@link #getQQ()} 返回群主的 QQ
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class GroupDissolutionEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();

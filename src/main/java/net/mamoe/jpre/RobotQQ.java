@@ -20,7 +20,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 框架上的机器人 QQ(响应 QQ)
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 @SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class RobotQQ {

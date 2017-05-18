@@ -3,7 +3,8 @@ package net.mamoe.jpre.exception;
 /**
  * 由插件引起的异常
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  * @see PluginLoadException
  */
 abstract public class PluginException extends RuntimeException {

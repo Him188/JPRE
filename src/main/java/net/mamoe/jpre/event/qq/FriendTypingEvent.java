@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
  * 好友"正在输入"
  * "正在输入": 使用电脑 QQ, 对方正在打字时聊天窗口顶部对方名字旁边会显示 "正在输入".
  *
- * @author Him188
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
  */
 public class FriendTypingEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();
