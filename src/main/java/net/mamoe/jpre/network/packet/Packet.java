@@ -122,7 +122,6 @@ abstract public class Packet extends BinaryStream {
 					ServerPongPacket.class,
 					EventResultPacket.class,
 					InvalidEventPacket.class,
-					LogPacket.class,
 			}) {
 				//noinspection unchecked
 				registerPacket((Class<? extends Packet>) aClass);
