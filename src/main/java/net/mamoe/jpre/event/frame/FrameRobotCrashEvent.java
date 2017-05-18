@@ -1,5 +1,6 @@
 package net.mamoe.jpre.event.frame;
 
+import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
@@ -11,8 +12,8 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameRobotCrashEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameRobotCrashEvent(RobotQQ robot) {
-		super(robot);
+	public FrameRobotCrashEvent(Frame frame, RobotQQ robot) {
+		super(frame,robot);
 	}
 
 	public static HandlerList getHandlers() {

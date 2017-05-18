@@ -1,5 +1,6 @@
 package net.mamoe.jpre.event.network;
 
+import net.mamoe.jpre.event.Cancellable;
 import net.mamoe.jpre.network.packet.Packet;
 
 /**
@@ -7,8 +8,8 @@ import net.mamoe.jpre.network.packet.Packet;
  *
  * @author Him188
  */
-public class DataPacketReceiveEvent extends NetworkEvent {
-	public DataPacketReceiveEvent(Packet packet) {
+public class DataPacketSendEvent extends NetworkEvent implements Cancellable {
+	public DataPacketSendEvent(Packet packet) {
 		super(packet);
 	}
 }

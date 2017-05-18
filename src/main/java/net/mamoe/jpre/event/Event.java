@@ -2,20 +2,26 @@ package net.mamoe.jpre.event;
 
 import net.mamoe.jpre.event.qq.FriendAddRequestEvent;
 import net.mamoe.jpre.plugin.PluginManager;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Field;
 
 /**
  * @author Him188
  */
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 abstract public class Event {
     /* Interception */
 
     private boolean intercepted = false;
 
     /**
-     * 拦截这个事件. 不会影响事件处理, 仅仅只是起到标识作用.
-     * 插件可根据需要进行忽略处理.
+     * 拦截这个事件. 不会影响事件处理, 仅仅只是起到标识作用.<br>
+     * 插件可根据需要进行忽略处理.<br>
+     * <p>
+     * "拦截" 概念是从 MPQ 插件中移植来的, 将事件拦截后, JPRE 返回给 MPQ 的事件状态也会发生改变.<br>
+     * 将事件拦截, 也可以让 MPQ 的事件终止处理.
+     * </p>
      */
     public void setIntercepted() {
         setIntercepted(true);
@@ -25,7 +31,6 @@ abstract public class Event {
         return intercepted;
     }
 
-    @SuppressWarnings("SameParameterValue")
     public void setIntercepted(boolean intercepted) {
         this.intercepted = intercepted;
     }
@@ -35,25 +40,49 @@ abstract public class Event {
 
     private boolean cancelled = false;
 
+    /**
+     * 检查这个事件是否被取消了.
+     *
+     * @throws NotImplementedException 当事件没有实现接口 {@link Cancellable} 时抛出.
+     */
     public boolean isCancelled() {
+        if (!(this instanceof Cancellable)) {
+            throw new NotImplementedException();
+        }
+
         return cancelled;
     }
 
-    @SuppressWarnings("SameParameterValue")
+    /**
+     * 取消这个事件.<br>
+     * 当事件被取消后, 插件可以自行进行回复,<br>
+     * 一些设置了忽略被取消事件的事件处理器 ({@link EventHandler#ignoreCancelled()} 为 false) 就不会收到事件,<br>
+     * 例如:<br>
+     * <p> TODO 2017/05/16 javadoc
+     * 事件: {@link FriendAddRequestEvent}, 且设置为接受请求.<br>
+     * 如果不取消事件, 事件系统最终会同意该请求.<br>
+     * 如果取消事件, 事件系统不会进行处理. 注意! 是不会处理(忽略), 而不是拒绝!<br>
+     * </p>
+     * <p>
+     * 取消事件不会影响 MPQ 事件. 只有 {@link #setIntercepted()} 才会影响 MPQ 事件!
+     * </p>
+     *
+     * @throws NotImplementedException 当事件没有实现接口 {@link Cancellable} 时抛出.
+     */
     public void setCancelled(boolean cancelled) {
+        if (!(this instanceof Cancellable)) {
+            throw new NotImplementedException();
+        }
+
         this.cancelled = cancelled;
     }
 
     /**
-     * 取消这个事件.
-     * 当事件被取消后, 插件可以自行进行回复,
-     * 一些设置了忽略被取消事件的事件处理器 ({@link EventHandler#ignoreCancelled()} 为 false) 就不会收到事件,
-     * 并且, 事件系统不会进行自动回复.
-     * 例如:
-     * <p> TODO 2017/05/16 javadoc
-     * 事件: {@link FriendAddRequestEvent}, 且设置为接受请求.
-     * 如果不取消事件, 事件系统最终会同意该请求.
-     * 如果取消事件, 事件系统不会进行处理. 注意! 是不会处理, 而不是拒绝!
+     * 取消这个事件. 详细的注释请查看 {@link #setCancelled(boolean)} <br>
+     * <p>
+     * 本方法中的代码实际就是 {@code setCancelled(true)}
+     *
+     * @throws NotImplementedException 当事件没有实现接口 {@link Cancellable} 时抛出.
      */
     public void setCancelled() {
         setCancelled(true);
@@ -73,6 +102,7 @@ abstract public class Event {
 
     /**
      * 返回当前类的类名, 当前类和父类(不包括 Object)的成员变量信息
+     * 例如, GroupMessageEvent
      *
      * @return {@code 类名(子类成员变量=值,父类成员变量=值)}
      */

@@ -110,12 +110,14 @@ public final class MPQClient {
                 long active = packet.getLong();
                 long passive = packet.getLong();
                 //String message = Utils.GBKDecode(packet.getString());
-                String message =packet.getString();
+                String message = packet.getString();
 
                 switch (type) {
                     case UNKNOWN:
                         sendPacket(new EventResultPacket(false));
                         break;
+
+                    /* Message */
                     case MESSAGE_FRIEND:
                         event = new PrivateMessageEvent(robot, robot.getQQ(active), message);
                         break;
@@ -125,6 +127,8 @@ public final class MPQClient {
                     case MESSAGE_DISCUSSION:
                         event = new DiscussionMessageEvent(robot, robot.getDiscussion(from), robot.getQQ(active), message);
                         break;
+
+                    /* Friend */
                     case FRIEND_ADD_RESULT:
                         event = new FriendAddResultEvent(robot, robot.getQQ(active), true);
                         break;
@@ -153,6 +157,7 @@ public final class MPQClient {
                         event = new FriendShakeEvent(robot, robot.getQQ(active));
                         break;
 
+                    /* Group */
                     case GROUP_JOIN_REQUEST:
                         event = new GroupJoinRequestEvent(robot, robot.getGroup(from), robot.getQQ(active));
                         break;
@@ -207,31 +212,32 @@ public final class MPQClient {
                         event = new GroupAnonymousDisableEvent(robot, robot.getGroup(from), robot.getQQ(active));
                         break;
 
+                    /* Frame */
                     case FRAME_STARTUP:
-                        event = new FrameStartupEvent();
+                        event = new FrameStartupEvent(this.getFrame());
                         break;
                     case FRAME_REBOOT:
-                        event = new FrameRebootEvent();
+                        event = new FrameRebootEvent(this.getFrame());
                         break;
                     case FRAME_QQ_ADD:
                         robot = RobotQQ.getRobot(this.getFrame(), active);
-                        event = new FrameRobotAddEvent(robot);
+                        event = new FrameRobotAddEvent(this.getFrame(), robot);
                         break;
                     case FRAME_QQ_LOGIN:
                         robot = RobotQQ.getRobot(this.getFrame(), active);
-                        event = new FrameRobotLoginEvent(robot);
+                        event = new FrameRobotLoginEvent(this.getFrame(), robot);
                         break;
                     case FRAME_QQ_OFFLINE:
                         robot = RobotQQ.getRobot(this.getFrame(), active);
-                        event = new FrameRobotOfflineEvent(robot);
+                        event = new FrameRobotOfflineEvent(this.getFrame(), robot);
                         break;
                     case FRAME_QQ_FORCE_OFFLINE:
                         robot = RobotQQ.getRobot(this.getFrame(), active);
-                        event = new FrameRobotForceOfflineEvent(robot);
+                        event = new FrameRobotForceOfflineEvent(this.getFrame(), robot);
                         break;
                     case FRAME_QQ_CRASH:
                         robot = RobotQQ.getRobot(this.getFrame(), active);
-                        event = new FrameRobotCrashEvent(robot);
+                        event = new FrameRobotCrashEvent(this.getFrame(), robot);
                         break;
 
                     case TENPAY_RECEIVE_TRANSFER:

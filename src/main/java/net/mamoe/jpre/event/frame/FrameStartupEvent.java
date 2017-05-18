@@ -1,5 +1,6 @@
 package net.mamoe.jpre.event.frame;
 
+import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
@@ -10,7 +11,11 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameStartupEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlers() {
+    public FrameStartupEvent(Frame frame) {
+        super(frame);
+    }
+
+    public static HandlerList getHandlers() {
 		return handlers;
 	}
 

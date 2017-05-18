@@ -10,6 +10,10 @@ target/
 src/test/test.txt
 src/test/test.xml
 
+# EPL
 *.bak
 *.e
 *.ec
+
+# Test
+plugins/
