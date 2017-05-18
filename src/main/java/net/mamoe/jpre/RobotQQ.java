@@ -501,7 +501,6 @@ public class RobotQQ {
      * @param time  时间, 单位秒, 最大一个月. 为零时解除禁言
      * @return 是否成功
      */
-    // TODO: 2017/5/17 无效果
     public boolean shutUp(long group, long QQ, int time) {
         runCommand(CommandId.SHUT_UP, this.getQQNumber(), group, QQ, time);
         return booleanResult();
@@ -891,7 +890,7 @@ public class RobotQQ {
      * 呵呵呵呵呵呵呵呵呵呵呵呵呵
      *
      * @param target 群号或 QQ 号
-     */
+     */// TODO: 2017/5/18  check it
     public int crackIOSQQ(long target) {
         runCommand(CommandId.CRACK_IOS_QQ, this.getQQNumber(), target);
         return intResult();
