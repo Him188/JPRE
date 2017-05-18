@@ -1,6 +1,7 @@
 package net.mamoe.jpre.event.jpre;
 
 import net.mamoe.jpre.RobotQQ;
+import net.mamoe.jpre.event.Cancellable;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
@@ -8,10 +9,8 @@ import net.mamoe.jpre.event.HandlerList;
  *
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
- * @deprecated 暂未支持
- */
-@Deprecated
-public class MenuActionEvent extends JPREEvent { // TODO: 2017/5/12
+ */// TODO: 2017/5/18
+public class MenuActionEvent extends JPREEvent implements Cancellable{
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {

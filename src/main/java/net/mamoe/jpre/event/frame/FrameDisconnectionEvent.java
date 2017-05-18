@@ -4,15 +4,15 @@ import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
- * 框架连接(包括重连) JPRE 时触发.
+ * 框架断开连接 JPRE 时触发.
  *
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class FrameLoginEvent extends FrameEvent {
+public class FrameDisconnectionEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameLoginEvent(Frame frame) {
+	public FrameDisconnectionEvent(Frame frame) {
 		super(frame);
 	}
 

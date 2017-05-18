@@ -1,27 +1,22 @@
 package net.mamoe.jpre.event.frame;
 
 import net.mamoe.jpre.Frame;
-import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
- * 添加了新 QQ
+ * 框架连接(包括重连) JPRE 时触发.
  *
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-@SuppressWarnings("unused")
-public class FrameRobotAddEvent extends FrameRobotEvent {
+public class FrameConnectionEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameRobotAddEvent(Frame frame, RobotQQ robot) {
-		super(frame,robot);
+	public FrameConnectionEvent(Frame frame) {
+		super(frame);
 	}
 
 	public static HandlerList getHandlers() {
 		return handlers;
 	}
-
-
-	native void outclassMethod();
 }

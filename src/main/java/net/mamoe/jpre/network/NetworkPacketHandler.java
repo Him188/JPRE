@@ -6,6 +6,7 @@ import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.JPREMain;
 import net.mamoe.jpre.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
+import net.mamoe.jpre.event.frame.FrameConnectionEvent;
 import net.mamoe.jpre.network.packet.Protocol;
 
 import java.io.IOException;
@@ -119,16 +120,22 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
         super.channelActive(ctx);
 
+        FrameConnectionEvent event = null;
         for (MPQClient client : clients) {
-            // TODO: 2017/5/17 FRAME LOGIN EVENTS
             if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
-                return;
+                event = new FrameConnectionEvent(client.getFrame());
+                break;
             }
         }
 
-        Frame frame = new Frame(getJPREMain());
-        MPQClient client = new MPQClient(frame, (InetSocketAddress) ctx.channel().remoteAddress(), ctx);
-        clients.add(client);
+        if (event == null) {
+            Frame frame = new Frame(getJPREMain());
+            MPQClient client = new MPQClient(frame, (InetSocketAddress) ctx.channel().remoteAddress(), ctx);
+            clients.add(client);
+            event = new FrameConnectionEvent(frame);
+        }
+
+        event.getFrame().getPluginManager().callEvent(event);
     }
 
     @Override

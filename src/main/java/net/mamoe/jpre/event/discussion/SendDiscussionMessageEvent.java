@@ -3,6 +3,7 @@ package net.mamoe.jpre.event.discussion;
 import net.mamoe.jpre.Discussion;
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
+import net.mamoe.jpre.event.Cancellable;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
@@ -13,7 +14,7 @@ import net.mamoe.jpre.event.HandlerList;
  * @deprecated 未支持 // TODO: 2017/5/12 完成讨论组消息事件
  */
 @Deprecated
-public class SendDiscussionMessageEvent extends DiscussionEvent {
+public class SendDiscussionMessageEvent extends DiscussionEvent implements Cancellable{
     private static final HandlerList handlers = new HandlerList();
 
     public static HandlerList getHandlers() {

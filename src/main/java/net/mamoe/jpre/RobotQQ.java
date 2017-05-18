@@ -6,8 +6,6 @@ import net.mamoe.jpre.event.send.SendPrivateMessageEvent;
 import net.mamoe.jpre.network.MPQClient;
 import net.mamoe.jpre.network.NetworkPacketHandler;
 import net.mamoe.jpre.network.packet.CommandPacket;
-import net.mamoe.jpre.network.packet.LogPacket;
-import net.mamoe.jpre.network.packet.Packet;
 import net.mamoe.jpre.network.packet.StaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.scheduler.Task;
@@ -336,7 +334,7 @@ public class RobotQQ {
      * @param autoLogin 运行框架时是否自动登录该Q.若添加后需要登录该 QQ 则需要通过 Api_Login 操作
      * @return 是否成功
      */
-    public static boolean addQQ(long QQ, long password, boolean autoLogin) {
+    public static boolean addQQ(long QQ, String password, boolean autoLogin) {
         staticRunCommand(CommandId.ADD_QQ, 0L, QQ, password, autoLogin);
         return staticBooleanResult();
     }
@@ -394,19 +392,8 @@ public class RobotQQ {
         return staticStringResult();
     }
 
-
 	/* MPQ API*/
 
-
-    /**
-     * 向 MPQ 后台添加一条日志
-     *
-     * @param log 日志内容
-     */
-    public void log(String log) {
-        Packet logPacket = new LogPacket(log);
-        getFrame().getClient().sendPacket(logPacket);
-    }
 
     /**
      * 计算得到页面操作用参数 Bkn 或 G_tk
@@ -1252,6 +1239,7 @@ public class RobotQQ {
         //}
     }
 
+    //args 必须至少有一个值并且类型为 long.
     private static void staticRunCommand(CommandId id, Object... args) {
         //synchronized (MPQCaller.class) {
         for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {

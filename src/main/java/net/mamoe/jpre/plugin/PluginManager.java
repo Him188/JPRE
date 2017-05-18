@@ -51,9 +51,9 @@ public final class PluginManager {
 	 *
 	 * @param event 事件
 	 *
-	 * @return 是否成功
+	 * @return 事件返回值
 	 */
-	public boolean callEvent(final Event event) {
+	public int callEvent(final Event event) {
 		HandlerList list = getHandlerList(event.getClass());
 		if (list != null && list.size() != 0) {
 
@@ -66,9 +66,9 @@ public final class PluginManager {
 			}
 
 			event.close();
-			return true;
 		}
-		return false;
+
+		return event.getResultStatus();
 	}
 
 	public File getPluginDataFolder() {
@@ -382,7 +382,7 @@ public final class PluginManager {
 	/**
 	 * 注册事件监听器
 	 * <p>
-	 * 插件必须已经开启 (enable) 才能注册事件. 否则本方法将会抛出错误 {@link PluginEventException}
+	 * 插件必须已经开启 ({@link Plugin#isEnabled()}) 才能注册事件. 否则本方法将会抛出错误 {@link PluginEventException}
 	 * <p>
 	 * 参数 {@code listener} 中的所有符合规范的事件处理器都会被注册
 	 * 规范即为: 有一个参数, 并且参数的类型是任何一个 Event. 返回值类型, 方法是否公共都不影响.

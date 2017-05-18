@@ -5,12 +5,12 @@ package net.mamoe.jpre;
  * @since JPRE 1.0.0
  */
 public enum OnlineStatus {
-	STATUS_ONLINE(1),                       //我在线上
-	STATUS_Q_ME(2),                            //Q 我吧
-	STATUS_LEAVE(3),                            //离开
-	STATUS_WORKING(4),                          //忙碌
-	STATUS_DO_NOT_DISTURB(5),               //请勿打扰
-	STATUS_HIDE(6);                             //隐身
+	STATUS_ONLINE(10),                       //我在线上
+	STATUS_Q_ME(60),                            //Q 我吧
+	STATUS_LEAVE(30),                            //离开
+	STATUS_WORKING(50),                          //忙碌
+	STATUS_DO_NOT_DISTURB(70),               //请勿打扰
+	STATUS_HIDE(201);                             //隐身
 
 	private int id;
 

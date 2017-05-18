@@ -7,24 +7,22 @@ package net.mamoe.jpre.network.packet;
 public class EventResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_EVENT_RESULT;
 
-	// TODO: 2017/4/28 int 返回值 
-	private final boolean cancelled;
+	//返回值-1 已收到信息但拒绝处理  //JPRE不使用
+	//返回0 没有收到信息或不被处理   //JPRE不使用
 
-	/**
-	 * 返回事件是否拦截
-	 *
-	 * @return 事件是否拦截
-	 */
-	public boolean isCancelled() {
-		return cancelled;
-	}
+	//返回1 被处理完毕,继续执行其他插件
+	//返回2 被处理完毕,阻塞信息不再处理其他插件
 
-	public EventResultPacket() {
-		this(false);
-	}
+	//特殊返回值:
+	//0 忽略/取消该事件(如被添加好友 申请加入群
+	//10 同意/批准该事件(如被添加好友 申请加入群
+	//20 不同意/拒绝该事件(如被添加好友 申请加入群
+	//30 单向同意该事件(仅用于被添加好友
 
-	public EventResultPacket(boolean cancelled) {
-		this.cancelled = cancelled;
+	private final int returnValue;
+
+	public EventResultPacket(int returnValue) {
+		this.returnValue = returnValue;
 	}
 
 	@Override
@@ -34,7 +32,7 @@ public class EventResultPacket extends Packet {
 		}
 
 		clear();
-		putRawWithType(cancelled);
+		putInt(returnValue);
 	}
 
 	@Override

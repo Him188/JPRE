@@ -9,17 +9,15 @@ import net.mamoe.jpre.plugin.PluginManager;
  * 一个监听器例子:
  * 注意, 方法上的注解 {@code @EventListener} 是必须的
  * <p>
- * <pre>
  * class MySimpleListener implements Listener{
- *     {@code @EventListener(priority = EventPriority.NORMAL, ignoreCancelled = true)}
+ *     {@code  @EventListener(priority = EventPriority.NORMAL, ignoreCancelled = true)}
  *     public void onMessage(GroupMessageEvent event){
  *         if (event.getMessage().equals("说 OK")){
- *              event.replay = "OK";
+ *              event.getGroup().sendMessage("OK");
  *              event.setCancelled(true);
  *         }
  *     }
  * }
- * </pre>
  * <p>
  * 关于注册监听器, 请查看: {@link PluginManager#registerEvents(Listener, Plugin)}
  *
