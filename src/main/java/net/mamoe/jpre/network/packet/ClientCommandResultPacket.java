@@ -4,7 +4,7 @@ package net.mamoe.jpre.network.packet;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class CommandResultPacket extends Packet {
+public class ClientCommandResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.CLIENT_COMMAND_RESULT;
 
 	private long robot;

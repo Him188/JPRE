@@ -50,7 +50,7 @@ abstract public class Event {
 
     public boolean isCancelled() {
         if (!(this instanceof Cancellable)) {
-            throw new NotImplementedException();
+            return false;
         }
 
         return cancelled;

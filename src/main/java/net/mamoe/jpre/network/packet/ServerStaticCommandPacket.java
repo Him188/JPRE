@@ -6,7 +6,7 @@ import net.mamoe.jpre.CommandId;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class StaticCommandPacket extends Packet {
+public class ServerStaticCommandPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_STATIC_COMMAND;
 
 	private final Object[] args;
@@ -20,7 +20,7 @@ public class StaticCommandPacket extends Packet {
 		return id;
 	}
 
-	public StaticCommandPacket(CommandId commandId, Object[] args) {
+	public ServerStaticCommandPacket(CommandId commandId, Object[] args) {
 		this.args = args;
 		id = commandId;
 	}

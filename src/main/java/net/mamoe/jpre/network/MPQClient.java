@@ -22,8 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 
-import static net.mamoe.jpre.network.packet.Protocol.CLIENT_EVENT;
-import static net.mamoe.jpre.network.packet.Protocol.CLIENT_PING;
+import static net.mamoe.jpre.network.packet.Protocol.*;
 
 /**
  * 连接到服务器的客户端 (MPQ)
@@ -81,12 +80,12 @@ public final class MPQClient {
     public void dataReceive(BinaryStream packet) {
         byte pid = packet.getByte();
         switch (pid) {
-            case CLIENT_EVENT:
+            case CLIENT_EVENT: // TODO: 2017/5/18 移动到 composePacket
                 Event event = null;
 
                 EventType type = EventType.match(packet.getInt());
                 if (type == null) {
-                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
                     break;
                 }
 
@@ -117,7 +116,7 @@ public final class MPQClient {
 
                 switch (type) {
                     case UNKNOWN:
-                        sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
+                        sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
                         break;
 
                     /* Message */
@@ -249,23 +248,23 @@ public final class MPQClient {
                 }
 
                 if (event == null) {
-                    sendPacket(new InvalidEventPacket());
+                    sendPacket(new ServerInvalidEventPacket());
                     break;
                 }
                 System.out.println("[Event] Parsed: " + event);
-                sendPacket(new EventResultPacket(frame.getPluginManager().callEvent(event)));
+                sendPacket(new ClientEventResultPacket(frame.getPluginManager().callEvent(event)));
                 break;
             default:
                 Packet pk;
                 try {
                     pk = Packet.matchPacket(pid);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 System.out.println("Packet: " + pk);
                 if (pk == null) {
-                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 pk.setClient(this);
@@ -290,14 +289,31 @@ public final class MPQClient {
         }
 
         switch (packet.getNetworkId()) {
-            case CLIENT_PING:
+            case CLIENT_PING: {
                 sendPacket(new ServerPongPacket());
                 break;
+            }
 
-            default:
-                sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
+            case CLIENT_COMMAND_RESULT: {
+                ClientCommandResultPacket pk = (ClientCommandResultPacket) packet;
+                RobotQQ robot = RobotQQ.getRobot(this.getFrame(), pk.getRobot());
+                robot.addResult(pk.getResult());
                 break;
+            }
 
+            case CLIENT_STATIC_COMMAND_RESULT: {
+                ClientStaticCommandResultPacket pk = (ClientStaticCommandResultPacket) packet;
+                RobotQQ.staticAddResult(pk.getResult());
+                break;
+            }
+
+            case CLIENT_GET_PLUGIN_INFORMATION:
+            case CLIENT_GET_PLUGIN_LIST:
+                // TODO: 2017/5/18 完成包
+            default: {
+                sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
+                break;
+            }
         }
     }
 

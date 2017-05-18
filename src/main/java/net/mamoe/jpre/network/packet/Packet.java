@@ -116,12 +116,12 @@ abstract public class Packet extends BinaryStream {
 		try {
 			for (Class<?> aClass : new Class<?>[]{
 					ClientPingPacket.class,
-					CommandResultPacket.class,
-					GetPluginListPacket.class,
-					GetPluginInformationPacket.class,
+					ClientCommandResultPacket.class,
+					ClientGetPluginListPacket.class,
+					ClientGetPluginInformationPacket.class,
 					ServerPongPacket.class,
-					EventResultPacket.class,
-					InvalidEventPacket.class,
+					ClientEventResultPacket.class,
+					ServerInvalidEventPacket.class,
 			}) {
 				//noinspection unchecked
 				registerPacket((Class<? extends Packet>) aClass);

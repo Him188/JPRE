@@ -5,7 +5,7 @@ package net.mamoe.jpre.network.packet;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class GetPluginInformationResultPacket extends Packet {
+public class ServerGetPluginInformationResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_GET_PLUGIN_INFORMATION_RESULT;
 
 	private final String name;
@@ -15,7 +15,7 @@ public class GetPluginInformationResultPacket extends Packet {
 	private final int api;
 	private final String description;
 
-	public GetPluginInformationResultPacket(String name, String author, String version, String main, int api, String description) {
+	public ServerGetPluginInformationResultPacket(String name, String author, String version, String main, int api, String description) {
 		this.name = name;
 		this.author = author;
 		this.version = version;

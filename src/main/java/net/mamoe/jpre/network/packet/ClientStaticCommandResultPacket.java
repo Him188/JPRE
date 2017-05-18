@@ -1,21 +1,17 @@
 package net.mamoe.jpre.network.packet;
 
-
 /**
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class GetPluginInformationPacket extends Packet {
-	public static final byte NETWORK_ID = Protocol.CLIENT_GET_PLUGIN_INFORMATION;
+public class ClientStaticCommandResultPacket extends Packet {
+	public static final byte NETWORK_ID = Protocol.CLIENT_STATIC_COMMAND_RESULT;
 
-	private String name;
-
-	public String getName() {
-		return name;
-	}
+	private Object result;
 
 	@Override
 	public void encode() {
+
 	}
 
 	@Override
@@ -24,11 +20,15 @@ public class GetPluginInformationPacket extends Packet {
 			return;
 		}
 
-		this.name = this.getString();
+		result = getRaw();
 	}
 
 	@Override
 	public byte getNetworkId() {
 		return NETWORK_ID;
+	}
+
+	public Object getResult() {
+		return result;
 	}
 }

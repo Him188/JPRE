@@ -8,7 +8,7 @@ import net.mamoe.jpre.Utils;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class CommandPacket extends Packet {
+public class ServerCommandPacket extends Packet {
     public static final byte NETWORK_ID = Protocol.SERVER_COMMAND;
 
     private final RobotQQ robot;
@@ -23,7 +23,7 @@ public class CommandPacket extends Packet {
         return id;
     }
 
-    public CommandPacket(RobotQQ robot, CommandId commandId, Object[] args) {
+    public ServerCommandPacket(RobotQQ robot, CommandId commandId, Object[] args) {
         this.robot = robot;
         this.args = Utils.convertLongToString(args);
         id = commandId;

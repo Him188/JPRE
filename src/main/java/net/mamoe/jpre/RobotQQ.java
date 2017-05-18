@@ -5,8 +5,8 @@ import net.mamoe.jpre.event.send.SendGroupMessageEvent;
 import net.mamoe.jpre.event.send.SendPrivateMessageEvent;
 import net.mamoe.jpre.network.MPQClient;
 import net.mamoe.jpre.network.NetworkPacketHandler;
-import net.mamoe.jpre.network.packet.CommandPacket;
-import net.mamoe.jpre.network.packet.StaticCommandPacket;
+import net.mamoe.jpre.network.packet.ServerCommandPacket;
+import net.mamoe.jpre.network.packet.ServerStaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.scheduler.Task;
 
@@ -1167,7 +1167,7 @@ public class RobotQQ {
     private synchronized void runCommand(CommandId id, Object... args) {
         //synchronized (MPQCaller.class) {
         for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {
-            connectedClient.sendPacket(new CommandPacket(this, id, args));
+            connectedClient.sendPacket(new ServerCommandPacket(this, id, args));
         }
         //}
     }
@@ -1181,44 +1181,16 @@ public class RobotQQ {
 
     private static ConcurrentLinkedQueue<Object> staticResults = new ConcurrentLinkedQueue<>();
 
-    private static int staticParseInt(String value) {
-        if (value.isEmpty()) {
-            return 0;
-        }
-        if (value.equalsIgnoreCase("false")) {
-            return 0;
-        }
-        if (value.equalsIgnoreCase("true")) {
-            return 1;
-        }
-        return Integer.parseInt(value);
-    }
-
-    private static long staticParseLong(String value) {
-        if (value.isEmpty()) {
-            return 0;
-        }
-        if (value.equalsIgnoreCase("false")) {
-            return 0;
-        }
-        if (value.equalsIgnoreCase("true")) {
-            return 1;
-        }
-        return Long.parseLong(value);
-    }
-
     private static boolean staticBooleanResult() {
         return staticIntResult() == 1;
     }
 
     private static int staticIntResult() {
-        return 1;
-        // TODO: 2017/4/8 fix that
-        //return parseInt(stringResult());
+        return parseInt(staticStringResult());
     }
 
     private static long staticLongResult() {
-        return staticParseLong(staticStringResult());
+        return parseLong(staticStringResult());
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -1242,7 +1214,7 @@ public class RobotQQ {
     private static void staticRunCommand(CommandId id, Object... args) {
         //synchronized (MPQCaller.class) {
         for (MPQClient connectedClient : NetworkPacketHandler.getClients()) {
-            connectedClient.sendPacket(new StaticCommandPacket(id, args));
+            connectedClient.sendPacket(new ServerStaticCommandPacket(id, args));
         }
         //}
     }

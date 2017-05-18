@@ -18,6 +18,7 @@ public interface Protocol {
 	byte CLIENT_GET_PLUGIN_INFORMATION = 5;
 
 	byte CLIENT_COMMAND_RESULT = 6;
+	byte CLIENT_STATIC_COMMAND_RESULT = 14;
 
 
 	//send by server:

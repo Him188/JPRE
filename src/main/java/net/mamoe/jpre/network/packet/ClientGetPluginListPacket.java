@@ -7,7 +7,7 @@ import java.util.List;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class GetPluginListPacket extends Packet {
+public class ClientGetPluginListPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.CLIENT_GET_PLUGIN_LIST;
 
 	private List<String> result;
