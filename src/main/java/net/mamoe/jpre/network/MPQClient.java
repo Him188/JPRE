@@ -17,7 +17,7 @@ import net.mamoe.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
 import net.mamoe.jpre.network.packet.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.SocketAddress;
+import java.net.InetSocketAddress;
 import java.util.Arrays;
 
 import static net.mamoe.jpre.network.packet.Protocol.CLIENT_EVENT;
@@ -31,7 +31,7 @@ import static net.mamoe.jpre.network.packet.Protocol.CLIENT_PING;
  */
 @SuppressWarnings("WeakerAccess")
 public final class MPQClient {
-    MPQClient(Frame frame, SocketAddress address, ChannelHandlerContext initCtx) {
+    MPQClient(Frame frame, InetSocketAddress address, ChannelHandlerContext initCtx) {
         frame.setClient(this);
         this.frame = frame;
         this.address = address;
@@ -43,8 +43,8 @@ public final class MPQClient {
         return "MPQClient(Address=" + address.toString() + ")";
     }
 
-    public boolean is(SocketAddress address) {
-        return this.address == address;
+    public boolean is(InetSocketAddress address) {
+        return address.getAddress().equals(this.address.getAddress());
     }
 
     /* Frame */
@@ -57,14 +57,14 @@ public final class MPQClient {
 
 
     /* Address */
-    private SocketAddress address;
+    private InetSocketAddress address;
 
     /**
      * 获取 IP 地址
      *
      * @return IP
      */
-    public SocketAddress getAddress() {
+    public InetSocketAddress getAddress() {
         return address;
     }
 

@@ -9,6 +9,7 @@ import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.network.packet.Protocol;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +87,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     private void processPacket(ChannelHandlerContext ctx, BinaryStream stream) {
         System.out.println(stream);
         for (MPQClient client : clients) {
-            if (client.is(ctx.channel().remoteAddress())) {
+            if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
                 client.getFrame().getScheduler().scheduleTask(null, () -> {
                     try {
                         client.dataReceive(stream);
@@ -119,13 +120,13 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
         for (MPQClient client : clients) {
             // TODO: 2017/5/17 FRAME LOGIN EVENTS
-            if (client.is(ctx.channel().remoteAddress())) {
+            if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
                 return;
             }
         }
 
         Frame frame = new Frame(getJPREMain());
-        MPQClient client = new MPQClient(frame, ctx.channel().remoteAddress(), ctx);
+        MPQClient client = new MPQClient(frame, (InetSocketAddress) ctx.channel().remoteAddress(), ctx);
         clients.add(client);
     }
 
