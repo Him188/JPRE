@@ -12,12 +12,12 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameRebootEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
+    public static HandlerList getHandlers() {
+        return handlers;
+    }
+
     public FrameRebootEvent(Frame frame) {
         super(frame);
     }
-
-    public static HandlerList getHandlers() {
-		return handlers;
-	}
 
 }

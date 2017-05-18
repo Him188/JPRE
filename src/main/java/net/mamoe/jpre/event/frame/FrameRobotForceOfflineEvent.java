@@ -13,11 +13,11 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameRobotForceOfflineEvent extends FrameRobotEvent {
     private static final HandlerList handlers = new HandlerList();
 
-    public FrameRobotForceOfflineEvent(Frame frame, RobotQQ robot) {
-        super(frame,robot);
-    }
-
     public static HandlerList getHandlers() {
         return handlers;
+    }
+
+    public FrameRobotForceOfflineEvent(Frame frame, RobotQQ robot) {
+        super(frame,robot);
     }
 }

@@ -28,7 +28,7 @@ public class FriendAddResultEvent extends QQEvent {
 	/**
 	 * 是否成功添加
 	 *
-	 * @return TRUE: 对方已添加为双向好友. FALSE: 拒绝添加
+	 * @return TRUE: 对方已添加为 双向(?) 好友. FALSE: 拒绝添加
 	 */
 	public boolean isSucceed() {
 		return succeed;

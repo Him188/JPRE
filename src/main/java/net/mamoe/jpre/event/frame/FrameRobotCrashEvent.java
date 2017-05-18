@@ -13,11 +13,11 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameRobotCrashEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameRobotCrashEvent(Frame frame, RobotQQ robot) {
-		super(frame,robot);
-	}
-
 	public static HandlerList getHandlers() {
 		return handlers;
+	}
+
+	public FrameRobotCrashEvent(Frame frame, RobotQQ robot) {
+		super(frame,robot);
 	}
 }

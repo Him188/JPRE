@@ -12,7 +12,9 @@ import net.mamoe.jpre.event.discussion.DiscussionMessageEvent;
 import net.mamoe.jpre.event.frame.*;
 import net.mamoe.jpre.event.group.*;
 import net.mamoe.jpre.event.network.DataPacketReceiveEvent;
+import net.mamoe.jpre.event.network.DataPacketSendEvent;
 import net.mamoe.jpre.event.qq.*;
+import net.mamoe.jpre.event.qq.taotao.FriendTaotaoCommitEvent;
 import net.mamoe.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
 import net.mamoe.jpre.network.packet.*;
 
@@ -84,7 +86,7 @@ public final class MPQClient {
 
                 EventType type = EventType.match(packet.getInt());
                 if (type == null) {
-                    sendPacket(new EventResultPacket(false));
+                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
                     break;
                 }
 
@@ -115,7 +117,7 @@ public final class MPQClient {
 
                 switch (type) {
                     case UNKNOWN:
-                        sendPacket(new EventResultPacket(false));
+                        sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
                         break;
 
                     /* Message */
@@ -258,12 +260,12 @@ public final class MPQClient {
                 try {
                     pk = Packet.matchPacket(pid);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                    sendPacket(new EventResultPacket(false));
+                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 System.out.println("Packet: " + pk);
                 if (pk == null) {
-                    sendPacket(new EventResultPacket(false));
+                    sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 pk.setClient(this);
@@ -293,7 +295,7 @@ public final class MPQClient {
                 break;
 
             default:
-                sendPacket(new EventResultPacket(false));
+                sendPacket(new EventResultPacket(Event.STATUS_CONTINUE));
                 break;
 
         }
@@ -306,6 +308,12 @@ public final class MPQClient {
      */
     public void sendPacket(Packet packet) {
         packet.encode();
+
+        DataPacketSendEvent event = new DataPacketSendEvent(packet);
+        if (getFrame().getPluginManager().callEvent(event) == 1) {
+            return;
+        }
+
         byte[] data = packet.getAll();
         byte[] result = new byte[data.length + 1];//数据包ID
         try {

@@ -11,9 +11,13 @@ import java.lang.reflect.Field;
  */
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 abstract public class Event {
-    /* Abstraction */
+    public static final int STATUS_UNPROCESSED = 0;     //队列_未处理
+    public static final int STATUS_CONTINUE = 1;        //队列_继续执行
+    public static final int STATUS_BLOCK = 2;           //队列_中断_阻塞
 
-    abstract public int getResultStatus();
+    public int getResultStatus(){
+        return STATUS_CONTINUE;
+    }
 
     /* Interception */
 

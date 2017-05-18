@@ -1,8 +1,9 @@
-package net.mamoe.jpre.event.qq;
+package net.mamoe.jpre.event.qq.taotao;
 
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
+import net.mamoe.jpre.event.qq.QQEvent;
 
 /**
  * 好友评论机器人的说说 事件

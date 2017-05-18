@@ -8,10 +8,10 @@ import net.mamoe.jpre.RobotQQ;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public abstract class AdminGroupEvent extends GroupEvent {
+public abstract class GroupAdminEvent extends GroupEvent {
 	private final QQ admin;
 
-	public AdminGroupEvent(RobotQQ robot, Group group, QQ qq, QQ admin) {
+	public GroupAdminEvent(RobotQQ robot, Group group, QQ qq, QQ admin) {
 		super(robot, group, qq);
 		this.admin = admin;
 	}

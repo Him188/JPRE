@@ -11,7 +11,7 @@ import net.mamoe.jpre.event.HandlerList;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class GroupJoinEvent extends AdminGroupEvent {
+public class GroupJoinEvent extends GroupAdminEvent {
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {

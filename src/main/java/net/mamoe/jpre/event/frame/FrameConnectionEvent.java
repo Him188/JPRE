@@ -12,11 +12,11 @@ import net.mamoe.jpre.event.HandlerList;
 public class FrameConnectionEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameConnectionEvent(Frame frame) {
-		super(frame);
-	}
-
 	public static HandlerList getHandlers() {
 		return handlers;
+	}
+
+	public FrameConnectionEvent(Frame frame) {
+		super(frame);
 	}
 }

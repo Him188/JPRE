@@ -2,15 +2,16 @@ package net.mamoe.jpre.event.qq.taotao;
 
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
+import net.mamoe.jpre.event.Cancellable;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
- * 评论了别人的说说
+ * 评论别人的说说
  *
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
- */
-public class TaoTaoCommentEvent extends TaoTaoEvent {
+ */ // TODO: 2017/5/18 implement
+public class TaoTaoCommentEvent extends TaoTaoEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {
@@ -27,5 +28,10 @@ public class TaoTaoCommentEvent extends TaoTaoEvent {
 
 	public String getMessage() {
 		return message;
+	}
+
+	@Override
+	public int getResultStatus() {
+		return isCancelled() ? 1 : 0;
 	}
 }

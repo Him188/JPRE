@@ -3,6 +3,7 @@ package net.mamoe.jpre.event.qq;
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
+import net.mamoe.jpre.event.Selectable;
 
 /**
  * 他人请求添加机器人为好友
@@ -11,7 +12,7 @@ import net.mamoe.jpre.event.HandlerList;
  * @since JPRE 1.0.0
  */
 @SuppressWarnings("unused")
-public class FriendAddRequestEvent extends QQEvent {
+public class FriendAddRequestEvent extends QQEvent implements Selectable {
     private static final HandlerList handlers = new HandlerList();
 
     public static HandlerList getHandlers() {
@@ -19,7 +20,7 @@ public class FriendAddRequestEvent extends QQEvent {
     }
 
 
-    public enum RequestAction {
+    public enum Action {
         ACCEPT_AND_ADD, //同意并添加为双向好友
         ACCEPT_ONLY,    //同意并添加为单向好友(对方好友有机器人, 机器人好友没有对方)
         DECLINE,        //拒绝
@@ -30,7 +31,7 @@ public class FriendAddRequestEvent extends QQEvent {
 
     private final String message; //附加消息
 
-    private RequestAction action = RequestAction.IGNORE;
+    private Action action = Action.IGNORE;
 
     public FriendAddRequestEvent(RobotQQ robot, QQ qq, String message) {
         super(robot, qq);
@@ -50,11 +51,11 @@ public class FriendAddRequestEvent extends QQEvent {
     }
 
     // TODO: 2017/4/19 接受请求
-    public RequestAction getAction() {
+    public Action getAction() {
         return action;
     }
 
-    public void setAction(RequestAction action) {
+    public void setAction(Action action) {
         this.action = action;
     }
 }

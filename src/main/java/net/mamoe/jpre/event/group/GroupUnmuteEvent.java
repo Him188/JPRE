@@ -11,7 +11,7 @@ import net.mamoe.jpre.event.HandlerList;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class GroupUnmuteEvent extends AdminGroupEvent {
+public class GroupUnmuteEvent extends GroupAdminEvent {
 	private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {

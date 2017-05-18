@@ -8,15 +8,15 @@ import net.mamoe.jpre.event.HandlerList;
  *
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
- */
+ */ // TODO: 2017/5/18 implement
 public class FrameDisconnectionEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 
-	public FrameDisconnectionEvent(Frame frame) {
-		super(frame);
-	}
-
 	public static HandlerList getHandlers() {
 		return handlers;
+	}
+
+	public FrameDisconnectionEvent(Frame frame) {
+		super(frame);
 	}
 }
