@@ -1,25 +1,27 @@
 package net.mamoe.jpre.scheduler;
 
-import javafx.concurrent.Worker;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.concurrent.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 延迟任务管理器.
  * <p>
  * 本类内置了 {@link ScheduledThreadPoolExecutor} 和 {@link ThreadPoolExecutor},
  * 你可以在这里轻松地创建并管理延迟(循环)任务
- * @author Him188 @ JPRE Project */
-public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER (worker)
-    private Frame frame;
+ * @author Him188 @ JPRE Project
+ * @since JPRE 1.0.0
+ */
+public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
+	private Frame frame;
 
+	final ScheduledThreadPoolExecutor service = new ScheduledThreadPoolExecutor(10);
 
-    private ConcurrentLinkedQueue<Task> tasks;
-
-    private ArrayList<>
+	final ThreadPoolExecutor pool = new ThreadPoolExecutor(32, 128, 1000 * 60, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
 
 	public Scheduler(Frame frame) {
 		this.frame = frame;

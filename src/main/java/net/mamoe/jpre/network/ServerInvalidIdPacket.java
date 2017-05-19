@@ -5,10 +5,9 @@ import net.mamoe.jpre.network.packet.Protocol;
 
 /**
  * @author Him188 @ JPRE Project
- * @since JPRE
  */
 public class ServerInvalidIdPacket extends Packet {
-    public static final byte NETWORK_ID = Protocol.SERVER_PACKET_PROCESSING_EXCEPTION;
+    public static final byte NETWORK_ID = Protocol.SERVER_INVALID_ID;
 
     @Override
     public void encode() {

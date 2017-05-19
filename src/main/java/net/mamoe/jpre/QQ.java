@@ -40,7 +40,7 @@ public class QQ extends User {
     // TODO: 2017/5/17 添加所有方法
 
     public String getNickName() {
-        return RobotQQ.getNick(this.getNumber()); // TODO: 2017/5/12  存储, 监听事件修改
+        return this.getRobot().getFrame().getNick(this.getNumber()); // TODO: 2017/5/12  存储, 监听事件修改
     }
 
     public String like() {
