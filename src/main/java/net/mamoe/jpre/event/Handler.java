@@ -6,9 +6,7 @@ import net.mamoe.jpre.plugin.Plugin;
  * 事件处理器
  * 一般不会在插件中使用
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public interface Handler {
 	Plugin getPlugin();
 

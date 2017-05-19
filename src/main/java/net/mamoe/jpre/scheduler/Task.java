@@ -5,9 +5,7 @@ import net.mamoe.jpre.plugin.Plugin;
 /**
  * 延迟任务
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("WeakerAccess")
 public abstract class Task implements Runnable {
 	/* Abstract */

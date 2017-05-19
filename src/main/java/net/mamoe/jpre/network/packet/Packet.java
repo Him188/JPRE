@@ -20,9 +20,7 @@ import java.lang.reflect.Modifier;
  * <p>
  * <li><strong></strong></li>
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("WeakerAccess")
 abstract public class Packet extends BinaryStream {
 	private boolean encoded;

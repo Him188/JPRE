@@ -28,9 +28,7 @@ import static net.mamoe.jpre.network.packet.Protocol.*;
  * 连接到服务器的客户端 (MPQ)
  * MPQ 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("WeakerAccess")
 public final class MPQClient {
     MPQClient(Frame frame, InetSocketAddress address, ChannelHandlerContext initCtx) {
@@ -83,9 +81,10 @@ public final class MPQClient {
             case CLIENT_EVENT: // TODO: 2017/5/18 移动到 composePacket
                 Event event = null;
 
+                byte id = packet.getByte();
                 EventType type = EventType.match(packet.getInt());
                 if (type == null) {
-                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE, id));
                     return;
                 }
 
@@ -116,7 +115,7 @@ public final class MPQClient {
 
                 switch (type) {
                     case UNKNOWN:
-                        sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                        sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE, id));
                         break;
 
                     /* Message */
@@ -253,19 +252,19 @@ public final class MPQClient {
 
                 }
                 System.out.println("[Event] Parsed: " + event);
-                sendPacket(new ServerEventResultPacket(frame.getPluginManager().callEvent(event)));
+                sendPacket(new ServerEventResultPacket(frame.getPluginManager().callEvent(event), id));
                 break;
             default:
                 Packet pk;
                 try {
                     pk = Packet.matchPacket(pid);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ServerInvalidIdPacket());
                     return;
                 }
                 System.out.println("Packet: " + pk);
                 if (pk == null) {
-                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ServerInvalidIdPacket());
                     return;
                 }
                 pk.setClient(this);
@@ -298,13 +297,13 @@ public final class MPQClient {
             case CLIENT_COMMAND_RESULT: {
                 ClientCommandResultPacket pk = (ClientCommandResultPacket) packet;
                 RobotQQ robot = RobotQQ.getRobot(this.getFrame(), pk.getRobot());
-                robot.addResult(pk.getResult());
+                robot.setResult(pk.getId(), pk.getResult());
                 break;
             }
 
             case CLIENT_STATIC_COMMAND_RESULT: {
                 ClientStaticCommandResultPacket pk = (ClientStaticCommandResultPacket) packet;
-                RobotQQ.staticAddResult(pk.getResult());
+                this.getFrame().setResult(pk.getId(), pk.getResult());
                 break;
             }
 
@@ -312,7 +311,7 @@ public final class MPQClient {
             case CLIENT_GET_PLUGIN_LIST:
                 // TODO: 2017/5/18 完成包
             default: {
-                sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                sendPacket(new ServerInvalidIdPacket());
                 break;
             }
         }

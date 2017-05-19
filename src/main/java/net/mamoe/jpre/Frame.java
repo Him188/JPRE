@@ -13,9 +13,7 @@ import java.io.File;
 /**
  * 框架. JPRE 允许多个MPQ框架连接, 每次连接都会创建本类, 断开连接后 {@link #shutdown(boolean)}
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("WeakerAccess")
 public final class Frame {
     @Override
@@ -168,7 +166,10 @@ public final class Frame {
     public void runVoidCommand(CommandId id, Object... args) throws InterruptedException {
         this.getClient().sendPacket(new ServerStaticCommandPacket((byte) 0, id, args));
     }
-    
+
+    public void setResult(byte id, Object result) {
+        this.results.setResult(id, result);
+    }
     
 	/* MPQ API */
 

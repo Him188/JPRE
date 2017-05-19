@@ -6,9 +6,7 @@ import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.qq.QQEvent;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public abstract class GroupEvent extends QQEvent {
 
 	private final Group group;

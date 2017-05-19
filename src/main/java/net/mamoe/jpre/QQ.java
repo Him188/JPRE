@@ -1,9 +1,7 @@
 package net.mamoe.jpre;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("unused")
 public class QQ extends User {
 

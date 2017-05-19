@@ -14,9 +14,7 @@ import java.util.Map;
  * Yaml 配置
  * 注意, 本类不会自动保存配置.
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class YamlConfig extends Config {
 	private Map<String, Object> list;

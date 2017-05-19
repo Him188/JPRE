@@ -6,9 +6,7 @@ import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.qq.QQEvent;
 
 /**
- * @author XianD @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author XianD @ JPRE Project */
 public abstract class DiscussionEvent extends QQEvent {
 
     private final Discussion discussion;

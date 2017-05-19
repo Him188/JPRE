@@ -1,9 +1,7 @@
 package net.mamoe.jpre;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public abstract class User { // TODO: 2017/5/17 Group/DiscussionTemporary 类
 	abstract public boolean sendMessage(String content);
 

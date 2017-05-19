@@ -4,9 +4,7 @@ import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.RobotQQ;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public abstract class FrameRobotEvent extends FrameEvent {
 	private final RobotQQ robot;
 

@@ -8,9 +8,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 群成员名片变更
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class GroupCardChangeEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();
 

@@ -6,9 +6,7 @@ import java.util.jar.JarFile;
  * 由 Gson 读取
  *
  * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- * @see PluginManager#getDescription(JarFile)
- */
+ * @see PluginManager#getDescription(JarFile) */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PluginDescription {
 	public String name;

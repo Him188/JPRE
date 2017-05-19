@@ -6,9 +6,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 插件菜单被点击
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */// TODO: 2017/5/18
+ * @author Him188 @ JPRE Project */// TODO: 2017/5/18
 public class MenuActionEvent extends JPREEvent {
     private static final HandlerList handlers = new HandlerList();
 

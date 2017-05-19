@@ -3,9 +3,7 @@ package net.mamoe.jpre.event;
 import net.mamoe.jpre.RobotQQ;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 abstract public class RobotEvent extends Event {
 	private RobotQQ robot;
 

@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * 包返回值存储容器
+ *
+ * @author Him188 @ JPRE Project */
 public class CommandResults extends LinkedHashMap<Byte, Object> {
     private final Queue<Byte> keys = new LinkedList<>();
 

@@ -8,9 +8,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 管理员开启了匿名聊天
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class GroupAnonymousEnableEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();
 

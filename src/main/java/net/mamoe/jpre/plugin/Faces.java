@@ -7,9 +7,7 @@ package net.mamoe.jpre.plugin;
  * 或名字里带有字母的（如表情（K歌）的表情名:Face_K_ge）也会用下划线【_】隔开
  * 还有一种是与其他表情拼音一样的（如表情（帅）原本的表情名:Face_shuai与表情（衰）的表情名）为防止冲突，会使用带有改字同义词或近义词命名该表情的表情名（所以表情（帅）的表情名为:Face_shuai_qi）
  *
- * @author LamGC @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author LamGC @ JPRE Project */
 @SuppressWarnings("SpellCheckingInspection")
 public interface Faces {
 	int Face_jingya = 0;

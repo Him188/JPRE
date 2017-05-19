@@ -7,9 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 abstract public class Event {
     public static final int STATUS_UNPROCESSED = 0;     //队列_未处理

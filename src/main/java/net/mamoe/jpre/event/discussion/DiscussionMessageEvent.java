@@ -7,9 +7,7 @@ import net.mamoe.jpre.event.HandlerList;
 
 /**
  * 讨论组消息
- * @author XianD @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author XianD @ JPRE Project */
 public class DiscussionMessageEvent extends DiscussionEvent {
 
     private static final HandlerList handlers = new HandlerList();

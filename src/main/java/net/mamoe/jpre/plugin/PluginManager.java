@@ -39,9 +39,7 @@ import java.util.zip.ZipEntry;
  * 2. {@link #loadPlugin(String)}: 加载插件
  * 3. {@code {@link #getPlugin(String)}.enable() }: 启动插件
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class PluginManager {
 	/* Popular methods */

@@ -6,9 +6,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 框架加载完成
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class FrameStartupEvent extends FrameEvent {
 	private static final HandlerList handlers = new HandlerList();
 

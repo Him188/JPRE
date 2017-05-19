@@ -1,9 +1,7 @@
 package net.mamoe.jpre.network.packet;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class ServerEventResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_EVENT_RESULT;
 
@@ -18,12 +16,14 @@ public class ServerEventResultPacket extends Packet {
 	//10 同意/批准该事件(如被添加好友 申请加入群
 	//20 不同意/拒绝该事件(如被添加好友 申请加入群
 	//30 单向同意该事件(仅用于被添加好友
-
 	private final int returnValue;
 
-	public ServerEventResultPacket(int returnValue) {
-		this.returnValue = returnValue;
-	}
+    private final int id;
+
+    public ServerEventResultPacket(int returnValue, int id) {
+        this.returnValue = returnValue;
+        this.id = id;
+    }
 
 	@Override
 	public void encode() {

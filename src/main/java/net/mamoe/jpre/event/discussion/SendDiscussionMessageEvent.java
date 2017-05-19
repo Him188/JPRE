@@ -10,9 +10,7 @@ import net.mamoe.jpre.event.HandlerList;
  * 发送讨论组消息事件
  *
  * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- * @deprecated 未支持 // TODO: 2017/5/12 完成讨论组消息事件
- */
+ * @deprecated 未支持 // TODO: 2017/5/12 完成讨论组消息事件 */
 @Deprecated
 public class SendDiscussionMessageEvent extends DiscussionEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

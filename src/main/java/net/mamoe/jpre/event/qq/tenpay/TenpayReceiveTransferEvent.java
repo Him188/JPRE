@@ -7,9 +7,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 收到财付通转账
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class TenpayReceiveTransferEvent extends TenpayEvent {
 	private static final HandlerList handlers = new HandlerList();
 

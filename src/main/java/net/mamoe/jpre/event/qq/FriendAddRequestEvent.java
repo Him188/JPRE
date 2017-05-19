@@ -8,9 +8,7 @@ import net.mamoe.jpre.event.Selectable;
 /**
  * 他人请求添加机器人为好友
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("unused")
 public class FriendAddRequestEvent extends QQEvent implements Selectable {
     private static final HandlerList handlers = new HandlerList();

@@ -7,9 +7,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 被好友抖动
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class FriendShakeEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();
 

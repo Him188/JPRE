@@ -15,9 +15,7 @@ import org.apache.commons.cli.Options;
  * 如果你想开发插件. 请查看 {@link Plugin}
  *
  * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- * @see PluginManager 真正的插件管理器
- */
+ * @see PluginManager 真正的插件管理器 */
 @SuppressWarnings("WeakerAccess")
 public final class JPREMain {
     /* Instance */

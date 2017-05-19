@@ -1,9 +1,7 @@
 import java.util.*;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class ListSpeedTest {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {

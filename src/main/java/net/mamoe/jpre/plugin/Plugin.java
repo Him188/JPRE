@@ -8,11 +8,10 @@ import java.util.jar.JarFile;
  * 推荐插件主类继承 {@link JavaPlugin}, 该类已经封装了一些常用方法, 便于开发.
  *
  * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0 (code)
+(code)
  *
  * @author Him188 @ JPRE Project
- * @since LamGC 1.0.0 (javadoc)
- */
+ * @since LamGC 1.0.0 (javadoc) */
 @SuppressWarnings("unused")
 public interface Plugin {
     /**

@@ -7,9 +7,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * QQ 被强制离线
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class FrameRobotForceOfflineEvent extends FrameRobotEvent {
     private static final HandlerList handlers = new HandlerList();
 

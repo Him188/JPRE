@@ -20,9 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 框架上的机器人 QQ(响应 QQ)
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class RobotQQ {
     private final Frame frame;
@@ -831,6 +829,10 @@ public class RobotQQ {
 
     public void runVoidCommand(CommandId id, Object... args) throws InterruptedException {
         this.getFrame().getClient().sendPacket(new ServerStaticCommandPacket((byte) 0, id, args));
+    }
+
+    public void setResult(byte id, Object result) {
+        this.results.setResult(id, result);
     }
 
 	/* ROBOT LIST*/

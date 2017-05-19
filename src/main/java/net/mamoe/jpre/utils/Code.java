@@ -1,9 +1,7 @@
 package net.mamoe.jpre.utils;
 
 /**
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings("Duplicates")
 public final class Code {
     // TODO: 2017/4/22 finish

@@ -17,9 +17,7 @@ import java.util.List;
 /**
  * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     private JPREMain jpre;
 
@@ -47,7 +45,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
         synchronized (this) {
-            //System.out.println("[Network] Data packet received: (" + data.length + ")" + Arrays.toString(data));
             handlePacket(ctx, data);
         }
     }
@@ -61,7 +58,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     private void handlePacket(ChannelHandlerContext ctx, byte[] data) {
         try {
             temp = Utils.arrayAppend(temp, data);
-            //System.out.println("Now temp: " + Arrays.toString(temp));
             while (temp.length != 0) {
                 int position = Utils.arraySearch(temp, Protocol.SIGNATURE);
                 if (position < 0) {
@@ -70,7 +66,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
                 byte[] d = Utils.arrayGetCenter(temp, 0, position);
                 temp = Utils.arrayDelete(temp, position + Protocol.SIGNATURE.length);
-                processPacket(ctx, d);
+
+                JPREMain.getServerScheduler().scheduleTask(() -> processPacket(ctx, d));
             }
         } catch (Throwable e) {
             e.printStackTrace();
@@ -113,10 +110,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //if (!clients.isEmpty()) { //只允许一个MPQ连接
-        //    return;
-        //}
-       // System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
         super.channelActive(ctx);
 
         FrameConnectionEvent event = null;
@@ -139,18 +132,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        //MPQClient found = null;
-        //for (MPQClient client : clients) {
-        //    if (found != null) {
-        //        continue;
-        //    }
-        //    if (client.is(ctx.channel().remoteAddress())) {
-        //        found = client;
-        //    }
-        //}
-        //if (found != null) {
-        //    clients.remove(found);
-        //}
         System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " disconnected.");
         super.channelInactive(ctx);
     }

@@ -12,9 +12,7 @@ import java.util.jar.JarFile;
  * <p>
  * Javadoc 请查看: {@link Plugin}
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 @SuppressWarnings({"ResultOfMethodCallIgnored", "WeakerAccess", "unused", "UnusedReturnValue"})
 public abstract class JavaPlugin extends PluginDescription implements Plugin {
     private PluginManager owner;

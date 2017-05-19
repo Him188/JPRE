@@ -9,9 +9,7 @@ import net.mamoe.jpre.event.Selectable;
 /**
  * 机器人被邀请加入群
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */
+ * @author Him188 @ JPRE Project */
 public class GroupInvitationEvent extends GroupEvent implements Selectable {
 	private static final HandlerList handlers = new HandlerList();
 

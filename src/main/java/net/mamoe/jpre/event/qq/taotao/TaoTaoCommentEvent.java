@@ -8,9 +8,7 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 评论别人的说说
  *
- * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
- */ // TODO: 2017/5/18 implement
+ * @author Him188 @ JPRE Project */ // TODO: 2017/5/18 implement
 public class TaoTaoCommentEvent extends TaoTaoEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
