@@ -120,7 +120,7 @@ abstract public class Packet extends BinaryStream {
 					ClientGetPluginListPacket.class,
 					ClientGetPluginInformationPacket.class,
 					ServerPongPacket.class,
-					ClientEventResultPacket.class,
+					ServerEventResultPacket.class,
 					ServerInvalidEventPacket.class,
 			}) {
 				//noinspection unchecked

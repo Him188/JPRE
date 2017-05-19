@@ -9,20 +9,22 @@ import net.mamoe.jpre.CommandId;
 public class ServerStaticCommandPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_STATIC_COMMAND;
 
+	private final byte id;
 	private final Object[] args;
-	private final CommandId id;
+	private final CommandId commandId;
 
 	public Object[] getArgs() {
 		return args;
 	}
 
-	public CommandId getId() {
-		return id;
+	public CommandId getCommandId() {
+		return commandId;
 	}
 
-	public ServerStaticCommandPacket(CommandId commandId, Object[] args) {
+	public ServerStaticCommandPacket(byte id, CommandId commandId, Object[] args) {
+		this.id = id;
 		this.args = args;
-		id = commandId;
+		this.commandId = commandId;
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class ServerStaticCommandPacket extends Packet {
 
 		clear();
 
-		putByte(id.getId());
+		putByte(commandId.getId());
 		putRaw(args);
 	}
 

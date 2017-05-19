@@ -5,36 +5,42 @@ package net.mamoe.jpre.network.packet;
  * @since JPRE 1.0.0
  */
 public class ClientCommandResultPacket extends Packet {
-	public static final byte NETWORK_ID = Protocol.CLIENT_COMMAND_RESULT;
+    public static final byte NETWORK_ID = Protocol.CLIENT_COMMAND_RESULT;
 
-	private long robot;
-	private Object result;
+    private byte id; // 操作 ID, 用于识别是哪一次API调用的返回值
+    private long robot;
+    private Object result;
 
-	@Override
-	public void encode() {
+    @Override
+    public void encode() {
 
-	}
+    }
 
-	@Override
-	public void decode() {
-		if (!setEncoded(false)) {
-			return;
-		}
+    @Override
+    public void decode() {
+        if (!setEncoded(false)) {
+            return;
+        }
 
-		robot = getLong();
-		result = getRaw();
-	}
+        id = getByte();
+        robot = getLong();
+        result = getRaw();
+    }
 
-	@Override
-	public byte getNetworkId() {
-		return NETWORK_ID;
-	}
+    @Override
+    public byte getNetworkId() {
+        return NETWORK_ID;
+    }
 
-	public Object getResult() {
-		return result;
-	}
+    public Object getResult() {
+        return result;
+    }
 
-	public long getRobot() {
-		return robot;
-	}
+    public long getRobot() {
+        return robot;
+    }
+
+    public byte getId() {
+        return id;
+    }
 }

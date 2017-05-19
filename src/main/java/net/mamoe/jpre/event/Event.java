@@ -4,6 +4,7 @@ import net.mamoe.jpre.plugin.PluginManager;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * @author Him188 @ JPRE Project
@@ -15,6 +16,9 @@ abstract public class Event {
     public static final int STATUS_CONTINUE = 1;        //队列_继续执行
     public static final int STATUS_BLOCK = 2;           //队列_中断_阻塞
 
+    /**
+     * 用于与 MPQ 通讯. 插件自定义事件时不需要继承或使用本方法
+     */
     public int getResultStatus(){
         return STATUS_CONTINUE;
     }
@@ -49,11 +53,8 @@ abstract public class Event {
     private boolean cancelled = false;
 
     public boolean isCancelled() {
-        if (!(this instanceof Cancellable)) {
-            return false;
-        }
+        return this instanceof Cancellable && cancelled;
 
-        return cancelled;
     }
 
     public void setCancelled(boolean cancelled) {
@@ -89,7 +90,7 @@ abstract public class Event {
 
     /**
      * 返回当前类的类名, 当前类和父类(不包括 Object)的成员变量信息
-     * 例如, GroupMessageEvent
+     * 例如, GroupMessageEvent(group=xxx,qq=xxx,message=xxx,cancelled=xxx,intercepted=xxx)
      *
      * @return {@code 类名(子类成员变量=值,父类成员变量=值)}
      */
@@ -99,6 +100,9 @@ abstract public class Event {
         Class<?> clazz = getClass();
         while (clazz != null && clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
                 field.setAccessible(true);
                 try {
                     result.append(field.getName()).append("=").append(field.get(this)).append(",");

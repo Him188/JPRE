@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.JPREMain;
-import net.mamoe.jpre.Utils;
+import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.event.frame.FrameConnectionEvent;
 import net.mamoe.jpre.network.packet.Protocol;
@@ -12,7 +12,6 @@ import net.mamoe.jpre.network.packet.Protocol;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, byte[] data) throws Exception {
         synchronized (this) {
-            System.out.println("[Network] Data packet received: (" + data.length + ")" + Arrays.toString(data));
+            //System.out.println("[Network] Data packet received: (" + data.length + ")" + Arrays.toString(data));
             handlePacket(ctx, data);
         }
     }
@@ -117,7 +116,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         //if (!clients.isEmpty()) { //只允许一个MPQ连接
         //    return;
         //}
-        System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
+       // System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " connected.");
         super.channelActive(ctx);
 
         FrameConnectionEvent event = null;

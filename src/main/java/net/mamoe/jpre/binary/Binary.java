@@ -62,8 +62,12 @@ public final class Binary {
     }
 
     public static int toInt(byte[] bytes) {
-        return (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
+        //return (bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3];
         //return (bytes[0] << 24) + ((bytes[1] > 0 ? bytes[1] + 1 : bytes[1]) << 16) + ((bytes[2] > 0 ? bytes[2] + 1 : bytes[2]) << 8) + bytes[3];
+
+
+        //return (bytes[0] ) + (bytes[1] << 8) + (bytes[2] << 16) + (bytes[3] << 24);
+        return (bytes[0] ) + ((bytes[1] > 0 ? bytes[1] + 1 : bytes[1]) << 8) + (bytes[2] << 16) + (bytes[3] << 24);
     }
 
     public static long toLong(byte[] bytes) {

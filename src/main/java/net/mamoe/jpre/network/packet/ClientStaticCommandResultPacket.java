@@ -7,6 +7,7 @@ package net.mamoe.jpre.network.packet;
 public class ClientStaticCommandResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.CLIENT_STATIC_COMMAND_RESULT;
 
+	private byte id; // 操作 ID, 用于识别是哪一次API调用的返回值
 	private Object result;
 
 	@Override
@@ -30,5 +31,9 @@ public class ClientStaticCommandResultPacket extends Packet {
 
 	public Object getResult() {
 		return result;
+	}
+
+	public byte getId() {
+		return id;
 	}
 }

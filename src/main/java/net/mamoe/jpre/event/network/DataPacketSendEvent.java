@@ -13,9 +13,4 @@ public class DataPacketSendEvent extends NetworkEvent implements Cancellable {
 	public DataPacketSendEvent(Packet packet) {
 		super(packet);
 	}
-
-	@Override
-	public int getResultStatus() {
-		return isCancelled() ? 1:0;
-	}
 }

@@ -2,7 +2,7 @@ package net.mamoe.jpre.plugin;
 
 import com.google.gson.Gson;
 import net.mamoe.jpre.Frame;
-import net.mamoe.jpre.Utils;
+import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.event.*;
 import net.mamoe.jpre.exception.PluginEventException;
 import net.mamoe.jpre.exception.PluginLoadException;

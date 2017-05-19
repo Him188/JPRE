@@ -44,7 +44,7 @@ public final class JPREMain {
      *
      * @return Server sScheduler
      */
-    static ServerScheduler getServerScheduler() {
+    public static ServerScheduler getServerScheduler() {
         return serverScheduler;
     }
 
@@ -104,7 +104,7 @@ public final class JPREMain {
     private static void printAbout() {
         System.out.println("MPQ JavaPluginRuntimeEnvironment");
         System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);
-        System.out.println("Author: Him188 & LamGC & Other fiends");
-        System.out.println("GitHub: https://github.com/Him188/JPRE\n");
+        System.out.println("Author: Him188 & LamGC & Other fiends @ MamoeTech");
+        System.out.println("GitHub: https://github.com/MamoeTech/JPRE\n");
     }
 }

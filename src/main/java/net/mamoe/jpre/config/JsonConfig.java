@@ -1,7 +1,7 @@
 package net.mamoe.jpre.config;
 
 import com.google.gson.*;
-import net.mamoe.jpre.Utils;
+import net.mamoe.jpre.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;

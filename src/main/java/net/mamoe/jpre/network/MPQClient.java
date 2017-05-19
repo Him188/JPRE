@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.OnlineStatus;
 import net.mamoe.jpre.RobotQQ;
-import net.mamoe.jpre.Utils;
+import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.event.Event;
 import net.mamoe.jpre.event.EventType;
@@ -85,8 +85,8 @@ public final class MPQClient {
 
                 EventType type = EventType.match(packet.getInt());
                 if (type == null) {
-                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
-                    break;
+                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
+                    return;
                 }
 
                 long robotQQ = packet.getLong();
@@ -116,7 +116,7 @@ public final class MPQClient {
 
                 switch (type) {
                     case UNKNOWN:
-                        sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
+                        sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
                         break;
 
                     /* Message */
@@ -249,22 +249,23 @@ public final class MPQClient {
 
                 if (event == null) {
                     sendPacket(new ServerInvalidEventPacket());
-                    break;
+                    return;
+
                 }
                 System.out.println("[Event] Parsed: " + event);
-                sendPacket(new ClientEventResultPacket(frame.getPluginManager().callEvent(event)));
+                sendPacket(new ServerEventResultPacket(frame.getPluginManager().callEvent(event)));
                 break;
             default:
                 Packet pk;
                 try {
                     pk = Packet.matchPacket(pid);
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 System.out.println("Packet: " + pk);
                 if (pk == null) {
-                    sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
+                    sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
                     return;
                 }
                 pk.setClient(this);
@@ -311,7 +312,7 @@ public final class MPQClient {
             case CLIENT_GET_PLUGIN_LIST:
                 // TODO: 2017/5/18 完成包
             default: {
-                sendPacket(new ClientEventResultPacket(Event.STATUS_CONTINUE));
+                sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE));
                 break;
             }
         }
@@ -326,7 +327,8 @@ public final class MPQClient {
         packet.encode();
 
         DataPacketSendEvent event = new DataPacketSendEvent(packet);
-        if (getFrame().getPluginManager().callEvent(event) == 1) {
+        getFrame().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
             return;
         }
 

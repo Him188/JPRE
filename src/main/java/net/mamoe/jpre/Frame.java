@@ -2,9 +2,11 @@ package net.mamoe.jpre;
 
 import net.mamoe.jpre.exception.PluginLoadException;
 import net.mamoe.jpre.network.MPQClient;
+import net.mamoe.jpre.network.packet.ServerStaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.plugin.PluginManager;
 import net.mamoe.jpre.scheduler.Scheduler;
+import net.mamoe.jpre.utils.CommandResults;
 
 import java.io.File;
 
@@ -65,7 +67,7 @@ public final class Frame {
 
     private boolean shutdown;
 
-    public void connect(){
+    public void connect() {
 
     }
 
@@ -149,5 +151,305 @@ public final class Frame {
 
     public Scheduler getScheduler() {
         return scheduler;
+    }
+
+
+
+	/* COMMAND SENDER */
+
+    private CommandResults results = new CommandResults();
+
+    public byte runCommand(CommandId id, Object... args) throws InterruptedException {
+        byte i = results.requestId();
+        this.getClient().sendPacket(new ServerStaticCommandPacket(i, id, args));
+        return i;
+    }
+
+    public void runVoidCommand(CommandId id, Object... args) throws InterruptedException {
+        this.getClient().sendPacket(new ServerStaticCommandPacket((byte) 0, id, args));
+    }
+    
+    
+	/* MPQ API */
+
+    // TODO: 2017/5/17  package-private api,
+
+    /**
+     * 将群名片加入高速缓存当中
+     *
+     * @param group 群号
+     * @param QQ    QQ
+     * @param card  群名片
+     */
+    public boolean cacheNameCard(long group, long QQ, String card) {
+        try {
+            runCommand(CommandId.CACHE_NAME_CARD, 0L, group, QQ, card);
+            return true;
+        } catch (InterruptedException e) {
+            return false;
+        }
+    }
+
+    /**
+     * 根据图片 GUID 取得图片下载连接 失败返回空
+     *
+     * @param guid GUID
+     * @return 图片下载链接
+     */
+    public String guidGetPicLink(String guid) {
+        try {
+            byte id = runCommand(CommandId.GUID_GET_PIC_LINK, 0L, guid);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 发送封包
+     *
+     * @param data 封包数据
+     * @return unknown
+     */
+    public int send(String data) {
+        byte id = runCommand(CommandId.SEND, 0L, data);
+        returnIntResult();
+    }
+
+    /**
+     * 在框架记录页输出一行信息
+     *
+     * @param content 输出的内容
+     * @return unknown
+     */
+    public int output(String content) {
+        byte id = runCommand(CommandId.OUTPUT, 0L, content);
+        returnIntResult();
+    }
+
+    /**
+     * 取得本插件(JPRE)启用状态
+     *
+     * @return 本插件(JPRE)启用状态
+     */
+    public boolean isEnabled() {
+        byte id = runCommand(CommandId.IS_ENABLE, 0L);
+        returnBooleanResult();
+    }
+
+    /**
+     * 登录一个现存的 QQ
+     *
+     * @param QQ QQ
+     * @return 是否成功
+     */
+    public boolean login(long QQ) {
+        byte id = runCommand(CommandId.LOGIN, 0L, QQ);
+        returnBooleanResult();
+    }
+
+    /**
+     * 让指定 QQ 下线
+     *
+     * @param QQ QQ
+     */
+    public void logout(long QQ) {
+        byte id = runCommand(CommandId.LOGOUT, 0L, QQ);
+    }
+
+    /**
+     * Tean 加密算法
+     *
+     * @param content 内容
+     * @param key     key
+     * @return 加密结果
+     */
+    public String teaEncode(String content, String key) {
+        byte id = runCommand(CommandId.TEA_ENCODE, 0L, content, key);
+        returnStringResult();
+    }
+
+    /**
+     * Tean 解密算法
+     *
+     * @param content 内容
+     * @param key     key
+     * @return 解密结果
+     */
+    public String teaDecode(String content, String key) {
+        byte id = runCommand(CommandId.TEA_DECODE, 0L, content, key);
+        returnStringResult();
+    }
+
+    /**
+     * 取用户名
+     *
+     * @param QQ QQ
+     * @return 用户名
+     */
+    public String getNick(long QQ) {
+        byte id = runCommand(CommandId.GET_NICK, 0L, QQ);
+        returnStringResult();
+    }
+
+    /**
+     * 获取 QQ 等级
+     *
+     * @param QQ QQ
+     * @return QQ 等级
+     */
+    public String getQQLevel(long QQ) {
+        byte id = runCommand(CommandId.GET_QQ_LEVEL, 0L, QQ);
+        returnStringResult();
+    }
+
+    /**
+     * 获取 GID
+     *
+     * @param groupNumber 群号
+     * @return GID
+     */
+    public String getGId(long groupNumber) {
+        byte id = runCommand(CommandId.GN_GET_GID, 0L, groupNumber);
+        returnStringResult();
+    }
+
+    /**
+     * 获取群号
+     *
+     * @param gid GID
+     * @return 群号
+     */
+    public long getGroupNumber(String gid) {
+        byte id = runCommand(CommandId.GID_GET_GN, 0L, gid);
+        returnLongResult();
+    }
+
+    /**
+     * 取框架版本号(发布时间戳)
+     *
+     * @return 框架版本号(发布时间戳)
+     */
+    public int getVersion() {
+        byte id = runCommand(CommandId.GET_VERSION, 0L);
+        returnIntResult();
+    }
+
+    /**
+     * 取框架版本名
+     *
+     * @return 框架版本名
+     */
+    public String getVersionName() {
+        byte id = runCommand(CommandId.GET_VERSION_NAME, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取当前框架内部时间戳, 周期性与服务器时间同步
+     *
+     * @return 当前框架内部时间戳, 周期性与服务器时间同步
+     */
+    public int getTimeStamp() {
+        byte id = runCommand(CommandId.GET_TIME_STAMP, 0L);
+        returnIntResult();
+    }
+
+    /**
+     * 取得框架输出列表内所有信息
+     * 包可能过长, 导致接受慢
+     *
+     * @return 框架输出列表内所有信息
+     */
+    //LONG PACKET WARNING!!!
+    public String getLog() {
+        byte id = runCommand(CommandId.GET_LOG, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取得框架内随机一个在线且可以使用的QQ
+     *
+     * @return 框架内随机一个在线且可以使用的QQ
+     */
+    public String getRandomOnlineQQ() {
+        byte id = runCommand(CommandId.GET_RANDOM_ONLINE_QQ, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 往帐号列表添加一个 QQ. 当该 QQ 已存在时则覆盖密码
+     *
+     * @param QQ        QQ
+     * @param password  密码
+     * @param autoLogin 运行框架时是否自动登录该Q.若添加后需要登录该 QQ 则需要通过 Api_Login 操作
+     * @return 是否成功
+     */
+    public boolean addQQ(long QQ, String password, boolean autoLogin) {
+        byte id = runCommand(CommandId.ADD_QQ, 0L, QQ, password, autoLogin);
+        returnBooleanResult();
+    }
+
+    /**
+     * 设置在线状态和附加信息
+     *
+     * @param QQ              QQ
+     * @param status          状态.
+     * @param additionMessage 附加消息. 最大 255 字节
+     * @return 是否成功
+     */
+    public boolean setOnlineStatus(long QQ, OnlineStatus status, String additionMessage) {
+        byte id = runCommand(CommandId.SET_OL_STATUS, 0L, QQ, status.getId(), additionMessage);
+        returnBooleanResult();
+    }
+
+    /**
+     * 取得机器码
+     *
+     * @return 机器码
+     */
+    public String getMachineCode() {
+        byte id = runCommand(CommandId.GET_MC, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取得框架所在目录
+     *
+     * @return 框架所在目录
+     */
+    public String getRunPath() {
+        byte id = runCommand(CommandId.GET_RUN_PATH, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取得当前框架内在线可用的QQ列表
+     *
+     * @return 当前框架内在线可用的QQ列表
+     */
+    public String getOnlineQQList() {
+        byte id = runCommand(CommandId.GET_ONLINE_QQ_LIST, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取得框架内所有QQ列表。包括未登录以及登录失败的QQ
+     *
+     * @return 框架内所有QQ列表
+     */
+    public String getFrameQQList() {
+        byte id = runCommand(CommandId.GET_QQ_LIST, 0L);
+        returnStringResult();
+    }
+
+    /**
+     * 取得框架内设置的信息发送前缀
+     *
+     * @return 框架内设置的信息发送前缀
+     */
+    public String getPrefix() {
+        byte id = runCommand(CommandId.GET_PREFIX, 0L);
+        returnStringResult();
     }
 }

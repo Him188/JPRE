@@ -1,6 +1,6 @@
 package net.mamoe.jpre.config;
 
-import net.mamoe.jpre.Utils;
+import net.mamoe.jpre.utils.Utils;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 

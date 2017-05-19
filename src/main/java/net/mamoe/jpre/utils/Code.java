@@ -1,4 +1,4 @@
-package net.mamoe.jpre;
+package net.mamoe.jpre.utils;
 
 /**
  * @author Him188 @ JPRE Project

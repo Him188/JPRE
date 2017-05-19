@@ -4,7 +4,7 @@ package net.mamoe.jpre.network.packet;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
-public class ClientEventResultPacket extends Packet {
+public class ServerEventResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_EVENT_RESULT;
 
 	//返回值-1 已收到信息但拒绝处理  //JPRE不使用
@@ -21,7 +21,7 @@ public class ClientEventResultPacket extends Packet {
 
 	private final int returnValue;
 
-	public ClientEventResultPacket(int returnValue) {
+	public ServerEventResultPacket(int returnValue) {
 		this.returnValue = returnValue;
 	}
 
@@ -32,7 +32,7 @@ public class ClientEventResultPacket extends Packet {
 		}
 
 		clear();
-		putInt(returnValue);
+		putRawWithType(returnValue);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package net.mamoe.jpre;
+package net.mamoe.jpre.utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -179,19 +179,46 @@ public final class Utils {
         return true;
     }
 
-    /**
-     * 将数组中所有 long 类型值转换为 String. 供使用 MPQ API
-     */
-    public static Object[] convertLongToString(Object[] array) {
-        return array;
-        /*
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getClass() == long.class || array[i] instanceof Long) {
-                array[i] = String.valueOf(array[i]);
-            }
+
+    /* Parser */
+
+    public static int parseInt(String value) {
+        if (value == null) {
+            return 0;
         }
 
-        return array;
-        */
+        if (value.isEmpty()) {
+            return 0;
+        }
+        if (value.equalsIgnoreCase("false")) {
+            return 0;
+        }
+        if (value.equalsIgnoreCase("true")) {
+            return 1;
+        }
+        if (value.equalsIgnoreCase("null")) {
+            return 0;
+        }
+        return Integer.parseInt(value);
     }
+
+    public static long parseLong(String value) {
+        if (value == null) {
+            return 0;
+        }
+        if (value.isEmpty()) {
+            return 0;
+        }
+        if (value.equalsIgnoreCase("false")) {
+            return 0;
+        }
+        if (value.equalsIgnoreCase("true")) {
+            return 1;
+        }
+        if (value.equalsIgnoreCase("null")) {
+            return 0;
+        }
+        return Long.parseLong(value);
+    }
+
 }
