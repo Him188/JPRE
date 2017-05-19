@@ -211,8 +211,12 @@ public final class Frame {
      * @return unknown
      */
     public int send(String data) {
-        byte id = runCommand(CommandId.SEND, 0L, data);
-        returnIntResult();
+        try {
+            byte id = runCommand(CommandId.SEND, 0L, data);
+            return results.intResult(id);
+        } catch (InterruptedException e) {
+            return 0;
+        }
     }
 
     /**
@@ -222,8 +226,12 @@ public final class Frame {
      * @return unknown
      */
     public int output(String content) {
-        byte id = runCommand(CommandId.OUTPUT, 0L, content);
-        returnIntResult();
+        try {
+            byte id = runCommand(CommandId.OUTPUT, 0L, content);
+            return results.intResult(id);
+        } catch (InterruptedException e) {
+            return 0;
+        }
     }
 
     /**
@@ -232,8 +240,12 @@ public final class Frame {
      * @return 本插件(JPRE)启用状态
      */
     public boolean isEnabled() {
-        byte id = runCommand(CommandId.IS_ENABLE, 0L);
-        returnBooleanResult();
+        try {
+            byte id = runCommand(CommandId.IS_ENABLE, 0L);
+            return results.booleanResult(id);
+        } catch (InterruptedException e) {
+            return false;
+        }
     }
 
     /**
@@ -243,8 +255,12 @@ public final class Frame {
      * @return 是否成功
      */
     public boolean login(long QQ) {
-        byte id = runCommand(CommandId.LOGIN, 0L, QQ);
-        returnBooleanResult();
+        try {
+            byte id = runCommand(CommandId.LOGIN, 0L, QQ);
+            return results.booleanResult(id);
+        } catch (InterruptedException e) {
+            return false;
+        }
     }
 
     /**
@@ -253,7 +269,11 @@ public final class Frame {
      * @param QQ QQ
      */
     public void logout(long QQ) {
-        byte id = runCommand(CommandId.LOGOUT, 0L, QQ);
+        try {
+            runVoidCommand(CommandId.LOGOUT, 0L, QQ);
+        } catch (InterruptedException ignored) {
+
+        }
     }
 
     /**
@@ -264,8 +284,12 @@ public final class Frame {
      * @return 加密结果
      */
     public String teaEncode(String content, String key) {
-        byte id = runCommand(CommandId.TEA_ENCODE, 0L, content, key);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.TEA_ENCODE, 0L, content, key);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -276,8 +300,12 @@ public final class Frame {
      * @return 解密结果
      */
     public String teaDecode(String content, String key) {
-        byte id = runCommand(CommandId.TEA_DECODE, 0L, content, key);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.TEA_DECODE, 0L, content, key);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -287,8 +315,12 @@ public final class Frame {
      * @return 用户名
      */
     public String getNick(long QQ) {
-        byte id = runCommand(CommandId.GET_NICK, 0L, QQ);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_NICK, 0L, QQ);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -298,8 +330,12 @@ public final class Frame {
      * @return QQ 等级
      */
     public String getQQLevel(long QQ) {
-        byte id = runCommand(CommandId.GET_QQ_LEVEL, 0L, QQ);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_QQ_LEVEL, 0L, QQ);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -309,8 +345,12 @@ public final class Frame {
      * @return GID
      */
     public String getGId(long groupNumber) {
-        byte id = runCommand(CommandId.GN_GET_GID, 0L, groupNumber);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GN_GET_GID, 0L, groupNumber);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -320,8 +360,12 @@ public final class Frame {
      * @return 群号
      */
     public long getGroupNumber(String gid) {
-        byte id = runCommand(CommandId.GID_GET_GN, 0L, gid);
-        returnLongResult();
+        try {
+            byte id = runCommand(CommandId.GID_GET_GN, 0L, gid);
+            return results.longResult(id);
+        } catch (InterruptedException e) {
+            return 0;
+        }
     }
 
     /**
@@ -330,8 +374,12 @@ public final class Frame {
      * @return 框架版本号(发布时间戳)
      */
     public int getVersion() {
-        byte id = runCommand(CommandId.GET_VERSION, 0L);
-        returnIntResult();
+        try {
+            byte id = runCommand(CommandId.GET_VERSION, 0L);
+            return results.intResult(id);
+        } catch (InterruptedException e) {
+            return 0;
+        }
     }
 
     /**
@@ -340,8 +388,12 @@ public final class Frame {
      * @return 框架版本名
      */
     public String getVersionName() {
-        byte id = runCommand(CommandId.GET_VERSION_NAME, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_VERSION_NAME, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -350,8 +402,12 @@ public final class Frame {
      * @return 当前框架内部时间戳, 周期性与服务器时间同步
      */
     public int getTimeStamp() {
-        byte id = runCommand(CommandId.GET_TIME_STAMP, 0L);
-        returnIntResult();
+        try {
+            byte id = runCommand(CommandId.GET_TIME_STAMP, 0L);
+            return results.intResult(id);
+        } catch (InterruptedException e) {
+            return 0;
+        }
     }
 
     /**
@@ -362,8 +418,12 @@ public final class Frame {
      */
     //LONG PACKET WARNING!!!
     public String getLog() {
-        byte id = runCommand(CommandId.GET_LOG, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_LOG, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -372,8 +432,12 @@ public final class Frame {
      * @return 框架内随机一个在线且可以使用的QQ
      */
     public String getRandomOnlineQQ() {
-        byte id = runCommand(CommandId.GET_RANDOM_ONLINE_QQ, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_RANDOM_ONLINE_QQ, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -385,8 +449,12 @@ public final class Frame {
      * @return 是否成功
      */
     public boolean addQQ(long QQ, String password, boolean autoLogin) {
-        byte id = runCommand(CommandId.ADD_QQ, 0L, QQ, password, autoLogin);
-        returnBooleanResult();
+        try {
+            byte id = runCommand(CommandId.ADD_QQ, 0L, QQ, password, autoLogin);
+            return results.booleanResult(id);
+        } catch (InterruptedException e) {
+            return false;
+        }
     }
 
     /**
@@ -398,8 +466,12 @@ public final class Frame {
      * @return 是否成功
      */
     public boolean setOnlineStatus(long QQ, OnlineStatus status, String additionMessage) {
-        byte id = runCommand(CommandId.SET_OL_STATUS, 0L, QQ, status.getId(), additionMessage);
-        returnBooleanResult();
+        try {
+            byte id = runCommand(CommandId.SET_OL_STATUS, 0L, QQ, status.getId(), additionMessage);
+            return results.booleanResult(id);
+        } catch (InterruptedException e) {
+            return false;
+        }
     }
 
     /**
@@ -408,8 +480,12 @@ public final class Frame {
      * @return 机器码
      */
     public String getMachineCode() {
-        byte id = runCommand(CommandId.GET_MC, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_MC, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -418,8 +494,12 @@ public final class Frame {
      * @return 框架所在目录
      */
     public String getRunPath() {
-        byte id = runCommand(CommandId.GET_RUN_PATH, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_RUN_PATH, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -428,8 +508,12 @@ public final class Frame {
      * @return 当前框架内在线可用的QQ列表
      */
     public String getOnlineQQList() {
-        byte id = runCommand(CommandId.GET_ONLINE_QQ_LIST, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_ONLINE_QQ_LIST, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -438,8 +522,12 @@ public final class Frame {
      * @return 框架内所有QQ列表
      */
     public String getFrameQQList() {
-        byte id = runCommand(CommandId.GET_QQ_LIST, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_QQ_LIST, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 
     /**
@@ -448,7 +536,11 @@ public final class Frame {
      * @return 框架内设置的信息发送前缀
      */
     public String getPrefix() {
-        byte id = runCommand(CommandId.GET_PREFIX, 0L);
-        returnStringResult();
+        try {
+            byte id = runCommand(CommandId.GET_PREFIX, 0L);
+            return results.stringResult(id);
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 }
