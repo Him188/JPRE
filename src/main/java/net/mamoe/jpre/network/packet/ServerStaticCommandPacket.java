@@ -33,6 +33,7 @@ public class ServerStaticCommandPacket extends Packet {
 
 		clear();
 
+		putByte(id);
 		putByte(commandId.getId());
 		putRaw(args);
 	}

@@ -7,8 +7,21 @@ package net.mamoe.jpre.network.packet;
 public class ServerInvalidEventPacket extends Packet {
     public static final byte NETWORK_ID = Protocol.SERVER_INVALID_ID;
 
+    private final byte id;
+
+    public ServerInvalidEventPacket(byte id) {
+        this.id = id;
+    }
+
     @Override
     public void encode() {
+        if (setEncoded(true)) {
+            return;
+        }
+
+        clear();
+
+        putByte(id);
     }
 
     @Override

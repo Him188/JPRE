@@ -40,6 +40,7 @@ public class ServerCommandPacket extends Packet {
 
         clear();
 
+        putByte(id);
         putLong(robot.getQQNumber());
         putByte(commandId.getId());
         putInt(args.length);

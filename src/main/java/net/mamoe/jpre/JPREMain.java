@@ -15,7 +15,8 @@ import org.apache.commons.cli.Options;
  * 如果你想开发插件. 请查看 {@link Plugin}
  *
  * @author Him188 @ JPRE Project
- * @see PluginManager 真正的插件管理器 */
+ * @see PluginManager 真正的插件管理器
+ */
 @SuppressWarnings("WeakerAccess")
 public final class JPREMain {
     /* Instance */
@@ -37,7 +38,7 @@ public final class JPREMain {
     private static ServerScheduler serverScheduler;
 
     /**
-     * Server Scheduler 主要用于 {@link RobotQQ#stringResult} 的超时处理
+     * Server Scheduler 主要用于 {@link net.mamoe.jpre.utils.CommandResults#stringResult(byte)} 的超时处理
      * 插件请使用 {@link Frame#getScheduler()}
      *
      * @return Server sScheduler

@@ -247,7 +247,7 @@ public final class MPQClient {
                 }
 
                 if (event == null) {
-                    sendPacket(new ServerInvalidEventPacket());
+                    sendPacket(new ServerInvalidEventPacket(id));
                     return;
 
                 }

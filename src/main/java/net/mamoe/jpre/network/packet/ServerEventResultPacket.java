@@ -18,10 +18,10 @@ public class ServerEventResultPacket extends Packet {
 	//30 单向同意该事件(仅用于被添加好友
 	private final int returnValue;
 
-    private final int id;
+	private final byte id;
 
-    public ServerEventResultPacket(int returnValue, int id) {
-        this.returnValue = returnValue;
+	public ServerEventResultPacket(int returnValue, byte id) {
+		this.returnValue = returnValue;
         this.id = id;
     }
 
@@ -32,6 +32,7 @@ public class ServerEventResultPacket extends Packet {
 		}
 
 		clear();
+		putByte(id);
 		putRawWithType(returnValue);
 	}
 
