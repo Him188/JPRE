@@ -181,12 +181,10 @@ public final class Frame {
      * @param QQ    QQ
      * @param card  群名片
      */
-    public boolean cacheNameCard(long group, long QQ, String card) {
+    public void cacheNameCard(long group, long QQ, String card) {
         try {
-            runCommand(CommandId.CACHE_NAME_CARD, 0L, group, QQ, card);
-            return true;
-        } catch (InterruptedException e) {
-            return false;
+            runVoidCommand(CommandId.CACHE_NAME_CARD, 0L, group, QQ, card);
+        } catch (InterruptedException ignored) {
         }
     }
 
