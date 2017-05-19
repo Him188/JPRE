@@ -83,7 +83,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     }
 
     private void processPacket(ChannelHandlerContext ctx, BinaryStream stream) {
-        System.out.println(stream);
+        //System.out.println(stream);
         for (MPQClient client : clients) {
             if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
                 client.getFrame().getScheduler().scheduleTask(null, () -> {
@@ -93,6 +93,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
                         e.printStackTrace();
                     }
                 });
+                return;
             }
         }
     }

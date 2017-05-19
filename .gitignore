@@ -1,14 +1,14 @@
 *.dll
 out/
-lib/
-.idea/
-target/
-*.iml
+/lib/
+/.idea/
+/target/
+/*.iml
 *.ipr
 *.iws
 
-src/test/test.txt
-src/test/test.xml
+/src/test/test.txt
+/src/test/test.xml
 
 # EPL
 *.bak
@@ -16,4 +16,4 @@ src/test/test.xml
 *.ec
 
 # Test
-plugins/
+/test/

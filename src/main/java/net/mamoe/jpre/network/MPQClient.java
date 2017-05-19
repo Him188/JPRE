@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.OnlineStatus;
 import net.mamoe.jpre.RobotQQ;
-import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.event.Event;
 import net.mamoe.jpre.event.EventType;
@@ -17,10 +16,10 @@ import net.mamoe.jpre.event.qq.*;
 import net.mamoe.jpre.event.qq.taotao.FriendTaotaoCommitEvent;
 import net.mamoe.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
 import net.mamoe.jpre.network.packet.*;
+import net.mamoe.jpre.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
-import java.util.Arrays;
 
 import static net.mamoe.jpre.network.packet.Protocol.*;
 
@@ -262,13 +261,13 @@ public final class MPQClient {
                     sendPacket(new ServerInvalidIdPacket());
                     return;
                 }
-                System.out.println("Packet: " + pk);
                 if (pk == null) {
                     sendPacket(new ServerInvalidIdPacket());
                     return;
                 }
                 pk.setClient(this);
-                pk.setData(packet.getAll());
+                pk.setData(packet.getLast());
+                pk.setEncoded(true);
                 composePacket(pk);
                 break;
         }
@@ -282,11 +281,14 @@ public final class MPQClient {
     public void composePacket(Packet packet) {
         packet.decode();
 
+        System.out.print("Packet: " + packet);
         DataPacketReceiveEvent event = new DataPacketReceiveEvent(packet);
         frame.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            System.out.println("  (Cancelled)");
             return;
         }
+        System.out.println("");
 
         switch (packet.getNetworkId()) {
             case CLIENT_PING: {
@@ -342,7 +344,7 @@ public final class MPQClient {
         System.arraycopy(data, 0, result, 1, data.length);
         result = Utils.arrayAppend(result, Protocol.SIGNATURE);
         this.getLastCtx().writeAndFlush(result);
-        System.out.println("[Network] Packet sent:" + packet + ", data: " + Arrays.toString(result));
+        System.out.println("[Network] Packet sent:" + packet);
     }
 
 

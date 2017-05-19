@@ -183,8 +183,8 @@ public final class PluginManager {
 			}
 			Plugin plugin = getPlugin(file);
 			return plugin != null;
-		} catch (IOException e) {
-			return false;
+        } catch (IOException e) { // TODO: 2017/5/19 exception
+            return false;
 		} catch (PluginLoadException e) {
 			throw new PluginLoadException(e.getMessage());
 		}
@@ -206,9 +206,9 @@ public final class PluginManager {
 		if (description.getMainClass().isEmpty()) {
 			throw new PluginLoadException("Could not load plugin description: " + description.getName());
 		}
-		if (description.getMainClass().startsWith("net.mamoe.jpre.")) {
-			throw new PluginLoadException("Could not load main class " + description.getMainClass() + ". Caused by plugin " + description.getName());
-		}
+        if (description.getMainClass().startsWith("net.mamoe.jpre")) {
+            throw new PluginLoadException("Could not load main class " + description.getMainClass() + " in plugin " + description.getName());
+        }
 
 		for (Plugin plugin : plugins) {
 			if (plugin.getName().equals(description.name)) {
@@ -220,13 +220,13 @@ public final class PluginManager {
 		try {
 			Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
 			method.setAccessible(true);
-			URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-			method.invoke(classLoader, new File(file.getName()).toURI().toURL());
+            URLClassLoader classLoader = (URLClassLoader) this.getClass().getClassLoader();
+            method.invoke(classLoader, new File(file.getName()).toURI().toURL());
 
 			mainClass = Class.forName(description.getMainClass());
 		} catch (Throwable e) {
-			throw new PluginLoadException("Could not found main class " + description.getMainClass() + " Caused by plugin " + description.getName(), e);
-		}
+            throw new PluginLoadException("Could not found main class " + description.getMainClass() + " in plugin " + description.getName(), e);
+        }
 
 		if (!Plugin.class.isAssignableFrom(mainClass)) {
 			throw new PluginLoadException("The main class is not assignable from Plugin: " + mainClass.getName());

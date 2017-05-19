@@ -3,19 +3,14 @@ package net.mamoe.jpre;
 import net.mamoe.jpre.event.send.SendDiscussionMessageEvent;
 import net.mamoe.jpre.event.send.SendGroupMessageEvent;
 import net.mamoe.jpre.event.send.SendPrivateMessageEvent;
-import net.mamoe.jpre.network.MPQClient;
-import net.mamoe.jpre.network.NetworkPacketHandler;
 import net.mamoe.jpre.network.packet.ServerCommandPacket;
 import net.mamoe.jpre.network.packet.ServerStaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
-import net.mamoe.jpre.scheduler.Task;
 import net.mamoe.jpre.utils.CommandResults;
-import net.mamoe.jpre.utils.Utils;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * 框架上的机器人 QQ(响应 QQ)
@@ -956,7 +951,6 @@ public class RobotQQ {
     public void like(long QQ, int times, long millis, Plugin plugin) {
         frame.getScheduler().scheduleTask(plugin, () -> {
             for (int i = 0; i < times; i++) {
-                Thread.currentThread();
                 try {
                     Thread.sleep(millis);
                 } catch (InterruptedException e) {

@@ -8,7 +8,7 @@ import java.util.jar.JarFile;
  * @author Him188 @ JPRE Project
  * @see PluginManager#getDescription(JarFile)
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public class PluginDescription {
     public String name;
     public String main;

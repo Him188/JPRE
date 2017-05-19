@@ -209,8 +209,32 @@ abstract public class Packet extends BinaryStream {
 		return null;
 	}
 
-	@Override
-	public String toString() {
-		return this.getClass().getSimpleName() + "(Id=" + this.getNetworkId() + ")";
-	}
+    /**
+     * 返回当前类的类名, 当前类和父类(不包括 Object)的成员变量信息
+     * 例如, GroupMessageEvent(group=xxx,qq=xxx,message=xxx,cancelled=xxx,intercepted=xxx)
+     *
+     * @return {@code 类名(子类成员变量=值,父类成员变量=值)}
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder(getClass().getSimpleName() + "(");
+        Class<?> clazz = getClass();
+        while (clazz != null && clazz != Object.class) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+                field.setAccessible(true);
+                try {
+                    result.append(field.getName()).append("=").append(field.get(this)).append(",");
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+
+        result.deleteCharAt(result.length() - 1);
+        result.append(")");
+        return result.toString();
+    }
 }

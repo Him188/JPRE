@@ -1,7 +1,4 @@
-package net.mamoe.jpre.network;
-
-import net.mamoe.jpre.network.packet.Packet;
-import net.mamoe.jpre.network.packet.Protocol;
+package net.mamoe.jpre.network.packet;
 
 /**
  * @author Him188 @ JPRE Project
