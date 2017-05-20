@@ -647,9 +647,9 @@ public class RobotQQ {
      * @return 转码后的 JSON 格式文本
      */
     // TODO: 2017/4/9  解析 json
-    public String getGroupMemberA() {
+    public String getGroupMemberA(long group) {
         try {
-            byte id = runCommand(CommandId.GET_GROUP_MEMBER_A, this.getQQNumber());
+            byte id = runCommand(CommandId.GET_GROUP_MEMBER_A, this.getQQNumber(), group);
             return results.stringResult(id);
         } catch (InterruptedException e) {
             return null;
@@ -658,12 +658,13 @@ public class RobotQQ {
 
     /**
      * 通过 qun.qzone.qq.com 接口取得群成员列表 成功返回转码后的 JSON 格式文本
+     * (测试发现这似乎是管理员列表?)
      *
      * @return 转码后的 JSON 格式文本
      */
-    public String getGroupMemberB() {
+    public String getGroupMemberB(long group) {
         try {
-            byte id = runCommand(CommandId.GET_GROUP_MEMBER_B, this.getQQNumber());
+            byte id = runCommand(CommandId.GET_GROUP_MEMBER_B, this.getQQNumber(), group);
             return results.stringResult(id);
         } catch (InterruptedException e) {
             return null;

@@ -11,7 +11,8 @@ import java.util.List;
 import static net.mamoe.jpre.binary.Binary.*;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("WeakerAccess")
 public class BinaryStream {
     protected byte[] data;
@@ -245,8 +246,13 @@ public class BinaryStream {
         return getBytes(1)[0];
     }
 
-    public int getInt() { // TODO: 2017/5/17 check it
+    public int getInt() {
         return toInt(getBytes(4));
+        //return (int) getLong();
+    }
+
+    public int getIntAdded() {
+        return toIntAdded(getBytes(4));
         //return (int) getLong();
     }
 

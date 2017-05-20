@@ -81,7 +81,7 @@ public final class MPQClient {
                 Event event = null;
 
                 byte id = packet.getByte();
-                EventType type = EventType.match(packet.getInt());
+                EventType type = EventType.match(packet.getIntAdded());
                 if (type == null) {
                     sendPacket(new ServerEventResultPacket(Event.STATUS_CONTINUE, id));
                     return;
@@ -325,6 +325,7 @@ public final class MPQClient {
      * @param packet 包
      */
     public void sendPacket(Packet packet) {
+        packet.setClient(this);
         packet.encode();
 
         DataPacketSendEvent event = new DataPacketSendEvent(packet);
@@ -354,4 +355,11 @@ public final class MPQClient {
         return lastCtx;
     }
 
+    void setAddress(InetSocketAddress address) {
+        this.address = address;
+    }
+
+    void setCtx(ChannelHandlerContext lastCtx) {
+        this.lastCtx = lastCtx;
+    }
 }

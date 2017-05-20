@@ -117,6 +117,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         for (MPQClient client : clients) {
             if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
                 event = new FrameConnectionEvent(client.getFrame());
+                client.setAddress((InetSocketAddress) ctx.channel().remoteAddress());
+                client.setCtx(ctx);
                 break;
             }
         }

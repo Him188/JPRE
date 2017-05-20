@@ -5,7 +5,8 @@ import java.nio.charset.StandardCharsets;
 
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 
 
 @SuppressWarnings("WeakerAccess")
@@ -109,7 +110,7 @@ public final class Utils {
         int found = 0;
         loop:
         while (true) {
-            found = binarySearch(array, search[0], found);
+            found = binarySearch(array, search[0], found + 1);
             if (found < 0 || found > array.length) {
                 return -1;
             }
