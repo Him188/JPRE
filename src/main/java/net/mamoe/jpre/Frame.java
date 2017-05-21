@@ -41,7 +41,7 @@ public final class Frame {
 
     public Frame(JPREMain jpre) {
         this.jpre = jpre;
-        init(System.getProperty("user.dir"));// TODO: 2017/5/11 Frame 区分数据目录
+        init(JPREMain.getDataFolder());// TODO: 2017/5/11 Frame 区分数据目录
 
         scheduler = new Scheduler(this);
         pluginManager = new PluginManager(this);

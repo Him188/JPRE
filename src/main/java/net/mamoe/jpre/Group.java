@@ -6,7 +6,8 @@ import java.util.List;
 /**
  * QQ 群
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class Group extends User {
     private final long group;
 
@@ -58,19 +59,42 @@ public class Group extends User {
         return mute(qq, 0);
     }
 
-    public List<String> getGroupMemberList(){ // TODO: 2017/5/12 getGroupMemberList
+    public List<String> getGroupMemberList() { // TODO: 2017/5/12 getGroupMemberList
         return new ArrayList<>();
     }
 
-    public boolean wholeMute(){
+    public boolean wholeMute() {
         return getRobot().shutUpWhole(this.getNumber());
     }
 
-    public boolean wholeUnmute(){
+    public boolean wholeUnmute() {
         return getRobot().shutUpWhole(this.getNumber());
     }
 
-    public boolean setNotice(String title, String context){
+    public boolean setNotice(String title, String context) {
         return getRobot().setNotice(this.getNumber(), title, context);
+    }
+
+    public long[] getAdminList() {
+        String[] list = getRobot().getAdminList(this.getNumber()).split("\n");
+        ArrayList<Long> result = new ArrayList<>(list.length);
+        for (int i = 0; i < list.length; i++) {
+            list[i] = list[i].trim();
+            if (list[i].isEmpty()) {
+                continue;
+            }
+            try {
+                long number = Long.parseLong(list[i]);
+                result.add(number);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        Long[] array = result.toArray(new Long[result.size()]);
+        long[] returnValue = new long[array.length];
+        for (int i = 0; i < array.length; i++) {
+            returnValue[i] = array[i];
+        }
+        return returnValue;
     }
 }

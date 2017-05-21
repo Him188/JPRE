@@ -57,7 +57,7 @@ public final class JPREMain {
         serverScheduler = new ServerScheduler();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String... args) throws Exception {
         printAbout();
 
         CommandLineParser parser = new DefaultParser();
@@ -105,5 +105,17 @@ public final class JPREMain {
         System.out.println("Version: " + VERSION_TYPE + ", v" + VERSION);
         System.out.println("Author: Him188 & LamGC & Other fiends @ MamoeTech");
         System.out.println("GitHub: https://github.com/MamoeTech/JPRE\n");
+    }
+
+    /* DataFolder */
+
+    private static String dataFolder = System.getProperty("user.dir");
+
+    public static String getDataFolder() {
+        return dataFolder;
+    }
+
+    public static void setDataFolder(String dataFolder) {
+        JPREMain.dataFolder = dataFolder;
     }
 }
