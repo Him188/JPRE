@@ -3,7 +3,7 @@
 ——能让你使用 Java 开发 [MyPCQQ]("http://mypcqq.cc") 机器人插件的公益项目  
   
 ## 开源  
-GitHub: [JPRE(Java)(你现在阅读的就是)]("http://github.com/him188/jpre") / [MPQ插件(C#)]("http:/github.com/him188/jpre-mpq")  
+GitHub: [JPRE(Java)(你现在阅读的就是)]("http://github.com/mamoetech/jpre") / [MPQ插件(C#)]("http:/github.com/mamoetech/jpre-mpq")  
 
 ## 下载
 *项目仍在努力开发中，敬请期待*  
@@ -11,9 +11,9 @@ Circleci(需要登录): [JPRE(Java)]("baidu.com")
 Jenkins(直接下载): [JPRE(Java)]("baidu.com")  
 
 ## 作者  
-**本项目最初由 @LamGC 发起，我(Him188)后来参加开发**  
-- Java: @Him188(主要), @LamGC(部分), 其他朋友们(@XianD, @SoleMemory)
-- C#: @Him188
+**本项目最初由 \@LamGC 发起，我(Him188)后来参加开发**
+- Java: \@Him188(主要), \@LamGC(部分), 其他朋友们(\@XianD, \@SoleMemory)
+- C\#: \@Him188
 
 ## 词汇注明:   
 - JPRE:  

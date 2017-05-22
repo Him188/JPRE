@@ -88,8 +88,10 @@ public final class JPREMain {
             try {
                 Network.start(instance = new JPREMain(), finalPort);
             } catch (InterruptedException e) {
-                System.out.println("Starting server failed. Could not open port " + finalPort);
-                System.exit(0);
+	            System.out.println("Starting server failed. Could not open port " + finalPort);
+	            System.exit(0);
+            } catch (Exception e) { //捕获所有异常
+	            e.printStackTrace();
             }
         }).start();
         System.out.println("JPRE server is listening port " + port);

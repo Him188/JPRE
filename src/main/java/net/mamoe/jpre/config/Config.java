@@ -1,6 +1,9 @@
 package net.mamoe.jpre.config;
 
+import net.mamoe.jpre.exception.ConfigException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -289,5 +292,18 @@ abstract public class Config {
             return false;
         }
     }
+
+	static void createConfigFile(File file) {
+		try {
+			if (!file.exists()) {
+				if (!file.createNewFile()) {
+					throw new ConfigException("could not reload config", "could not create config file");
+				}
+			}
+		} catch (IOException e) {
+			throw new ConfigException("could not reload config", e);
+		}
+
+	}
 }
 

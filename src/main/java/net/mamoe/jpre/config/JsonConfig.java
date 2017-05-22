@@ -12,7 +12,8 @@ import java.util.Map.Entry;
  * Json 配置
  * 注意, 本类不会自动保存配置.
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JsonConfig extends Config {
     private Map<String, Object> list;
@@ -77,14 +78,8 @@ public class JsonConfig extends Config {
 
     @Override
     public void reload() {
-        try {
-            //System.out.println(file);
-            //noinspection ResultOfMethodCallIgnored
-            file.createNewFile(); // TODO: 2017/5/17 判断是否存在
-        } catch (IOException ignored) {
-
-        }
-        try {
+	    Config.createConfigFile(this.file);
+	    try {
             list = converter.toMap(Utils.readFile(file));
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,8 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author LamGC @ JPRE Project */
-@Target(ElementType.METHOD)
+ * @author LamGC @ JPRE Project
+ */
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventHandler {
 	/**
@@ -17,6 +18,7 @@ public @interface EventHandler {
 
 	/**
 	 * 定义这个监测器是否忽略已经被取消的事件
+	 *
 	 * @see Event#setCancelled()
 	 */
 	boolean ignoreCancelled() default true;

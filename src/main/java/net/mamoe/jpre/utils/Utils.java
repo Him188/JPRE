@@ -1,6 +1,11 @@
 package net.mamoe.jpre.utils;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 
 
@@ -40,6 +45,7 @@ public final class Utils {
         stream.close();
         content.close();
     }
+
 
     public static String readFile(File file) throws IOException {
         if (!file.exists() || file.isDirectory()) {
@@ -90,6 +96,13 @@ public final class Utils {
         System.arraycopy(array, length, newArray, 0, array.length - length);
         return newArray;
     }
+
+	public static void loadClass(File file, URLClassLoader classLoader) throws NoSuchMethodException, MalformedURLException, InvocationTargetException,
+			IllegalAccessException {
+		Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+		method.setAccessible(true);
+		method.invoke(classLoader, file.toURI().toURL());
+	}
 
     public static boolean parseBoolean(String value) {
         return value != null && (value.equalsIgnoreCase("true") || value.equals("1"));

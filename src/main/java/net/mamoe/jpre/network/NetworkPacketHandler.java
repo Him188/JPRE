@@ -71,7 +71,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
 
                 JPREMain.getServerScheduler().scheduleTask(() -> processPacket(ctx, d));
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -91,7 +91,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
                 client.getFrame().getScheduler().scheduleTask(null, () -> {
                     try {
                         client.dataReceive(stream);
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
@@ -101,7 +101,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Exception cause) throws Exception {
         if (cause instanceof IOException) { //远程主机强迫关闭了一个现有的连接
             return;
         }

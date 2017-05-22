@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /**
  * 方法事件处理器
- * 由 {@link PluginManager#registerEvent(Listener, Plugin, Class, Method)} 自动创建
+ * 由 {@link PluginManager#registerEvent(Listener, Plugin, Class, Handler)} 自动创建
  * 一般不会在插件中使用
  *
  * @author Him188 @ JPRE Project */

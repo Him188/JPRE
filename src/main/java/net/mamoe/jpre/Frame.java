@@ -1,6 +1,6 @@
 package net.mamoe.jpre;
 
-import net.mamoe.jpre.exception.PluginLoadException;
+import net.mamoe.jpre.exception.PluginException;
 import net.mamoe.jpre.network.MPQClient;
 import net.mamoe.jpre.network.packet.ServerStaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
@@ -100,17 +100,18 @@ public final class Frame {
         return names;
     }
 
+    // TODO: 2017/5/22 确认是否需要删除
     //加载一个插件:
     public boolean loadPluginDescription(String fileName) {
         try {
             return pluginManager.loadPluginDescription(fileName) != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean loadPlugin(String fileName) throws PluginLoadException {
+    public boolean loadPlugin(String fileName) throws PluginException {
         return pluginManager.loadPlugin(fileName);
     }
 
@@ -123,7 +124,7 @@ public final class Frame {
             plugin.enable();
             System.out.println("[Plugin] " + plugin.getName() + " enabled!");
             return true;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -136,7 +137,7 @@ public final class Frame {
             }
             plugin.disable();
             return true;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return false;
         }
     }

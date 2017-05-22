@@ -2,17 +2,16 @@ package net.mamoe.jpre.plugin;
 
 import com.google.gson.Gson;
 import net.mamoe.jpre.Frame;
-import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.event.*;
-import net.mamoe.jpre.exception.PluginEventException;
-import net.mamoe.jpre.exception.PluginLoadException;
+import net.mamoe.jpre.exception.EventException;
+import net.mamoe.jpre.exception.PluginException;
+import net.mamoe.jpre.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 import java.util.jar.JarFile;
@@ -39,16 +38,16 @@ import java.util.zip.ZipEntry;
  * 2. {@link #loadPlugin(String)}: 加载插件
  * 3. {@code {@link #getPlugin(String)}.enable() }: 启动插件
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class PluginManager {
-	/* Popular methods */
+    /* Popular methods */
 
 	/**
 	 * 调用(触发) 事件.
 	 *
 	 * @param event 事件
-	 *
 	 * @return 事件返回值
 	 */
 	public int callEvent(final Event event) {
@@ -58,7 +57,7 @@ public final class PluginManager {
 			for (EventPriority i : EventPriority.PRIORITIES) {
 				try {
 					list.getAll().stream().filter(handler -> handler.getPriority() == i).forEach(handler -> handler.execute(handler.getListener(), event));
-				} catch (Throwable e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -77,7 +76,7 @@ public final class PluginManager {
 
 	public PluginManager(Frame frame) {
 		this.frame = frame;
-		pluginDataFolder = new File(getFrame().getDataFolder() +File.separator+ "plugins" + File.separator);
+		pluginDataFolder = new File(getFrame().getDataFolder() + File.separator + "plugins" + File.separator);
 		loadPlugins();
 
 		enablePlugins();
@@ -113,13 +112,11 @@ public final class PluginManager {
 	 * 根据插件文件名/名称寻找插件
 	 *
 	 * @param name 插件 Jar 路径/名称
-	 *
 	 * @return 插件
 	 */
 	public Plugin getPlugin(String name) {
 		for (Plugin plugin : plugins) {
-			if (plugin.getName()
-					.equals(name) ||
+			if (plugin.getName().equals(name) ||
 					plugin.getFileName().equals(name)) {
 				return plugin;
 			}
@@ -131,7 +128,7 @@ public final class PluginManager {
 	/**
 	 * 从磁盘读取插件
 	 */
-	public void loadPlugins() {
+	public void loadPlugins() throws PluginException {
 		File[] list = listPlugins();
 		if (list == null) {
 			return;
@@ -139,9 +136,8 @@ public final class PluginManager {
 		for (File file : list) {
 			try {
 				loadPlugin(new JarFile(file));
-			} catch (Exception e) {
-				e.printStackTrace();
-				// TODO: 2017/4/21 exception
+			} catch (IOException e) {
+				throw new PluginException("could not load plugin", e);
 			}
 		}
 	}
@@ -151,7 +147,7 @@ public final class PluginManager {
 	 *
 	 * @param reloadFromDisk 从磁盘中重新读取插件. 可用于添加插件
 	 */
-	public void reloadPlugins(boolean reloadFromDisk) {
+	public void reloadPlugins(boolean reloadFromDisk) throws PluginException {
 		disablePlugins();
 		if (reloadFromDisk) {
 			plugins.clear();
@@ -172,10 +168,9 @@ public final class PluginManager {
 	 * 加载一个插件
 	 *
 	 * @param file 插件 Jar 路径
-	 *
 	 * @return 是否成功
 	 */
-	public boolean loadPlugin(String file) throws PluginLoadException {
+	public boolean loadPlugin(String file) throws PluginException {
 
 		try {
 			if (!loadPlugin(new JarFile(file))) {
@@ -183,10 +178,8 @@ public final class PluginManager {
 			}
 			Plugin plugin = getPlugin(file);
 			return plugin != null;
-        } catch (IOException e) { // TODO: 2017/5/19 exception
-            return false;
-		} catch (PluginLoadException e) {
-			throw new PluginLoadException(e.getMessage());
+		} catch (IOException e) {
+			throw new PluginException("could not load plugin", e);
 		}
 	}
 
@@ -194,59 +187,58 @@ public final class PluginManager {
 	 * 加载一个插件
 	 *
 	 * @param file 插件 Jar 文件
-	 *
 	 * @return 是否成功
 	 */
-	public boolean loadPlugin(JarFile file) throws PluginLoadException {
+	public boolean loadPlugin(JarFile file) throws PluginException {
 		PluginDescription description = descriptions.get(file.getName());
 		if (description == null) {
 			description = loadPluginDescription(file);
 		}
 
 		if (description.getMainClass().isEmpty()) {
-			throw new PluginLoadException("Could not load plugin description: " + description.getName());
+			throw new PluginException("could not load plugin " + description.getName(), "plugin description in file " + file.getName() + " is empty");
 		}
-        if (description.getMainClass().startsWith("net.mamoe.jpre")) {
-            throw new PluginLoadException("Could not load main class " + description.getMainClass() + " in plugin " + description.getName());
-        }
+		if (description.getMainClass().startsWith("net.mamoe.jpre")) {
+			throw new PluginException("could not load plugin " + description.getName(), "main class " + description.getMainClass() + " must not be started " +
+					"with net.mamoe.jpre");
+		}
 
 		for (Plugin plugin : plugins) {
-			if (plugin.getName().equals(description.name)) {
+			if (plugin.getName().equals(description.getName())) {
 				return true;
 			}
 		}
 
 		Class<?> mainClass;
 		try {
-			Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-			method.setAccessible(true);
-            URLClassLoader classLoader = (URLClassLoader) this.getClass().getClassLoader();
-            method.invoke(classLoader, new File(file.getName()).toURI().toURL());
-
+			Utils.loadClass(new File(file.getName()), (URLClassLoader) this.getClass().getClassLoader());
 			mainClass = Class.forName(description.getMainClass());
-		} catch (Throwable e) {
-            throw new PluginLoadException("Could not found main class " + description.getMainClass() + " in plugin " + description.getName(), e);
-        }
-
-		if (!Plugin.class.isAssignableFrom(mainClass)) {
-			throw new PluginLoadException("The main class is not assignable from Plugin: " + mainClass.getName());
+		} catch (Exception e) {
+			throw new PluginException("could not load plugin " + description.getName(), "main class " + description.getMainClass() + " not found", e);
 		}
 
+		if (!Plugin.class.isAssignableFrom(mainClass)) {
+			throw new PluginException("could not load plugin " + description.getName(), "main class " + mainClass.getCanonicalName() + " is not " +
+					"assignable from " + Plugin.class.getCanonicalName());
+		}
+
+		Plugin plugin;
 		try {
 			Constructor<?> constructor = mainClass.getConstructor();
 			constructor.setAccessible(true);
-			Plugin plugin = (Plugin) constructor.newInstance();
-			plugin.setPluginManager(this);
-			plugins.add(plugin);
-			plugin.setPluginDescription(description);
-			plugin.onLoad();
-
-			System.out.println("[Plugin] " + plugin.getName() + " loaded!");
-			return true;
-		} catch (Throwable e) {
-			e.printStackTrace();
-			throw new PluginLoadException("Could not create instance of " + description.getName(), e);
+			plugin = (Plugin) constructor.newInstance();
+		} catch (Exception e) {
+			throw new PluginException("could not load plugin " + description.getName(), "could not create instance of main class " + mainClass.getCanonicalName(), e);
 		}
+
+		plugin.setPluginManager(this);
+		plugins.add(plugin);
+		plugin.setPluginDescription(description);
+		plugin.onLoad();
+
+		System.out.println("[Plugin] " + plugin.getName() + " loaded!");
+		return true;
+
 	}
 
 	/**
@@ -262,7 +254,6 @@ public final class PluginManager {
 	 * 获取插件信息
 	 *
 	 * @param file 插件 Jar 路径
-	 *
 	 * @return 已加载返回插件信息, 若未加载返回 null. 未加载时可以使用 {@link #loadPluginDescription(JarFile)} 来加载
 	 */
 	public PluginDescription matchPluginDescription(String file) {
@@ -273,15 +264,13 @@ public final class PluginManager {
 	 * 加载插件信息
 	 *
 	 * @param file 插件 Jar 路径
-	 *
 	 * @return 插件信息
 	 */
-	public PluginDescription loadPluginDescription(String file) throws PluginLoadException {
+	public PluginDescription loadPluginDescription(String file) throws PluginException {
 		try {
-			System.out.println(file);
 			return loadPluginDescription(new JarFile(file));
-		} catch (IOException e) {
-			throw new PluginLoadException("Could not load file: " + file);
+		} catch (Exception e) { //NPE, IOException...
+			throw new PluginException("could not load plugin description in plugin file " + file, e);
 		}
 	}
 
@@ -289,13 +278,12 @@ public final class PluginManager {
 	 * 加载插件信息
 	 *
 	 * @param file 插件 Jar 文件
-	 *
 	 * @return 插件信息
 	 */
-	public PluginDescription loadPluginDescription(JarFile file) throws PluginLoadException {
+	public PluginDescription loadPluginDescription(JarFile file) throws PluginException {
 		PluginDescription description = getDescription(file);
 		if (description == null) {
-			throw new PluginLoadException("Could not load plugin description: " + file.getName());
+			throw new PluginException("could not load plugin description in plugin file " + file.getName());
 		}
 
 		descriptions.put(file.getName(), description);
@@ -322,7 +310,6 @@ public final class PluginManager {
 	 *
 	 * @param file     jar 包
 	 * @param resource 资源文件名
-	 *
 	 * @return 读取流
 	 */
 	public InputStream getResourceFile(JarFile file, String resource) {
@@ -340,7 +327,7 @@ public final class PluginManager {
 			}
 
 			return file.getInputStream(entry);
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -351,7 +338,6 @@ public final class PluginManager {
 	 * 若要添加到插件列表, 请使用 {@link #loadPluginDescription(String)}
 	 *
 	 * @param file 文件
-	 *
 	 * @return PluginDescription
 	 */
 	public PluginDescription getDescription(JarFile file) {
@@ -368,7 +354,7 @@ public final class PluginManager {
 			}
 
 			return new Gson().fromJson(Utils.readFile(file.getInputStream(entry)), PluginDescription.class).setFileName(file.getName());
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -380,7 +366,7 @@ public final class PluginManager {
 	/**
 	 * 注册事件监听器
 	 * <p>
-	 * 插件必须已经开启 ({@link Plugin#isEnabled()}) 才能注册事件. 否则本方法将会抛出错误 {@link PluginEventException}
+	 * 插件必须已经开启 ({@link Plugin#isEnabled()}) 才能注册事件. 否则本方法将会抛出异常 {@link EventException}
 	 * <p>
 	 * 参数 {@code listener} 中的所有符合规范的事件处理器都会被注册
 	 * 规范即为: 有一个参数, 并且参数的类型是任何一个 Event. 返回值类型, 方法是否公共都不影响.
@@ -407,46 +393,40 @@ public final class PluginManager {
 	 *
 	 * @param listener 事件监听器
 	 * @param plugin   插件
-	 *
-	 * @throws PluginEventException {@code plugin} 未启用 (enable) 时
-	 * @see #registerEvent(Listener, Plugin, Class, Method) 会循环调用该方法
+	 * @return 成功注册的监听器数量
+	 * @throws EventException {@code plugin} 未启用 (enable) 时
+	 * @see #registerEvent(Listener, Plugin, Class, Handler) 会循环调用该方法
 	 */
 	@SuppressWarnings("unchecked")
-	public void registerEvents(Listener listener, Plugin plugin) throws PluginEventException {
-		try {
-			if (!plugin.isEnabled()) {
-				throw new PluginEventException("Plugin " + plugin.getName() + " tried to register event while not enabled");
-			}
-
-			Collection<Method> methods = new HashSet<>();
-			Collections.addAll(methods, listener.getClass().getDeclaredMethods());
-			Collections.addAll(methods, listener.getClass().getMethods());
-			for (Method method : methods) {
-				EventHandler handler;
-				try {
-					if (method.getAnnotation(Deprecated.class) != null) {
-						continue;
-					}
-
-					handler = method.getAnnotation(EventHandler.class);
-				} catch (ClassCastException e) {
-					continue;
-				}
-				if (handler == null) {
-					continue;
-				}
-
-				Class<?> clazz;
-				if (method.getParameterTypes().length != 1 || !Event.class.isAssignableFrom(clazz = method.getParameterTypes()[0])) {
-					continue;
-				}
-
-				registerEvent(listener, plugin, (Class<Event>) clazz, method);
-			}
-		} catch (Throwable e) {
-			// TODO: 2017/5/12  throw PluginEventException
-			e.printStackTrace();
+	public int registerEvents(Listener listener, Plugin plugin) throws PluginException {
+		if (!plugin.isEnabled()) {
+			throw new PluginException("plugin " + plugin.getName() + " tried to register events while not enabled");
 		}
+
+		int count = 0;
+
+		HashSet<Method> methods = new HashSet<>();
+		Collections.addAll(methods, listener.getClass().getDeclaredMethods());
+		Collections.addAll(methods, listener.getClass().getMethods());
+		for (Method method : methods) {
+			if (method.getAnnotation(Deprecated.class) != null) {
+				continue;
+			}
+
+			if (method.getAnnotation(EventHandler.class) == null) {
+				continue;
+			}
+
+			Class<?> clazz; // TODO: 2017/5/22 !!! 使用 EventHandler 替换 method
+			if (method.getParameterTypes().length != 1 || !Event.class.isAssignableFrom(clazz = method.getParameterTypes()[0])) {
+				throw new PluginException("plugin " + plugin.getName() + " tried to register a event handler which is invalid");
+			}
+
+			MethodHandler handler = new MethodHandler(plugin, listener, method, (Class<Event>) clazz);
+			registerEvent(listener, plugin, (Class<Event>) clazz, handler);
+			count++;
+		}
+		return count;
 	}
 
 	/**
@@ -455,49 +435,31 @@ public final class PluginManager {
 	 * @param listener 事件监听器
 	 * @param plugin   插件
 	 * @param event    需要监听的事件
-	 * @param method   事件处理器
-	 *
-	 * @return 是否成功
-	 *
-	 * @throws PluginEventException 当 {@code plugin} 未启用 (enable) 时
-	 * @throws PluginEventException 当 {@code method} 没有注释 {@link EventHandler} 时
+	 * @param handler  事件处理器
+	 * @throws EventException 当 {@code plugin} 未启用 (enable) 时
 	 */
-	public boolean registerEvent(Listener listener, Plugin plugin, Class<Event> event, Method method) throws PluginEventException {
-		try {
-			if (!plugin.isEnabled()) {
-				throw new PluginEventException("Plugin " + plugin.getName() + " tried to register event while not enabled");
-			}
-
-			try {
-				method.getAnnotation(EventHandler.class);
-			} catch (ClassCastException e) {
-				throw new PluginEventException("Plugin " + plugin.getName() + " tried to register event while method is not annotated EventHandler");
-			}
-
-			HandlerList handlerList = getHandlerList(event);
-			if (handlerList == null) {
-				return false;
-			}
-			List<Handler> list = listeners.getOrDefault(plugin, new ArrayList<>());
-			MethodHandler handler = new MethodHandler(plugin, listener, method, event);
-			list.add(handler);
-			listeners.put(plugin, list);
-			handlerList.add(handler);
-			return true;
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return false;
+	public void registerEvent(Listener listener, Plugin plugin, Class<Event> event, Handler handler) throws PluginException {
+		if (!plugin.isEnabled()) {
+			throw new PluginException("plugin " + plugin.getName() + " tried to register event listener while not enabled");
 		}
+
+		HandlerList handlerList = getHandlerList(event);
+		if (handlerList == null) {
+			throw new PluginException("plugin " + plugin.getName() + " tried to register event listener while event has not handler list");
+		}
+
+		List<Handler> list = listeners.getOrDefault(plugin, new ArrayList<>());
+		list.add(handler);
+		listeners.put(plugin, list);
+		handlerList.add(handler);
 	}
 
 	/**
 	 * 取消该插件已注册的所有事件监听器
 	 *
 	 * @param plugin 插件
-	 *
-	 * @return 是否成功
 	 */
-	public boolean unregisterEvents(Plugin plugin) {
+	public void unregisterEvents(Plugin plugin) {
 		List<Handler> remove = new ArrayList<>();
 		for (List<Handler> handlers : listeners.values()) {
 			for (Handler handler : handlers) {
@@ -507,18 +469,14 @@ public final class PluginManager {
 			}
 			handlers.removeAll(remove);
 		}
-
-		return true;
 	}
 
 	/**
 	 * 取消该事件监听器已注册的所有事件处理器
 	 *
 	 * @param listener 事件监听器
-	 *
-	 * @return 是否成功
 	 */
-	public boolean unregisterEvents(Listener listener) {
+	public void unregisterEvents(Listener listener) {
 		List<Handler> remove = new ArrayList<>();
 		for (List<Handler> handlers : listeners.values()) {
 			for (Handler handler : handlers) {
@@ -528,8 +486,6 @@ public final class PluginManager {
 			}
 			handlers.removeAll(remove);
 		}
-
-		return true;
 	}
 
 
@@ -540,7 +496,7 @@ public final class PluginManager {
 		listeners.clear();
 	}
 
-	private HandlerList getHandlerList(Class<?> eventClass) {
+	private static HandlerList getHandlerList(Class<?> eventClass) {
 		try {
 			Method method = eventClass.getDeclaredMethod("getHandlers");
 			method.setAccessible(true);

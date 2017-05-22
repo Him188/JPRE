@@ -73,13 +73,8 @@ public class YamlConfig extends Config {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void reload() {
-		try {
-			//System.out.println(file);
-			//noinspection ResultOfMethodCallIgnored
-			file.createNewFile(); // TODO: 2017/5/17 判断是否存在
-		} catch (IOException ignored) {
+		Config.createConfigFile(this.file);
 
-		}
 		DumperOptions dumperOptions = new DumperOptions();
 		dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
 		Yaml yaml = new Yaml(dumperOptions);

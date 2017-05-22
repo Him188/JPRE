@@ -350,7 +350,7 @@ public final class MPQClient {
         byte[] result = new byte[data.length + 1];//数据包ID
         try {
             result[0] = Packet.getNetworkId(packet);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return;
         }

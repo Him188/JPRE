@@ -6,7 +6,7 @@
 ### 目录
 <a href="#第一章-jpre原理">一.JPRE原理</a>  
 <a href="#第二章-jpre插件结构">二.JPRE插件结构</a>  
-<a href="#develop">三.如何开发JPRE插件</a>
+<a href="#第三章-如何开发JPRE插件">三.如何开发JPRE插件</a>
 
 
 ## <span id="第一章-JPRE原理" name="第一章-JPRE原理">第一章 JPRE原理</span>
@@ -20,20 +20,20 @@ MPQ插件启动的时候会通过 TCP网络 连接JPRE, JPRE加载Java插件.
 - Java等到MPQ插件连接上并且通过了身份验证后, 将会开始接收来自MPQ插件的事件数据包, 同时将运行在JPRE上所有已启用应用的操作通过数据包发送给MPQ插件, 让MPQ插件执行.  
 
 **MPQ 与 Java 通讯方式**  
-- 在MPQ启用插件时, MPQ插件会尝试使用配置文件中的连接信息与JPRE进行连接, 并进行身份验证, 验证成功, MPQ插件将开始进入正常工作, 此时MPQ插件将接收所有事件, 并将事件以网络数据包的形式发送给JPRE, 由JPRE将事件分发给所有Java插件处理.  
+- 在MPQ启用插件时, MPQ插件会尝试使用配置文件中的连接信息与JPRE进行连接, 并进行身份验证, 验证成功, MPQ插件将开始进入正常工作, 此时MPQ插件将接收所有事件, 并将事件以网络数据包的形式发送给JPRE, 由JPRE将事件分发给所有Java插件处理.
 - 当MPQ插件与JPRE 连接/身份验证 失败时, 可手动在MPQ插件的菜单, 单击 "重新连接JPRE" 重新尝试连接, 本项可以在修改了配置文件中的连接信息后进行重连.  
 - **注意: 在连接成功后, 修改配置文件中的连接信息不会影响当前与目前连接成功的JPRE的连接.**  
 
 ## <span id="plugin" name="plugin">第二章 JPRE插件结构</span>
 **简述**  
 - JPRE插件都是 Jar 包
-- Jar 包根目录必须有一个声明插件信息的文件. 它的名字可以是: 
+- Jar 包根目录必须有一个声明插件信息的文件. 它的名字可以是:
   `plugin.json` `cq.json` `jpre.json`  
-  该文件必须存在以下字段:  
-  - `name`: (String) 插件名  
+  该文件必须存在以下字段:
+  - `name`: (String) 插件名
   - `appid`:(String) 应用AppID，用于在MPQ应用网络的识别
-  - `author`: (String) 插件作者  
-  - `api`: (int) 插件API版本号, 目前MPQ的API版本为9, 若插件API版本高于MPQ的API版本, 那么该插件将无法加载  
+  - `author`: (String) 插件作者
+  - `api`: (int) 插件API版本号, 目前MPQ的API版本为9, 若插件API版本高于MPQ的API版本, 那么该插件将无法加载
   - `version`: (String) 插件版本. 推荐使用 "1.0.0" 格式来书写版本号.  
   - `main`: (String) 插件主类的类全名(包含包名). 插件加载时会加载主类并调用 onLoad()    
   - `description`: (String) 插件的说明.  
@@ -76,8 +76,8 @@ JPRE拥有自由度高, 支持动态监听, 拦截, 取消的事件系统
   - 注意, 插件未启用时不可以注册事件. 即 `onLoad` 时不可以注册事件, `onEnable` 时可以.
 
 
-## <span id="develop" name="develop">第三章 如何开发一个JPRE插件</span>
-1. 首先, 前往JPRE在 GitHub 上的 releases, 下载已编译好的最新版JPRE.jar (点击[这里](https://github.com/Him188/CQ-JPRE/releases/tag/1.0.0)下载) .  
+## <span id="第三章-如何开发JPRE插件" name="第三章-如何开发JPRE插件">第三章 如何开发JPRE插件</span>
+1. 首先, 前往JPRE在 GitHub 上的 releases, 下载已编译好的最新版JPRE.jar (点击[这里](https://github.com/Him188/CQ-JPRE/releases/)下载) .
 2. 把 JPRE.jar 添加到项目依赖库中.  
 3. 让插件主类继承 `JavaPlugin` 类("class xxx extends JavaPlugin").  
 4. 创建一个新的类, 并让这个类实现 `Listener` 接口("class xxx implements Listener"), 这个类将作为事件监听类使用.  
