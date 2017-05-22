@@ -171,11 +171,8 @@ public final class PluginManager {
 	 * @return 是否成功
 	 */
 	public boolean loadPlugin(String file) throws PluginException {
-
 		try {
-			if (!loadPlugin(new JarFile(file))) {
-				return false;
-			}
+			loadPlugin(new JarFile(file));
 			Plugin plugin = getPlugin(file);
 			return plugin != null;
 		} catch (IOException e) {
@@ -189,7 +186,7 @@ public final class PluginManager {
 	 * @param file 插件 Jar 文件
 	 * @return 是否成功
 	 */
-	public boolean loadPlugin(JarFile file) throws PluginException {
+	public void loadPlugin(JarFile file) throws PluginException {
 		PluginDescription description = descriptions.get(file.getName());
 		if (description == null) {
 			description = loadPluginDescription(file);
@@ -205,7 +202,7 @@ public final class PluginManager {
 
 		for (Plugin plugin : plugins) {
 			if (plugin.getName().equals(description.getName())) {
-				return true;
+				return;
 			}
 		}
 
@@ -237,7 +234,6 @@ public final class PluginManager {
 		plugin.onLoad();
 
 		System.out.println("[Plugin] " + plugin.getName() + " loaded!");
-		return true;
 
 	}
 

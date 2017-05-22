@@ -10,7 +10,8 @@ import java.lang.reflect.Method;
  * 由 {@link PluginManager#registerEvent(Listener, Plugin, Class, Handler)} 自动创建
  * 一般不会在插件中使用
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class MethodHandler implements Handler {
 	private final Listener listener;
 	private final Class<Event> event;
@@ -71,17 +72,14 @@ public class MethodHandler implements Handler {
 			return;
 		}
 
-		for (Class<?> parameter : method.getParameterTypes()) {
-
-			if (parameter.isAssignableFrom(this.event)) {
-				try {
-					method.setAccessible(true);
-					method.invoke(listener, event);
-					return;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return;
-				}
+		if (event.getClass().isAssignableFrom(method.getParameterTypes()[0])) { //is parameter extends event
+			try {
+				method.setAccessible(true);
+				method.invoke(listener, event);
+				return;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
 			}
 		}
 	}

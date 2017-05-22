@@ -9,64 +9,44 @@ import net.mamoe.jpre.plugin.Plugin;
  * @author Him188 @ JPRE Project
  */
 public abstract class ClassHandler implements Handler {
-	private final Listener listener;
-	private final Class<Event> event;
-	private final Plugin plugin;
-	private final EventPriority priority;
+	private MethodHandler handler;
 
-	public ClassHandler(Plugin plugin, Listener listener, Class<Event> event, EventPriority priority) {
-		this.plugin = plugin;
-		this.listener = listener;
-		this.event = event;
-		this.priority = priority;
+	public ClassHandler(Plugin plugin, Listener listener, Class<Event> event) {
+		try {
+			this.handler = new MethodHandler(plugin, listener, this.getClass().getMethod("run"), event);
+		} catch (NoSuchMethodException ignored) {
+		}
 	}
 
 	public abstract void run(Event event);
 
 	@Override
 	public Class<Event> getEvent() {
-		return event;
+		return handler.getEvent();
 	}
 
 	@Override
 	public Plugin getPlugin() {
-		return plugin;
+		return handler.getPlugin();
 	}
 
 	@Override
 	public Listener getListener() {
-		return listener;
+		return handler.getListener();
 	}
 
 	@Override
 	public void execute(Listener listener, Event event) {
-		if (!getListener().equals(listener)) {
-			return;
-		}
-
-		EventHandler handler = this.getClass().getAnnotation(EventHandler.class);
-		if (handler == null) {
-			return;
-		}
-
-		if (handler.ignoreCancelled() && event.isCancelled()) {
-			return;
-		}
-
-		if (handler.ignoreIntercepted() && event.isIntercepted()) {
-			return;
-		}
-
-		run(event);
+		this.handler.execute(listener, event);
 	}
 
 	@Override
 	public EventPriority getPriority() {
-		return priority;
+		return handler.getPriority();
 	}
 
 	@Override
 	public String toString() {
-		return "ClassHandler(plugin=" + getPlugin().getName() + ",name=" + getClass().getSimpleName() + ")";
+		return "ClassHandler(plugin=" + getPlugin().getName() + ",handler=" + handler + ")";
 	}
 }

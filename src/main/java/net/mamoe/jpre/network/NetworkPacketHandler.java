@@ -101,7 +101,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Exception cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (cause instanceof IOException) { //远程主机强迫关闭了一个现有的连接
             return;
         }
