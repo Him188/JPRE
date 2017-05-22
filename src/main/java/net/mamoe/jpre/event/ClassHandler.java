@@ -3,7 +3,7 @@ package net.mamoe.jpre.event;
 import net.mamoe.jpre.plugin.Plugin;
 
 /**
- * 类事件处理器
+ * 类事件处理器.
  * JPRE没有提供自动创建方法
  *
  * @author Him188 @ JPRE Project
