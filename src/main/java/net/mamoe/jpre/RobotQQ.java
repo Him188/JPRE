@@ -74,6 +74,26 @@ public class RobotQQ {
         return groupTemporaryList;
     }
 
+    public QQ getQQ(long number) {
+        return getQQList().get(number);
+    }
+
+    public Group getGroup(long number) {
+        return getGroupList().get(number);
+    }
+
+    public Discussion getDiscussion(long number) {
+        return getDiscussionList().get(number);
+    }
+
+    public DiscussionTemporary getDiscussionTemporary(long number) {
+        return getDiscussionTemporaryList().get(number);
+    }
+
+    public GroupTemporary getGroupTemporary(long number) {
+        return getGroupTemporaryList().get(number);
+    }
+
     /* MPQ API*/
 
     /**
@@ -420,7 +440,7 @@ public class RobotQQ {
      * <p>
      * 不建议使用本方法, 推荐使用以下方法:
      * 发送群消息: {@link #sendGroupMessage(Group, String)}
-     * 发送好友消息: {@link #sendPrivateMessage(QQ, String)}
+     * 发送好友消息: {@link #sendFriendMessage(QQ, String)}
      * 发送讨论组消息: {@link #sendDiscussionMessage(Discussion, String)}
      * 发送群临时会话消息: {@link #sendGroupTemporaryMessage(GroupTemporary, String)}
      * 发送讨论组临时会话消息: {@link #sendDiscussionTemporaryMessage(DiscussionTemporary, String)}
@@ -443,19 +463,19 @@ public class RobotQQ {
     }
 
 
-    public boolean sendPrivateMessage(long QQ, String content) {
-        return sendPrivateMessage(getQQList().get(QQ), content);
+    public boolean sendFriendMessage(long QQ, String content) {
+        return sendFriendMessage(getQQ(QQ), content);
     }
 
-    public boolean sendPrivateMessage(QQ QQ, String content) {
-        SendPrivateMessageEvent event = new SendPrivateMessageEvent(this, QQ, content);
+    public boolean sendFriendMessage(QQ QQ, String content) {
+        SendFriendMessageEvent event = new SendFriendMessageEvent(this, QQ, content);
         getFrame().getPluginManager().callEvent(event);
         return !event.isCancelled() && sendMessage(TYPE_FRIEND, 0, 0L, QQ.getNumber(), event.getMessage());
     }
 
 
     public boolean sendGroupMessage(long group, String content) {
-        return sendGroupMessage(getGroupList().get(group), content);
+        return sendGroupMessage(getGroup(group), content);
     }
 
     public boolean sendGroupMessage(Group group, String content) {
@@ -466,7 +486,7 @@ public class RobotQQ {
 
 
     public boolean sendDiscussionMessage(long discussion, String content) {
-        return sendDiscussionMessage(getDiscussionList().get(discussion), content);
+        return sendDiscussionMessage(getDiscussion(discussion), content);
     }
 
     public boolean sendDiscussionMessage(Discussion discussion, String content) {
@@ -483,7 +503,7 @@ public class RobotQQ {
     }
 
     public boolean sendGroupTemporaryMessage(long session, String content) {
-        return sendGroupTemporaryMessage(getGroupTemporaryList().get(session), content);
+        return sendGroupTemporaryMessage(getGroupTemporary(session), content);
     }
 
 
@@ -1033,4 +1053,5 @@ public class RobotQQ {
         list.add(qq);
         return qq;
     }
+
 }

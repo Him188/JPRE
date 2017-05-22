@@ -1,17 +1,15 @@
-package net.mamoe.jpre.event.group;
+package net.mamoe.jpre.event.qq;
 
-import net.mamoe.jpre.Group;
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
- * 群聊消息. 一些消息如颜文字的特殊符号收到时会被转义为 unicode.
- * Called when receive group message
+ * 私聊消息. 一些消息如颜文字的特殊符号收到时会被转义为 unicode.
  *
  * @author Him188 @ JPRE Project
  */
-public class GroupMessageEvent extends GroupEvent {
+public class FriendMessageEvent extends QQEvent {
     private static final HandlerList handlers = new HandlerList();
 
     public static HandlerList getHandlers() {
@@ -21,8 +19,8 @@ public class GroupMessageEvent extends GroupEvent {
 
     private final String message;
 
-    public GroupMessageEvent(RobotQQ robot, Group group, QQ qq, String message) {
-        super(robot, group, qq);
+    public FriendMessageEvent(RobotQQ robot, QQ qq, String message) {
+        super(robot, qq);
         this.message = message;
     }
 

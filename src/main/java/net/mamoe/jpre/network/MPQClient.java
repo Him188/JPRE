@@ -161,7 +161,7 @@ public final class MPQClient {
 
                     /* Message */
                     case MESSAGE_FRIEND:
-                        event = new PrivateMessageEvent(robot, robot.getQQ(active), message);
+                        event = new FriendMessageEvent(robot, robot.getQQ(active), message);
                         break;
                     case MESSAGE_GROUP:
                         event = new GroupMessageEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
@@ -227,7 +227,7 @@ public final class MPQClient {
                     case GROUP_ADMIN_DEMOTION:
                         event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), GroupAdminChangeEvent.ChangeType.DEMOTION);
                         break;
-                    case GROUP_CARD_CHANGE:
+                    case GROUP_CARD_CHANGE: // TODO: 2017/4/22  check active and passive
                         event = new GroupCardChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
                         break;
                     //case GROUP_NAME_CHANGE:

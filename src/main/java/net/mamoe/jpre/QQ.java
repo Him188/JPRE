@@ -1,7 +1,8 @@
 package net.mamoe.jpre;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("unused")
 public class QQ extends User {
 
@@ -29,7 +30,7 @@ public class QQ extends User {
 
     @Override
     public boolean sendMessage(String content) {
-        return getRobot().sendPrivateMessage(this, content);
+        return getRobot().sendFriendMessage(this, content);
     }
 
     @Override

@@ -6,8 +6,8 @@ import net.mamoe.jpre.event.HandlerList;
 
 /**
  * @author Him188 @ JPRE Project */
-public class SendPrivateMessageEvent extends SendMessageEvent {
-	private static final HandlerList handlers = new HandlerList();
+public class SendFriendMessageEvent extends SendMessageEvent {
+    private static final HandlerList handlers = new HandlerList();
 
 	public static HandlerList getHandlers() {
 		return handlers;
@@ -17,8 +17,8 @@ public class SendPrivateMessageEvent extends SendMessageEvent {
 	private final QQ qq;
 	private final String message;
 
-	public SendPrivateMessageEvent(RobotQQ robotQQ, QQ qq, String message) {
-		super(robotQQ);
+    public SendFriendMessageEvent(RobotQQ robotQQ, QQ qq, String message) {
+        super(robotQQ);
 		this.qq = qq;
 		this.message = message;
 	}
