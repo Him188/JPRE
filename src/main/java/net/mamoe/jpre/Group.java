@@ -1,13 +1,13 @@
 package net.mamoe.jpre;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * QQ 群
  *
  * @author Him188 @ JPRE Project
  */
+@SuppressWarnings("WeakerAccess")
 public class Group extends User {
     private final long group;
 
@@ -59,10 +59,6 @@ public class Group extends User {
         return mute(qq, 0);
     }
 
-    public List<String> getGroupMemberList() { // TODO: 2017/5/12 getGroupMemberList
-        return new ArrayList<>();
-    }
-
     public boolean wholeMute() {
         return getRobot().shutUpWhole(this.getNumber());
     }
@@ -97,4 +93,6 @@ public class Group extends User {
         }
         return returnValue;
     }
+
+
 }

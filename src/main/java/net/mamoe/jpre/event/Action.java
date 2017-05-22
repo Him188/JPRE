@@ -1,7 +1,8 @@
-package net.mamoe.jpre.event.group;
+package net.mamoe.jpre.event;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public enum Action {
     ACCEPT(10),   //同意
     DECLINE(20),  //拒绝

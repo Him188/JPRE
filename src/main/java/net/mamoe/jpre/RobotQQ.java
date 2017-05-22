@@ -1,12 +1,11 @@
 package net.mamoe.jpre;
 
-import net.mamoe.jpre.event.send.SendDiscussionMessageEvent;
-import net.mamoe.jpre.event.send.SendGroupMessageEvent;
-import net.mamoe.jpre.event.send.SendPrivateMessageEvent;
+import net.mamoe.jpre.event.send.*;
 import net.mamoe.jpre.network.packet.ServerCommandPacket;
 import net.mamoe.jpre.network.packet.ServerStaticCommandPacket;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.utils.CommandResults;
+import net.mamoe.jpre.utils.UserList;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,7 +14,8 @@ import java.util.Set;
 /**
  * 框架上的机器人 QQ(响应 QQ)
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class RobotQQ {
     private final Frame frame;
@@ -46,84 +46,35 @@ public class RobotQQ {
         return "RobotQQ(QQ=" + getQQNumber() + ",Frame=" + frame.toString() + ")";
     }
 
+	/* LISTS */
 
-	/* QQ LIST */
+    private final UserList<QQ> qqList = new UserList<>(number -> new QQ(this, number));
+    private final UserList<Group> groupList = new UserList<>(number -> new Group(this, number));
+    private final UserList<Discussion> discussionList = new UserList<>(number -> new Discussion(this, number));
+    private final UserList<DiscussionTemporary> discussionTemporaryList = new UserList<>(number -> new DiscussionTemporary(this, number));
+    private final UserList<GroupTemporary> groupTemporaryList = new UserList<>(number -> new GroupTemporary(this, number));
 
-    private final Set<QQ> qqList = new HashSet<>();
-
-    public Set<QQ> getQQList() {
+    public UserList<QQ> getQQList() {
         return qqList;
     }
 
-    /**
-     * 获取 QQ 实例, 不存在时自动创建
-     *
-     * @return QQ
-     */
-    public QQ getQQ(long QQ) {
-        for (QQ robotQQ : qqList) {
-            if (robotQQ.getNumber() == QQ) {
-                return robotQQ;
-            }
-        }
-
-        QQ qq = new QQ(this, QQ);
-        qqList.add(qq);
-        return qq;
-    }
-
-	/* Group LIST */
-
-    private final Set<Group> groupList = new HashSet<>();
-
-    public Set<Group> getGroupList() {
+    public UserList<Group> getGroupList() {
         return groupList;
     }
 
-    /**
-     * 获取 Group 实例, 不存在时自动创建
-     *
-     * @return Group
-     */
-    public Group getGroup(long Group) {
-        for (Group robotGroup : groupList) {
-            if (robotGroup.getNumber() == Group) {
-                return robotGroup;
-            }
-        }
-
-        Group group = new Group(this, Group);
-        groupList.add(group);
-        return group;
-    }
-
-	/* Discussion LIST */
-
-    private final Set<Discussion> discussionList = new HashSet<>();
-
-    public Set<Discussion> getDiscussionList() {
+    public UserList<Discussion> getDiscussionList() {
         return discussionList;
     }
 
-    /**
-     * 获取 Discussion 实例, 不存在时自动创建
-     *
-     * @return Discussion
-     */
-    public Discussion getDiscussion(long Discussion) {
-        for (Discussion robotDiscussion : discussionList) {
-            if (robotDiscussion.getNumber() == Discussion) {
-                return robotDiscussion;
-            }
-        }
-
-        Discussion discussion = new Discussion(this, Discussion);
-        discussionList.add(discussion);
-        return discussion;
+    public UserList<DiscussionTemporary> getDiscussionTemporaryList() {
+        return discussionTemporaryList;
     }
 
-	/* MPQ API*/
+    public UserList<GroupTemporary> getGroupTemporaryList() {
+        return groupTemporaryList;
+    }
 
+    /* MPQ API*/
 
     /**
      * 计算得到页面操作用参数 Bkn 或 G_tk
@@ -230,7 +181,7 @@ public class RobotQQ {
      */
     public void unBan(long QQ) {
         try {
-             runVoidCommand(CommandId.D_BAN, this.getQQNumber(), QQ);
+            runVoidCommand(CommandId.D_BAN, this.getQQNumber(), QQ);
         } catch (InterruptedException ignored) {
 
         }
@@ -413,37 +364,30 @@ public class RobotQQ {
         }
     }
 
-    // TODO: 2017/4/22 上传图片修复 p.SetUtf8LenStr (Api_UploadPic (局_响应QQ, u.GetInt (), 到文本 (u.GetLong ()), u.GetByte ()))
+
+    public static final int UPLOAD_TYPE_FRIEND = 1;
+    public static final int UPLOAD_TYPE_TEMPORARY = UPLOAD_TYPE_FRIEND;
+
+    public static final int UPLOAD_TYPE_GROUP = 2;
+    public static final int UPLOAD_TYPE_DISCUSSION = UPLOAD_TYPE_GROUP;
 
     /**
      * 上传图片
      *
-     * @param file 图片文件绝对路径
-     * @return GUID | null
+     * @param uploadType UPLOAD_TYPE 开头常量. 好友图和群图的GUID并不相同并不通用 需要非别上传
+     * @param uploaderQq 上传该图片所属的群号或QQ
+     * @param file       图片数据. 可使用 {@link net.mamoe.jpre.utils.Utils#readFile} 读取图片文件
+     * @return 图片 GUID
      */
-    public String uploadImage(String file) {
+    public String uploadImage(int uploadType, long uploaderQq, byte[] file) {
         try {
-            byte id = runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), file, 0);
+            byte id = runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), uploadType, uploaderQq, file);
             return results.stringResult(id);
         } catch (InterruptedException e) {
             return null;
         }
     }
 
-    /**
-     * 上传图片
-     *
-     * @param image 图片字节集数据
-     * @return GUID | null
-     */
-    public String uploadImage(byte[] image) {
-        try {
-            byte id = runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), "", image);
-            return results.stringResult(id);
-        } catch (InterruptedException e) {
-            return null;
-        }
-    }
 
     public static final int TYPE_FRIEND = 1;
     public static final int TYPE_PRIVATE = 1;
@@ -456,7 +400,7 @@ public class RobotQQ {
      * 回复信息 请尽量避免使用该 API
      * 不会触发事件
      *
-     * @param type    类型. TYPE_ 开头常量
+     * @param type    类型. TYPE 开头常量
      * @param target  发送目标
      * @param content 消息内容
      * @return unknown
@@ -470,80 +414,96 @@ public class RobotQQ {
         }
     }
 
+
+    /**
+     * 发送消息
+     * <p>
+     * 不建议使用本方法, 推荐使用以下方法:
+     * 发送群消息: {@link #sendGroupMessage(Group, String)}
+     * 发送好友消息: {@link #sendPrivateMessage(QQ, String)}
+     * 发送讨论组消息: {@link #sendDiscussionMessage(Discussion, String)}
+     * 发送群临时会话消息: {@link #sendGroupTemporaryMessage(GroupTemporary, String)}
+     * 发送讨论组临时会话消息: {@link #sendDiscussionTemporaryMessage(DiscussionTemporary, String)}
+     *
+     * @param msgType    消息类型, TYPE 开头常量
+     * @param msgSubType 消息子类型. 无特殊说明情况下留空或填零
+     * @param receiveGid 接受消息的群号或讨论组号或临时会话号
+     * @param receiveQq  接受消息的 QQ 号
+     * @param msg        消息内容
+     * @return 是否成功
+     */
+    @SuppressWarnings("SameParameterValue")
+    public boolean sendMessage(int msgType, int msgSubType, long receiveGid, long receiveQq, String msg) {
+        try {
+            byte id = runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_DISCUSS, 0, receiveGid, receiveQq, msg);
+            return results.booleanResult(id);
+        } catch (InterruptedException e) {
+            return false;
+        }
+    }
+
+
     public boolean sendPrivateMessage(long QQ, String content) {
-        return sendPrivateMessage(getQQ(QQ), content);
+        return sendPrivateMessage(getQQList().get(QQ), content);
     }
 
     public boolean sendPrivateMessage(QQ QQ, String content) {
         SendPrivateMessageEvent event = new SendPrivateMessageEvent(this, QQ, content);
         getFrame().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
-        try {
-            byte id = runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_FRIEND, 0, 0L, QQ.getNumber(), event.getMessage());
-            return results.booleanResult(id);
-        } catch (InterruptedException e) {
-            return false;
-        }
+        return !event.isCancelled() && sendMessage(TYPE_FRIEND, 0, 0L, QQ.getNumber(), event.getMessage());
     }
 
+
     public boolean sendGroupMessage(long group, String content) {
-        return sendGroupMessage(getGroup(group), content);
+        return sendGroupMessage(getGroupList().get(group), content);
     }
 
     public boolean sendGroupMessage(Group group, String content) {
         SendGroupMessageEvent event = new SendGroupMessageEvent(this, group, content);
         getFrame().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
-        try {
-            byte id = runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_GROUP, 0, event.getGroup().getNumber(), 0L, event.getMessage());
-            return results.booleanResult(id);
-        } catch (InterruptedException e) {
-            return false;
-        }
+        return !event.isCancelled() && sendMessage(TYPE_GROUP, 0, group.getNumber(), 0L, event.getMessage());
     }
 
+
     public boolean sendDiscussionMessage(long discussion, String content) {
-        return sendDiscussionMessage(getDiscussion(discussion), content);
+        return sendDiscussionMessage(getDiscussionList().get(discussion), content);
     }
 
     public boolean sendDiscussionMessage(Discussion discussion, String content) {
         SendDiscussionMessageEvent event = new SendDiscussionMessageEvent(this, discussion, content);
         getFrame().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
-        try {
-            byte id = runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_DISCUSS, 0, 0L, event.getDiscussion().getNumber(), event.getMessage());
-            return results.booleanResult(id);
-        } catch (InterruptedException e) {
-            return false;
-        }
+        return !event.isCancelled() && sendMessage(TYPE_DISCUSS, 0, discussion.getNumber(), 0L, event.getMessage());
     }
-    // TODO: 2017/5/13 临时会话消息
-/*
-    public int sendDiscussMessage(long discuss, String content) {
-		return sendGroupMessage(discuss, content);
-	}
 
-	public int sendGroupTemporaryMessage(long session, String content) {
-		return sendGroupMessage(session, content);
-	}
 
-	public int sendDiscussTemporaryMessage(long session, String content) {
-		return sendGroupMessage(session, content);
-	}
-*/
+    public boolean sendGroupTemporaryMessage(GroupTemporary session, String content) {
+        SendGroupTemporaryMessageEvent event = new SendGroupTemporaryMessageEvent(this, session, content);
+        getFrame().getPluginManager().callEvent(event);
+        return !event.isCancelled() && sendMessage(TYPE_GROUP_TEMPORARY_SESSION, 0, session.getNumber(), 0L, event.getMessage());
+    }
+
+    public boolean sendGroupTemporaryMessage(long session, String content) {
+        return sendGroupTemporaryMessage(getGroupTemporaryList().get(session), content);
+    }
+
+
+    public boolean sendDiscussionTemporaryMessage(DiscussionTemporary session, String content) {
+        SendDiscussionTemporaryMessageEvent event = new SendDiscussionTemporaryMessageEvent(this, session, content);
+        getFrame().getPluginManager().callEvent(event);
+        return !event.isCancelled() && sendMessage(TYPE_DISCUSS_TEMPORARY_SESSION, 0, session.getNumber(), 0L, event.getMessage());
+    }
+
+    public boolean sendDiscussionTemporaryMessage(long session, String content) {
+        return sendDiscussionTemporaryMessage(getDiscussionTemporaryList().get(session), content);
+    }
+
 
     /**
      * 判断是否处于被屏蔽群信息状态
      *
      * @return 是否处于被屏蔽群信息状态
      */
-    public boolean isBlocked() { // TODO: 2017/4/8  check if it is this.getNumber()
+    public boolean isBlocked() {
         try {
             byte id = runCommand(CommandId.IF_BLOCK, this.getQQNumber());
             return results.booleanResult(id);
@@ -776,20 +736,6 @@ public class RobotQQ {
     }
 
     /**
-     * 呵呵呵呵呵呵呵呵呵呵呵呵呵
-     *
-     * @param target 群号或 QQ 号
-     */// TODO: 2017/5/18  check it
-    public int crackIOSQQ(long target) {
-        try {
-            byte id = runCommand(CommandId.CRACK_IOS_QQ, this.getQQNumber(), target);
-            return results.intResult(id);
-        } catch (InterruptedException e) {
-            return 0;
-        }
-    }
-
-    /**
      * 邀请对象加入群 失败返回错误理由
      *
      * @param group  群号
@@ -969,6 +915,8 @@ public class RobotQQ {
      * 发送好友卡片信息: {@link #sendPrivateObjectMessage(long, String, String)}
      * 发送群卡片信息: {@link #sendGroupObjectMessage(long, String, String)}
      * 发送讨论组卡片信息: {@link #sendDiscussionObjectMessage(long, String, String)}
+     * 发送群临时会话卡片信息: {@link #sendGroupTemporaryObjectMessage(long, String, String)}
+     * 发送讨论组临时会话卡片信息: {@link #sendDiscussionTemporaryObjectMessage(long, String, String)}
      *
      * @param msgType          收信对象类型. TYPE 开头常量. 1好友 2群 3讨论组 4群临时会话 5讨论组临时会话
      * @param receiveGid       接受消息的群. 发群内, 临时会话必填 好友可不填
@@ -977,7 +925,7 @@ public class RobotQQ {
      * @param objectMsgSubType 结构子类型,  00 基本 02 点歌 其他不明
      * @return 是否成功
      */
-    public boolean sendObjectMessage(int msgType, long receiveGid, long receiveQq, // TODO: 2017/5/13 放到正确的位置
+    public boolean sendObjectMessage(int msgType, long receiveGid, long receiveQq,
                                      String objectMsg, String objectMsgSubType) {
         try {
             byte id = runCommand(CommandId.SEND_OBJECT_MSG, this.getQQNumber(), msgType, receiveGid, receiveQq, objectMsg, objectMsgSubType);
@@ -1015,7 +963,28 @@ public class RobotQQ {
      */
     public boolean sendDiscussionObjectMessage(long discussion, String objectMsg, String objectMsgSubType) {
         return sendObjectMessage(TYPE_DISCUSS, discussion, 0L, objectMsg, objectMsgSubType);
-    }// TODO: 2017/5/13 临时会话卡片信息
+    }
+    // TODO: 2017/5/22 发送卡片消息事件
+
+    /**
+     * 调用 {@link #sendObjectMessage(int, long, long, String, String)}
+     * 本方法只是简化了调用参数
+     *
+     * @return 是否成功
+     */
+    public boolean sendDiscussionTemporaryObjectMessage(long session, String objectMsg, String objectMsgSubType) {
+        return sendObjectMessage(TYPE_DISCUSS_TEMPORARY_SESSION, session, 0L, objectMsg, objectMsgSubType);
+    }
+
+    /**
+     * 调用 {@link #sendObjectMessage(int, long, long, String, String)}
+     * 本方法只是简化了调用参数
+     *
+     * @return 是否成功
+     */
+    public boolean sendGroupTemporaryObjectMessage(long session, String objectMsg, String objectMsgSubType) {
+        return sendObjectMessage(TYPE_GROUP_TEMPORARY_SESSION, session, 0L, objectMsg, objectMsgSubType);
+    }
 
 
     // TODO: 2017/4/8  other commands
@@ -1026,7 +995,7 @@ public class RobotQQ {
 
     public byte runCommand(CommandId id, Object... args) throws InterruptedException {
         byte i = results.requestId();
-        this.getFrame().getClient().sendPacket(new ServerCommandPacket(i , this, id, args));
+        this.getFrame().getClient().sendPacket(new ServerCommandPacket(i, this, id, args));
         return i;
     }
 

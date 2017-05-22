@@ -7,29 +7,30 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 收到财付通转账
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class TenpayReceiveTransferEvent extends TenpayEvent {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlers() {
-		return handlers;
-	}
+    public static HandlerList getHandlers() {
+        return handlers;
+    }
 
 
-	private final float amount;
-	private final String message;
+    private final float amount;
+    private final String message;
 
-	public TenpayReceiveTransferEvent(RobotQQ robot, QQ QQ, float amount, String message) {
-		super(robot, QQ);
-		this.amount = amount;
-		this.message = message;
-	}
+    public TenpayReceiveTransferEvent(RobotQQ robot, QQ QQ, float amount, String message) {
+        super(robot, QQ);
+        this.amount = amount;
+        this.message = message;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public float getAmount() {
-		return amount;
-	}
+    public float getAmount() {
+        return amount;
+    }
 }

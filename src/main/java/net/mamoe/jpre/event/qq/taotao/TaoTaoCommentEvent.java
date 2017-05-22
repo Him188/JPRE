@@ -8,28 +8,31 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 评论别人的说说
  *
- * @author Him188 @ JPRE Project */ // TODO: 2017/5/18 implement
+ * @author Him188 @ JPRE Project
+ * @deprecated 不支持
+ */
+@Deprecated
 public class TaoTaoCommentEvent extends TaoTaoEvent implements Cancellable {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlers() {
-		return handlers;
-	}
+    public static HandlerList getHandlers() {
+        return handlers;
+    }
 
 
-	private final String message;
+    private final String message;
 
-	public TaoTaoCommentEvent(RobotQQ robot, QQ qq, String message) {
-		super(robot, qq);
-		this.message = message;
-	}
+    public TaoTaoCommentEvent(RobotQQ robot, QQ qq, String message) {
+        super(robot, qq);
+        this.message = message;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	@Override
-	public int getResultStatus() {
-		return isCancelled() ? 1 : 0;
-	}
+    @Override
+    public int getResultStatus() {
+        return isCancelled() ? 1 : 0;
+    }
 }

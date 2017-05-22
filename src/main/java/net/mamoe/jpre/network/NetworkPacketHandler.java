@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.JPREMain;
+import net.mamoe.jpre.event.frame.FrameDisconnectionEvent;
 import net.mamoe.jpre.utils.Utils;
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.event.frame.FrameConnectionEvent;
@@ -17,7 +18,8 @@ import java.util.List;
 /**
  * 网络数据包接收器. 该类属于网络层, 插件一般不需要使用
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     private JPREMain jpre;
 
@@ -105,8 +107,6 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         }
 
         super.exceptionCaught(ctx, cause);
-
-        // TODO: 2017/3/22  配置是否显示错误信息.
     }
 
     @Override
@@ -136,6 +136,15 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("[Network] RemoteClient: " + ctx.channel().remoteAddress() + " disconnected.");
+
+        for (MPQClient client : clients) {
+            if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
+                FrameDisconnectionEvent event = new FrameDisconnectionEvent(client.getFrame());
+                client.getFrame().getPluginManager().callEvent(event);
+                break;
+            }
+        }
+
         super.channelInactive(ctx);
     }
 }

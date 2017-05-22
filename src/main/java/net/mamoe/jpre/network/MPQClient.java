@@ -10,10 +10,11 @@ import net.mamoe.jpre.event.EventType;
 import net.mamoe.jpre.event.discussion.DiscussionMessageEvent;
 import net.mamoe.jpre.event.frame.*;
 import net.mamoe.jpre.event.group.*;
+import net.mamoe.jpre.event.jpre.MenuActionEvent;
 import net.mamoe.jpre.event.network.DataPacketReceiveEvent;
 import net.mamoe.jpre.event.network.DataPacketSendEvent;
 import net.mamoe.jpre.event.qq.*;
-import net.mamoe.jpre.event.qq.taotao.FriendTaotaoCommitEvent;
+import net.mamoe.jpre.event.qq.taotao.TaoTaoBeCommentedEvent;
 import net.mamoe.jpre.event.qq.tenpay.TenpayReceiveTransferEvent;
 import net.mamoe.jpre.network.packet.*;
 import net.mamoe.jpre.utils.Utils;
@@ -27,7 +28,8 @@ import static net.mamoe.jpre.network.packet.Protocol.*;
  * 连接到服务器的客户端 (MPQ)
  * MPQ 连接到 JPRE 后创建. 详见: {@link NetworkPacketHandler#channelActive}
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("WeakerAccess")
 public final class MPQClient {
     MPQClient(Frame frame, InetSocketAddress address, ChannelHandlerContext initCtx) {
@@ -77,7 +79,47 @@ public final class MPQClient {
     public void dataReceive(BinaryStream packet) {
         byte pid = packet.getByte();
         switch (pid) {
-            case CLIENT_EVENT: // TODO: 2017/5/18 移动到 composePacket
+
+            default:
+                Packet pk;
+                try {
+                    pk = Packet.matchPacket(pid);
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
+                    sendPacket(new ServerInvalidIdPacket());
+                    return;
+                }
+                if (pk == null) {
+                    sendPacket(new ServerInvalidIdPacket());
+                    return;
+                }
+                pk.setClient(this);
+                pk.setData(packet.getLast());
+                pk.setEncoded(true);
+                composePacket(pk);
+                break;
+        }
+    }
+
+    /**
+     * 数据包处理
+     *
+     * @param packet 包
+     */
+    @SuppressWarnings("ConstantConditions")
+    public void composePacket(Packet packet) {
+        packet.decode();
+
+        System.out.print("Packet: " + packet);
+        DataPacketReceiveEvent ev = new DataPacketReceiveEvent(packet);
+        frame.getPluginManager().callEvent(ev);
+        if (ev.isCancelled()) {
+            System.out.println("  (Cancelled)");
+            return;
+        }
+        System.out.println("");
+
+        switch (packet.getNetworkId()) {
+            case CLIENT_EVENT: {
                 Event event = null;
 
                 byte id = packet.getByte();
@@ -93,7 +135,7 @@ public final class MPQClient {
                     robot = RobotQQ.getRobot(this.getFrame(), robotQQ);
                 }
 
-                packet.getInt(); // sub type
+                int subType = packet.getInt(); // sub type
                 /*
                 * .版本 2
 				* .参数 参_机器人QQ, 文本型, , 多QQ登录情况下用于识别是哪个Q
@@ -133,7 +175,7 @@ public final class MPQClient {
                         event = new FriendAddResultEvent(robot, robot.getQQ(active), true);
                         break;
                     case FRIEND_ADD_REQUEST:
-                        event = new FriendAddRequestEvent(robot, robot.getQQ(active), message);
+                        event = new FriendAddRequestEvent(robot, robot.getQQ(active), message, subType == 1);
                         break;
                     case FRIEND_STATUS_CHANGE:
                         event = new FriendStatusChangeEvent(robot, robot.getQQ(active), OnlineStatus.match(Integer.parseInt(message)));
@@ -145,7 +187,7 @@ public final class MPQClient {
                         event = new FriendSignChangeEvent(robot, robot.getQQ(active), message);
                         break;
                     case FRIEND_TAOTAO_BE_COMMENT:
-                        event = new FriendTaotaoCommitEvent(robot, robot.getQQ(active), message);
+                        event = new TaoTaoBeCommentedEvent(robot, robot.getQQ(active), message);
                         break;
                     case FRIEND_TYPING:
                         event = new FriendTypingEvent(robot, robot.getQQ(active));
@@ -162,12 +204,12 @@ public final class MPQClient {
                         event = new GroupJoinRequestEvent(robot, robot.getGroup(from), robot.getQQ(active));
                         break;
                     case GROUP_INVITATION_REQUEST:
-                        event = new GroupInvitationRequestEvent(robot, robot.getGroup(from), robot.getQQ(active), robot.getQQ(passive));
+                        event = new GroupInvitationRequestEvent(robot, robot.getGroup(from), robot.getQQ(active), robot.getQQ(passive), subType == 1);
                         break;
                     case GROUP_INVITATION:
                         event = new GroupInvitationEvent(robot, robot.getGroup(from), robot.getQQ(active));
                         break;
-                    case GROUP_JOIN: // TODO: 2017/4/22  check active and passive
+                    case GROUP_JOIN:
                         event = new GroupJoinEvent(robot, robot.getGroup(from), robot.getQQ(active), robot.getQQ(passive));
                         break;
                     case GROUP_QUIT:
@@ -185,7 +227,7 @@ public final class MPQClient {
                     case GROUP_ADMIN_DEMOTION:
                         event = new GroupAdminChangeEvent(robot, robot.getGroup(from), robot.getQQ(passive), GroupAdminChangeEvent.ChangeType.DEMOTION);
                         break;
-                    case GROUP_CARD_CHANGE: // TODO: 2017/4/22  check active and passive
+                    case GROUP_CARD_CHANGE:
                         event = new GroupCardChangeEvent(robot, robot.getGroup(from), robot.getQQ(active), message);
                         break;
                     //case GROUP_NAME_CHANGE:
@@ -240,8 +282,14 @@ public final class MPQClient {
                         event = new FrameRobotCrashEvent(this.getFrame(), robot);
                         break;
 
+                    /* TENPAY */
                     case TENPAY_RECEIVE_TRANSFER:
                         event = new TenpayReceiveTransferEvent(robot, robot.getQQ(active), Integer.parseInt(message), packet.getString());
+                        break;
+
+                    /* JPRE */
+                    case JPRE_MENU_ACTION:
+                        event = new MenuActionEvent(robot, MenuActionEvent.ActionType.fromInt(subType));
                         break;
                 }
 
@@ -253,44 +301,8 @@ public final class MPQClient {
                 System.out.println("[Event] Parsed: " + event);
                 sendPacket(new ServerEventResultPacket(frame.getPluginManager().callEvent(event), id));
                 break;
-            default:
-                Packet pk;
-                try {
-                    pk = Packet.matchPacket(pid);
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
-                    sendPacket(new ServerInvalidIdPacket());
-                    return;
-                }
-                if (pk == null) {
-                    sendPacket(new ServerInvalidIdPacket());
-                    return;
-                }
-                pk.setClient(this);
-                pk.setData(packet.getLast());
-                pk.setEncoded(true);
-                composePacket(pk);
-                break;
-        }
-    }
+            }
 
-    /**
-     * 数据包处理
-     *
-     * @param packet 包
-     */
-    public void composePacket(Packet packet) {
-        packet.decode();
-
-        System.out.print("Packet: " + packet);
-        DataPacketReceiveEvent event = new DataPacketReceiveEvent(packet);
-        frame.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            System.out.println("  (Cancelled)");
-            return;
-        }
-        System.out.println("");
-
-        switch (packet.getNetworkId()) {
             case CLIENT_PING: {
                 sendPacket(new ServerPongPacket());
                 break;

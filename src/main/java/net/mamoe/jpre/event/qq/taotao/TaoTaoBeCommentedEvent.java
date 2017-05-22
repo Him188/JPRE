@@ -16,7 +16,14 @@ public class TaoTaoBeCommentedEvent extends TaoTaoEvent {
 	}
 
 
-	public TaoTaoBeCommentedEvent(RobotQQ robot, QQ qq){
-		super(robot, qq);
-	}
+    public TaoTaoBeCommentedEvent(RobotQQ robot, QQ qq, String content) {
+        super(robot, qq);
+        this.content = content;
+    }
+
+    private final String content;
+
+    public String getContent() {
+        return content;
+    }
 }

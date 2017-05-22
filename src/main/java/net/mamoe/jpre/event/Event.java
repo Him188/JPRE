@@ -18,7 +18,7 @@ abstract public class Event {
      * 用于与 MPQ 通讯. 插件自定义事件时不需要继承或使用本方法
      */
     public int getResultStatus(){
-        return STATUS_CONTINUE;
+        return isIntercepted() ? STATUS_BLOCK : STATUS_CONTINUE;
     }
 
     /* Interception */

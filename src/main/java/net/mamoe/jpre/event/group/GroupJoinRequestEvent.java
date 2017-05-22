@@ -3,6 +3,7 @@ package net.mamoe.jpre.event.group;
 import net.mamoe.jpre.Group;
 import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
+import net.mamoe.jpre.event.Action;
 import net.mamoe.jpre.event.HandlerList;
 import net.mamoe.jpre.event.Selectable;
 

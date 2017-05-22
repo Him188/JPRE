@@ -20,5 +20,5 @@ public abstract class User { // TODO: 2017/5/17 Group/DiscussionTemporary 类
 		return robot;
 	}
 
-
+	abstract public long getNumber();
 }

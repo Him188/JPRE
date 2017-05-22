@@ -6,15 +6,16 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 框架断开连接 JPRE 时触发.
  *
- * @author Him188 @ JPRE Project */ // TODO: 2017/5/18 implement
+ * @author Him188 @ JPRE Project
+ */
 public class FrameDisconnectionEvent extends FrameEvent {
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	public static HandlerList getHandlers() {
-		return handlers;
-	}
+    public static HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public FrameDisconnectionEvent(Frame frame) {
-		super(frame);
-	}
+    public FrameDisconnectionEvent(Frame frame) {
+        super(frame);
+    }
 }

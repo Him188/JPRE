@@ -6,7 +6,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 插件菜单被点击
  *
- * @author Him188 @ JPRE Project */// TODO: 2017/5/18
+ * @author Him188 @ JPRE Project
+ */
 public class MenuActionEvent extends JPREEvent {
     private static final HandlerList handlers = new HandlerList();
 
@@ -18,9 +19,24 @@ public class MenuActionEvent extends JPREEvent {
     private final ActionType type;
 
     public enum ActionType {
-        LEFT_CLICK,
-        RIGHT_CLICK,
-        LEFT_DOUBLE_CLICK
+        LEFT_CLICK(1),
+        RIGHT_CLICK(2),
+        LEFT_DOUBLE_CLICK(3);
+
+        private int type;
+
+        ActionType(int type) {
+            this.type = type;
+        }
+
+        public static ActionType fromInt(int type) {
+            for (ActionType actionType : ActionType.values()) {
+                if (actionType.type == type) {
+                    return actionType;
+                }
+            }
+            return null;
+        }
     }
 
     public MenuActionEvent(RobotQQ robot, ActionType type) {

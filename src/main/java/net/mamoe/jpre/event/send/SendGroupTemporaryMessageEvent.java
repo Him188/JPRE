@@ -1,13 +1,13 @@
 package net.mamoe.jpre.event.send;
 
-import net.mamoe.jpre.Discussion;
+import net.mamoe.jpre.GroupTemporary;
 import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
  * @author Him188 @ JPRE Project
  */
-public class SendDiscussionMessageEvent extends SendMessageEvent {
+public class SendGroupTemporaryMessageEvent extends SendMessageEvent {
     private static final HandlerList handlers = new HandlerList();
 
     public static HandlerList getHandlers() {
@@ -15,17 +15,17 @@ public class SendDiscussionMessageEvent extends SendMessageEvent {
     }
 
 
-    private final Discussion discussion;
+    private final GroupTemporary session;
     private final String message;
 
-    public SendDiscussionMessageEvent(RobotQQ robotQQ, Discussion discussion, String message) {
+    public SendGroupTemporaryMessageEvent(RobotQQ robotQQ, GroupTemporary session, String message) {
         super(robotQQ);
-        this.discussion = discussion;
+        this.session = session;
         this.message = message;
     }
 
-    public Discussion getDiscussion() {
-        return discussion;
+    public GroupTemporary getSession() {
+        return session;
     }
 
     public String getMessage() {

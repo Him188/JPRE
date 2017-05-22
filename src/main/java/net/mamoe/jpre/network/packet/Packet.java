@@ -117,17 +117,24 @@ abstract public class Packet extends BinaryStream {
 					ClientCommandResultPacket.class,
 					ClientGetPluginListPacket.class,
 					ClientGetPluginInformationPacket.class,
+                    ClientStaticCommandResultPacket.class,
+
 					ServerPongPacket.class,
 					ServerEventResultPacket.class,
 					ServerInvalidEventPacket.class,
-			}) {
+                    ServerCommandPacket.class,
+                    ServerGetPluginInformationResultPacket.class,
+                    ServerInvalidEventPacket.class,
+                    ServerInvalidIdPacket.class,
+                    ServerStaticCommandPacket.class
+            }) {
 				//noinspection unchecked
 				registerPacket((Class<? extends Packet>) aClass);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}// TODO: 2017/4/17  
-	}
+        }
+    }
 
 	/**
 	 * 已注册的包列表. 键与 {@link #PACKET_IDS} 对应
