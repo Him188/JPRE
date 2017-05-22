@@ -11,7 +11,8 @@ import java.util.Map;
 /**
  * 配置接口
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings({"unused", "WeakerAccess"})
 abstract public class Config {
     protected File file;

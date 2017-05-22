@@ -1,7 +1,8 @@
 package net.mamoe.jpre.network.packet;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class ServerEventResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_EVENT_RESULT;
 

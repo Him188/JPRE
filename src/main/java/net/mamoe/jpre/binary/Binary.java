@@ -3,7 +3,8 @@ package net.mamoe.jpre.binary;
 /**
  * 字节转换. 字节数组转换为各种基本数据类型
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("WeakerAccess")
 public final class Binary {
     public static byte[] toBytes(int value) {

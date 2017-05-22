@@ -5,7 +5,8 @@ import net.mamoe.jpre.QQ;
 import net.mamoe.jpre.RobotQQ;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public abstract class GroupAdminEvent extends GroupEvent {
 	private final QQ admin;
 

@@ -4,7 +4,8 @@ import net.mamoe.jpre.CommandId;
 import net.mamoe.jpre.RobotQQ;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class ServerCommandPacket extends Packet {
     public static final byte NETWORK_ID = Protocol.SERVER_COMMAND;
 

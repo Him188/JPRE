@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 某人被同意加入群
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class GroupJoinEvent extends GroupAdminEvent {
 	private static final HandlerList handlers = new HandlerList();
 

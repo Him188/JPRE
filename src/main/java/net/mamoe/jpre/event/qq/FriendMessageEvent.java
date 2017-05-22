@@ -10,21 +10,21 @@ import net.mamoe.jpre.event.HandlerList;
  * @author Him188 @ JPRE Project
  */
 public class FriendMessageEvent extends QQEvent {
-    private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 
-    public static HandlerList getHandlers() {
-        return handlers;
-    }
+	public static HandlerList getHandlers() {
+		return handlers;
+	}
 
 
-    private final String message;
+	private final String message;
 
-    public FriendMessageEvent(RobotQQ robot, QQ qq, String message) {
-        super(robot, qq);
-        this.message = message;
-    }
+	public FriendMessageEvent(RobotQQ robot, QQ qq, String message) {
+		super(robot, qq);
+		this.message = message;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public String getMessage() {
+		return message;
+	}
 }

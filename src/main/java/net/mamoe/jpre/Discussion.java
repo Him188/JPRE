@@ -1,7 +1,8 @@
 package net.mamoe.jpre;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class Discussion extends User {
 	private final long number;
 

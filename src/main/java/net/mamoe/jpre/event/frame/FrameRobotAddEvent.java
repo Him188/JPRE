@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 添加了新 QQ
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("unused")
 public class FrameRobotAddEvent extends FrameRobotEvent {
 	private static final HandlerList handlers = new HandlerList();

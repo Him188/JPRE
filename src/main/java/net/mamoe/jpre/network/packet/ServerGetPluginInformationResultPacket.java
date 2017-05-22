@@ -2,7 +2,8 @@ package net.mamoe.jpre.network.packet;
 
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class ServerGetPluginInformationResultPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_GET_PLUGIN_INFORMATION_RESULT;
 

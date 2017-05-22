@@ -3,7 +3,8 @@ package net.mamoe.jpre.event;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 @SuppressWarnings("unused")
 public interface Cancellable {
 

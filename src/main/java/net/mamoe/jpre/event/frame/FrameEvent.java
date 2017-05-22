@@ -4,7 +4,8 @@ import net.mamoe.jpre.Frame;
 import net.mamoe.jpre.event.Event;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public abstract class FrameEvent extends Event{
     private final Frame frame;
 

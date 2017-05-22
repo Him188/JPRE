@@ -3,7 +3,8 @@ package net.mamoe.jpre.network.packet;
 import net.mamoe.jpre.CommandId;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class ServerStaticCommandPacket extends Packet {
 	public static final byte NETWORK_ID = Protocol.SERVER_STATIC_COMMAND;
 

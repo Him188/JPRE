@@ -7,7 +7,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 好友今日首次发起会话(电脑上发起)
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class FriendFirstConversationEvent extends QQEvent{
 	private static final HandlerList handlers = new HandlerList();
 

@@ -5,7 +5,8 @@ import net.mamoe.jpre.RobotQQ;
 import net.mamoe.jpre.event.HandlerList;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class SendFriendMessageEvent extends SendMessageEvent {
     private static final HandlerList handlers = new HandlerList();
 

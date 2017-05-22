@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 好友在线状态改变
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class FriendStatusChangeEvent extends QQEvent {
 	private static final HandlerList handlers = new HandlerList();
 
@@ -19,7 +20,7 @@ public class FriendStatusChangeEvent extends QQEvent {
 
 	private final OnlineStatus status;
 
-	public FriendStatusChangeEvent(RobotQQ robot, QQ qq,  OnlineStatus status) {
+	public FriendStatusChangeEvent(RobotQQ robot, QQ qq, OnlineStatus status) {
 		super(robot, qq);
 		this.status = status;
 	}

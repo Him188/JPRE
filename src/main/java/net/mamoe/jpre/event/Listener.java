@@ -21,6 +21,7 @@ import net.mamoe.jpre.plugin.PluginManager;
  * <p>
  * 关于注册监听器, 请查看: {@link PluginManager#registerEvents(Listener, Plugin)}
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public interface Listener {
 }

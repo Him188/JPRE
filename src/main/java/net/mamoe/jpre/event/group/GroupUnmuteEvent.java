@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 群成员被解除禁言
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class GroupUnmuteEvent extends GroupAdminEvent {
 	private static final HandlerList handlers = new HandlerList();
 

@@ -1,7 +1,8 @@
 package net.mamoe.jpre.event;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public enum EventPriority {
 	LOWEST,
 	LOW,

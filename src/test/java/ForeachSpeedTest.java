@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class ForeachSpeedTest {
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();

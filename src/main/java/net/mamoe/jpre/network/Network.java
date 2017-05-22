@@ -16,7 +16,8 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
  * 本类用于启动网络服务器. 包接受器请参考 {@link NetworkPacketHandler}
  * (插件请不要使用本类, 用了也会因端口占用而抛出异常)
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public final class Network {
     private static ServerBootstrap server;
 

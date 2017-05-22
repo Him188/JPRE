@@ -10,7 +10,8 @@ import net.mamoe.jpre.event.Selectable;
 /**
  * 某人申请加入群
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class GroupJoinRequestEvent extends GroupEvent implements Selectable {
 	private static final HandlerList handlers = new HandlerList();
 

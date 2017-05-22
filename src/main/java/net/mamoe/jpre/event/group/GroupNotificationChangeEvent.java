@@ -8,7 +8,8 @@ import net.mamoe.jpre.event.HandlerList;
 /**
  * 群公告变更
  *
- * @author Him188 @ JPRE Project */
+ * @author Him188 @ JPRE Project
+ */
 public class GroupNotificationChangeEvent extends GroupEvent {
 	private static final HandlerList handlers = new HandlerList();
 
