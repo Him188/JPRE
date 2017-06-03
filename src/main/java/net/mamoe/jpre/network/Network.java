@@ -22,7 +22,7 @@ public final class Network {
     private static ServerBootstrap server;
 
     /**
-     * 启动网路服务器. 会阻塞线程直到关闭网络服务器.
+     * 启动网络服务器. 会阻塞线程直到关闭网络服务器.
      *
      * @param port 端口号
      * @throws RuntimeException 服务器已经启动时抛出

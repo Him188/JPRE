@@ -2,7 +2,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 /**
- * @author Him188 */
+ * @author Him188
+ */
 public class TestDecoding {
 	public static void main(String... args) {
 		System.out.println("Text decoding: ");
