@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author Him188 @ JPRE Project
  * @since JPRE 1.0.0
  */
+@Deprecated
 public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 	private Frame frame;
 

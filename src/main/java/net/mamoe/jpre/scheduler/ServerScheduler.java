@@ -7,6 +7,7 @@ import net.mamoe.jpre.Frame;
  *
  * @author Him188 @ JPRE Project
  */
+@Deprecated
 public final class ServerScheduler extends Scheduler {
     public ServerScheduler() {
         super(null);

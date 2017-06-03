@@ -8,6 +8,7 @@ import net.mamoe.jpre.plugin.Plugin;
  * @author Him188 @ JPRE Project
  */
 @SuppressWarnings("WeakerAccess")
+@Deprecated
 public abstract class Task implements Runnable {
 	/* Abstract */
 
