@@ -64,6 +64,7 @@ public final class JPREMain {
         Options options = new Options();
         options.addOption("h", "help", false, "Print the usage information");
         options.addOption("p", "port", true, "Set the server port number");
+	    options.addOption("v", "version", true, "Show version");
 
         CommandLine commandLine = parser.parse(options, args);
 
@@ -71,6 +72,11 @@ public final class JPREMain {
             System.out.println("Help Message");
             System.exit(0);
         }
+
+	    if (commandLine.hasOption("v")) {
+		    printAbout();
+		    System.exit(0);
+	    }
 
         int port = DEFAULT_PORT;
         if (commandLine.hasOption("p")) {
@@ -90,7 +96,7 @@ public final class JPREMain {
             } catch (InterruptedException e) {
 	            System.out.println("Starting server failed. Could not open port " + finalPort);
 	            System.exit(0);
-            } catch (Exception e) { //捕获所有异常
+            } catch (Throwable e) {
 	            e.printStackTrace();
             }
         }).start();
@@ -117,7 +123,8 @@ public final class JPREMain {
         return dataFolder;
     }
 
-    public static void setDataFolder(String dataFolder) {
-        JPREMain.dataFolder = dataFolder;
-    }
+	//for other applications, like Nukkit
+	public static void setDataFolder(String dataFolder) {
+		JPREMain.dataFolder = dataFolder;
+	}
 }

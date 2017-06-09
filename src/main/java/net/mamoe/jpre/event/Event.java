@@ -48,7 +48,7 @@ abstract public class Event {
     }
 
 
-	/* Cancellation*/
+	/* Cancellation */
 
     private boolean cancelled = false;
 

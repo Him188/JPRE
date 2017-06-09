@@ -13,8 +13,6 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author Him188 @ JPRE Project
  */
-
-
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
 	public static String toString(Object object) {
