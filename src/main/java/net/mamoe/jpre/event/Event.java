@@ -1,6 +1,7 @@
 package net.mamoe.jpre.event;
 
 import net.mamoe.jpre.plugin.PluginManager;
+import net.mamoe.jpre.utils.Utils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.lang.reflect.Field;
@@ -104,7 +105,7 @@ abstract public class Event {
                 }
                 field.setAccessible(true);
                 try {
-                    result.append(field.getName()).append("=").append(field.get(this)).append(",");
+	                result.append(field.getName()).append("=").append(Utils.toString(field.get(this))).append(",");
                 } catch (IllegalAccessException ignored) {
                 }
             }

@@ -23,7 +23,7 @@ public class ClientGetPluginInformationPacket extends Packet {
 			return;
 		}
 
-		this.name = this.getString();
+		this.name = this.getStringDecoded();
 	}
 
 	@Override

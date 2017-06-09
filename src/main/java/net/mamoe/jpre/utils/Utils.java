@@ -1,6 +1,7 @@
 package net.mamoe.jpre.utils;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -16,6 +17,21 @@ import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("WeakerAccess")
 public final class Utils {
+	public static String toString(Object object) {
+		if (object.getClass().isArray()) {
+			StringBuilder str = new StringBuilder(object.getClass().getSimpleName() + "(" + Array.getLength(object) + "){");
+			if (Array.getLength(object) != 0) {
+				for (int i = 0; i < Array.getLength(object); i++) {
+					str.append(Array.get(object, i)).append(",");
+				}
+				str.deleteCharAt(str.length() - 1);
+			}
+			return str.toString();
+		}
+
+		return object.toString();
+	}
+
     public static void writeFile(String fileName, String content) throws IOException {
         writeFile(fileName, new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
     }

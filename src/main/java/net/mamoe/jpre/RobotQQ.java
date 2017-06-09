@@ -1013,14 +1013,14 @@ public class RobotQQ {
 
     private CommandResults results = new CommandResults();
 
-    public byte runCommand(CommandId id, Object... args) throws InterruptedException {
-        byte i = results.requestId();
+	private byte runCommand(CommandId id, Object... args) throws InterruptedException {
+		byte i = results.requestId();
         this.getFrame().getClient().sendPacket(new ServerCommandPacket(i, this, id, args));
         return i;
     }
 
-    public void runVoidCommand(CommandId id, Object... args) throws InterruptedException {
-        this.getFrame().getClient().sendPacket(new ServerStaticCommandPacket((byte) 0, id, args));
+	private void runVoidCommand(CommandId id, Object... args) throws InterruptedException {
+		this.getFrame().getClient().sendPacket(new ServerStaticCommandPacket((byte) 0, id, args));
     }
 
     public void setResult(byte id, Object result) {

@@ -3,6 +3,7 @@ package net.mamoe.jpre.network.packet;
 
 import net.mamoe.jpre.binary.BinaryStream;
 import net.mamoe.jpre.network.MPQClient;
+import net.mamoe.jpre.utils.Utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -119,6 +120,7 @@ abstract public class Packet extends BinaryStream {
 					ClientGetPluginListPacket.class,
 					ClientGetPluginInformationPacket.class,
                     ClientStaticCommandResultPacket.class,
+					ClientEventPacket.class,
 
 					ServerPongPacket.class,
 					ServerEventResultPacket.class,
@@ -234,7 +236,7 @@ abstract public class Packet extends BinaryStream {
                 }
                 field.setAccessible(true);
                 try {
-                    result.append(field.getName()).append("=").append(field.get(this)).append(",");
+	                result.append(field.getName()).append("=").append(Utils.toString(field.get(this))).append(",");
                 } catch (IllegalAccessException ignored) {
                 }
             }

@@ -76,10 +76,8 @@ public class MethodHandler implements Handler {
 			try {
 				method.setAccessible(true);
 				method.invoke(listener, event);
-				return;
 			} catch (Exception e) {
 				e.printStackTrace();
-				return;
 			}
 		}
 	}

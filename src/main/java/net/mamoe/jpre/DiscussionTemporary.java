@@ -5,7 +5,7 @@ package net.mamoe.jpre;
  *
  * @author Him188 @ JPRE Project
  */
-public class DiscussionTemporary extends Temporary {
+public final class DiscussionTemporary extends Temporary {
     public DiscussionTemporary(RobotQQ robot, long session) {
         super(robot, session);
     }
