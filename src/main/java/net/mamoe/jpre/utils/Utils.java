@@ -26,6 +26,7 @@ public final class Utils {
 				}
 				str.deleteCharAt(str.length() - 1);
 			}
+			str.append("}");
 			return str.toString();
 		}
 
