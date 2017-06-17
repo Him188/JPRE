@@ -1,34 +1,99 @@
 package net.mamoe.jpre.scheduler;
 
-import net.mamoe.jpre.plugin.Plugin;
-
 /**
- * 延迟任务
- *
  * @author Him188 @ JPRE Project
  */
-@SuppressWarnings("WeakerAccess")
-@Deprecated
 public abstract class Task implements Runnable {
-	/* Abstract */
-
-	/**
-	 * 计时时间到达后调用本方法
-	 */
 	public abstract void onRun();
 
+	/**
+	 * 已创建的 Task 数量
+	 */
+	public static int taskCount = 0;
 
-	/* Scheduler */
-	private Scheduler scheduler;
+	private int id;
 
-	public void setScheduler(Scheduler scheduler) {
-		this.scheduler = scheduler;
+	private long period;
+	private long delay;
+
+	/**
+	 * {@link Task} 构造器, 将会寻找该对象的注解 {@link TaskInfo} 并调用 {@link Task#init(TaskInfo)} <br>
+	 * 当找不到注解时会调用 {@link Task#init()}
+	 */
+	public Task() {
+		TaskInfo annotation = null;
+		try {
+			annotation = this.getClass().getAnnotation(TaskInfo.class);
+		} catch (NullPointerException ignored) {
+			init();
+		}
+
+		if (annotation == null) {
+			init();
+		} else {
+			init(annotation);
+		}
 	}
 
-	public Scheduler getScheduler() {
-		return scheduler;
+	/**
+	 * {@link Task} 构造器, 将会使用注解 {@link TaskInfo} 的属性并调用 {@link Task#init(long, long)}
+	 */
+	public Task(TaskInfo info) {
+		init(info.delay(), info.period());
 	}
 
+	public Task(long delay) {
+		init(delay, -1);
+	}
+
+	public Task(long delay, long period) {
+		init();
+		this.period = period;
+		this.delay = delay;
+		this.id = taskCount++;
+	}
+
+	protected void init(TaskInfo info) {
+		init(info.delay(), info.period());
+	}
+
+	protected void init() {
+		init(0);
+	}
+
+	protected void init(long delay) {
+		init(delay, -1);
+	}
+
+	protected void init(long delay, long period) {
+		this.period = period;
+		this.delay = delay;
+		this.id = taskCount++;
+	}
+
+	public long getPeriod() {
+		return period;
+	}
+
+	public long getDelay() {
+		return delay;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && obj instanceof Task && this.id == ((Task) obj).getId();
+	}
+
+	@Override
+	public void run() {
+		if (!this.isCancelled()) {
+			this.onRun();
+		}
+	}
 
 	private boolean cancelled = false;
 
@@ -36,49 +101,7 @@ public abstract class Task implements Runnable {
 		return cancelled;
 	}
 
-	private void setCancelled(boolean cancelled) {
+	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
-	}
-
-
-	protected Plugin owner;
-
-	protected final void setOwner(Plugin owner) {
-		this.owner = owner;
-	}
-
-
-	protected final Plugin getOwner() {
-		return owner;
-	}
-
-	/**
-	 * 取消这个任务, 在任务计时时间到达前可通过 {@link #start()} 重新激活任务
-	 */
-	public void cancel() {
-		setCancelled(true);
-	}
-
-	/**
-	 * 重新激活任务
-	 */
-	public void start() {
-		setCancelled(false);
-	}
-
-	/**
-	 * 取消任务并从任务池中删除 (不可重新激活任务)
-	 */
-	public void forceCancel() {
-		cancel();
-		getScheduler().service.remove(this);
-		getScheduler().pool.remove(this);
-	}
-
-	@Override
-	public void run() {
-		if (!isCancelled()) {
-			onRun();
-		}
 	}
 }

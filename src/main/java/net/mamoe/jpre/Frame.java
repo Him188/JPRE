@@ -44,14 +44,12 @@ public final class Frame {
         this.jpre = jpre;
         init(JPREMain.getDataFolder());// TODO: 2017/5/11 Frame 区分数据目录
 
-        scheduler = new Scheduler(this);
         pluginManager = new PluginManager(this);
 
         pluginManager.loadPlugins();
     }
 
     private PluginManager pluginManager;
-    private Scheduler scheduler;
 
     public PluginManager getPluginManager() {
         return pluginManager;
@@ -72,7 +70,6 @@ public final class Frame {
 
     public void shutdown(boolean shutdown) {
         this.shutdown = shutdown;
-        scheduler.shutdown();
         pluginManager.disablePlugins();
     }
 
@@ -125,7 +122,7 @@ public final class Frame {
             plugin.enable();
             System.out.println("[Plugin] " + plugin.getName() + " enabled!");
             return true;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false;
         }
     }
@@ -138,7 +135,7 @@ public final class Frame {
             }
             plugin.disable();
             return true;
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return false;
         }
     }
@@ -150,7 +147,7 @@ public final class Frame {
 
 
     public Scheduler getScheduler() {
-        return scheduler;
+        return getJPREMain().getScheduler();
     }
 
 
@@ -201,7 +198,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GUID_GET_PIC_LINK, 0L, guid);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -216,7 +213,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.SEND, 0L, data);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -231,7 +228,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.OUTPUT, 0L, content);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -245,7 +242,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.IS_ENABLE, 0L);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -260,7 +257,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.LOGIN, 0L, QQ);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -289,7 +286,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.TEA_ENCODE, 0L, content, key);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -305,7 +302,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.TEA_DECODE, 0L, content, key);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -320,7 +317,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_NICK, 0L, QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -335,7 +332,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_QQ_LEVEL, 0L, QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -350,7 +347,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GN_GET_GID, 0L, groupNumber);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -365,7 +362,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GID_GET_GN, 0L, gid);
             return results.longResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -379,7 +376,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_VERSION, 0L);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -393,7 +390,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_VERSION_NAME, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -407,7 +404,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_TIME_STAMP, 0L);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -423,7 +420,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_LOG, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -437,7 +434,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_RANDOM_ONLINE_QQ, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -454,7 +451,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.ADD_QQ, 0L, QQ, password, autoLogin);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -471,7 +468,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.SET_OL_STATUS, 0L, QQ, status.getId(), additionMessage);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -485,7 +482,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_MC, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -499,7 +496,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_RUN_PATH, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -513,7 +510,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_ONLINE_QQ_LIST, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -527,7 +524,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_QQ_LIST, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -541,7 +538,7 @@ public final class Frame {
         try {
             byte id = runCommand(CommandId.GET_PREFIX, 0L);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }

@@ -1,7 +1,7 @@
 package net.mamoe.jpre.utils;
 
 import net.mamoe.jpre.JPREMain;
-import net.mamoe.jpre.scheduler.Task;
+import net.mamoe.jpre.scheduler.TaskHandler;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -52,20 +52,20 @@ public class CommandResults extends HashMap<Byte, Object> {
     }
 
     public String stringResult(byte id) {
-        Task task = JPREMain.getServerScheduler().scheduleTimingTask(() -> this.put(id, ""), 5000);//5s
+        TaskHandler task = JPREMain.getInstance().getScheduler().addTask(null, () -> this.put(id, ""), 5000);//5s
         Object result;
 
         result = this.remove(id);
         while (result == null) {
             try {
                 Thread.sleep(1);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
                 return null;
             }
             result = this.remove(id);
         }
 
-        task.forceCancel();
+        task.cancelTask();
         keys.offer(id);
         return String.valueOf(result);
     }

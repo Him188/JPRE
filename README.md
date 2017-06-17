@@ -7,12 +7,12 @@ GitHub: [JPRE(Java)(你现在阅读的就是)]("http://github.com/mamoetech/jpre
 
 ## 下载
 *项目仍在努力开发中，敬请期待*  
-Circleci(需要登录): [JPRE(Java)]("baidu.com")  
-Jenkins(直接下载): [JPRE(Java)]("baidu.com")  
+Circleci(需要登录): [JPRE(Java)]("https://baidu.com")
+Jenkins(直接下载): [JPRE(Java)]("https://baidu.com")
 
 ## 作者  
 **本项目最初由 \@LamGC 发起，我(Him188)后来参加开发**
-- Java: \@Him188(主要), \@LamGC(部分), 其他朋友们(\@XianD, \@SoleMemory)
+- Java: __[MamoeTech]("https://github.com/MamoeTech")__ \@Him188(主要), \@LamGC(部分), 其他朋友们(\@XianD, \@SoleMemory)
 - C\#: \@Him188
 
 ## 词汇注明:   
@@ -23,21 +23,11 @@ MyPCQQ 的简写，MPQ是一款QQ机器人应用，其官方提供一个给出 A
 
 ## 说明  
    
-#### 项目运行模式   
-MPQ 官方框架支持 StdCall 方式的 Windows 动态链接库(DLL)，我们为了强劲的性能，选择了C#(感谢@somebody编写的MPQ C# 插件模板 [查看论坛原文]("TODO") )  
-  
-**项目核心工作方式为网络通讯(TCP)**  
-JPRE为服务端，MPQ插件为客户端  
-MPQ插件启动时连接JPRE，JPRE随即加载并启动插件  
+#### 项目运行模式
+*请参阅 Java: `net.mamoe.jpre.network`包; C#: `Plugin.Network`命名空间*
 
-**JPRE调用API会以网络数据包的形式传送到MPQ插件; MPQ插件收到事件会以同样的方式传递给JPRE**  
-上述内容基本解释了JPRE与MPQ插件通信过程
-*详细网络过程请参阅 Java: `net.mamoe.jpre.network`包; C#: `Plugin.Network`命名空间*
+#### 说明
 
-#### 详细说明
-**正文**  
-*正文内容可能不适合不具备编程基础的读者阅读*   
-  
 JPRE 允许你使用 Java 调用 MPQ API，并且能处理 MPQ 发生的事件。  
 从前几个标题中已经可以看出，JPRE是一个独立的应用程序，可以不依赖于其他应用运行  
 

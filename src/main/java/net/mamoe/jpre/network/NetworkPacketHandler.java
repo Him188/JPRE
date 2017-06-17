@@ -69,7 +69,7 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
                 byte[] d = Utils.arrayGetCenter(temp, 0, position);
                 temp = Utils.arrayDelete(temp, position + Protocol.SIGNATURE.length);
 
-                JPREMain.getServerScheduler().scheduleTask(() -> processPacket(ctx, d));
+	            JPREMain.getInstance().getScheduler().addTask(() -> processPacket(ctx, d));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,8 +88,8 @@ public class NetworkPacketHandler extends SimpleChannelInboundHandler<byte[]> {
         //System.out.println(stream);
         for (MPQClient client : clients) {
             if (client.is((InetSocketAddress) ctx.channel().remoteAddress())) {
-                client.getFrame().getScheduler().scheduleTask(null, () -> {
-                    try {
+	            client.getFrame().getScheduler().addTask(() -> {
+		            try {
                         client.dataReceive(stream);
                     } catch (Exception e) {
                         e.printStackTrace();

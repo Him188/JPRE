@@ -105,7 +105,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GTK_BKN, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -119,7 +119,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_BKN32, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -133,7 +133,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_LDW, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -147,7 +147,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_SESSION_KEY, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -161,7 +161,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_CLIENT_KEY, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -175,7 +175,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_LONG_CLIENT_KEY, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -189,7 +189,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_COOKIES, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -232,7 +232,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SHUT_UP, this.getQQNumber(), group, QQ, time);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -247,7 +247,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SHUT_UP, this.getQQNumber(), group, "", 0);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -263,7 +263,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SET_NOTICE, this.getQQNumber(), group, title, content);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -278,7 +278,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_NOTICE, this.getQQNumber(), group);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -294,7 +294,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_NAME_CARD, this.getQQNumber(), group, QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -310,7 +310,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SET_NAME_CARD, this.getQQNumber(), group, QQ, card);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -352,7 +352,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.KICK, this.getQQNumber(), group, QQ);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -403,7 +403,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.UPLOAD_PIC, this.getQQNumber(), uploadType, uploaderQq, file);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -429,7 +429,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.REPLY, this.getQQNumber(), type, target, content);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -457,7 +457,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SEND_MSG, this.getQQNumber(), TYPE_DISCUSS, 0, receiveGid, receiveQq, msg);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -527,7 +527,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.IF_BLOCK, this.getQQNumber());
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }
@@ -542,7 +542,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_ADMIN_LIST, this.getQQNumber(), group);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -558,7 +558,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.ADD_TAOTAO, this.getQQNumber(), content);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -572,7 +572,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_SIGN, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -587,7 +587,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SET_SIGN, this.getQQNumber(), content);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -602,7 +602,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GROUP_LIST_A, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -616,7 +616,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GROUP_LIST_B, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -631,7 +631,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GROUP_MEMBER_A, this.getQQNumber(), group);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -646,7 +646,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GROUP_MEMBER_B, this.getQQNumber(), group);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -660,7 +660,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_FRIEND_LIST, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -675,7 +675,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_QQ_AGE, this.getQQNumber(), QQ);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -690,7 +690,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_AGE, this.getQQNumber(), QQ);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -705,7 +705,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_EMAIL, this.getQQNumber(), QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -720,7 +720,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_GENDER, this.getQQNumber(), QQ);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -735,7 +735,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SEND_TYPING, this.getQQNumber(), QQ);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -750,7 +750,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SEND_SHAKE, this.getQQNumber(), QQ);
             return results.intResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -766,7 +766,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GROUP_INVITATION, this.getQQNumber(), QQList, group);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -795,7 +795,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.CREATE_DG, this.getQQNumber());
             return results.longResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return 0;
         }
     }
@@ -811,7 +811,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.KICK_DG, this.getQQNumber(), discuss, QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -827,7 +827,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.DG_INVITATION, this.getQQNumber(), discuss, QQList);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -856,7 +856,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GET_DG_LIST, this.getQQNumber());
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -871,7 +871,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.UPLOAD_VOICE, this.getQQNumber(), amrData);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -886,7 +886,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.GUID_GET_VOICE_LINK, guid);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -901,7 +901,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.LIKE, this.getQQNumber(), QQ);
             return results.stringResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return null;
         }
     }
@@ -916,7 +916,7 @@ public class RobotQQ {
      * @param plugin 用于接受 Task
      */
     public void like(long QQ, int times, long millis, Plugin plugin) {
-        frame.getScheduler().scheduleTask(plugin, () -> {
+        frame.getScheduler().addTask(plugin, () -> {
             for (int i = 0; i < times; i++) {
                 try {
                     Thread.sleep(millis);
@@ -950,7 +950,7 @@ public class RobotQQ {
         try {
             byte id = runCommand(CommandId.SEND_OBJECT_MSG, this.getQQNumber(), msgType, receiveGid, receiveQq, objectMsg, objectMsgSubType);
             return results.booleanResult(id);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
             return false;
         }
     }

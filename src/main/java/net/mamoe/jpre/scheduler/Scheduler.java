@@ -1,104 +1,97 @@
 package net.mamoe.jpre.scheduler;
 
-import net.mamoe.jpre.Frame;
+import net.mamoe.jpre.JPREMain;
 import net.mamoe.jpre.plugin.Plugin;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
- * 延迟任务管理器.
- * <p>
- * 本类内置了 {@link ScheduledThreadPoolExecutor} 和 {@link ThreadPoolExecutor},
- * 你可以在这里轻松地创建并管理延迟(循环)任务
  * @author Him188 @ JPRE Project
- * @since JPRE 1.0.0
  */
-@Deprecated
-public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
-	private Frame frame;
+public class Scheduler extends Thread {
+	public static final int WORKER_COUNT = Math.max(4, Runtime.getRuntime().availableProcessors() * 2);
+	private final JPREMain main;
 
-	final ScheduledThreadPoolExecutor service = new ScheduledThreadPoolExecutor(10);
+	private Map<Integer, Worker> workers = new HashMap<>(WORKER_COUNT);
 
-	final ThreadPoolExecutor pool = new ThreadPoolExecutor(32, 128, 1000 * 60, TimeUnit.MILLISECONDS, new SynchronousQueue<>());
+	private long heartbeatDelay;
 
-	public Scheduler(Frame frame) {
-		this.frame = frame;
+	public Scheduler(int heartbeatDelay, JPREMain main) {
+		this.main = main;
+		for (int i = 0; i < WORKER_COUNT; i++) {
+			Worker worker = new Worker();
+			worker.start();
+			workers.put(worker.getWorkerId(), worker);
+		}
+
+		this.heartbeatDelay = heartbeatDelay;
 	}
 
-	public Frame getFrame() {
-		return frame;
+	public long getHeartbeatDelay() {
+		return heartbeatDelay;
 	}
 
-	/**
-	 * 新建延迟任务. 该任务只会被执行一次
-	 *
-	 * @param plugin 插件
-	 * @param task   任务
-	 * @param delay  延迟时间. 单位毫秒
-	 *
-	 * @return 是否成功
-	 */
-	public Task scheduleTimingTask(Plugin plugin, Runnable task, long delay) {
-		return scheduleTimingTask(plugin, new Task() {
-			@Override
-			public void onRun() {
-				task.run();
+	public Map<Integer, Worker> getWorkers() {
+		return workers;
+	}
+
+	public TaskHandler[] addMethodTasks(Plugin plugin, Object object) {
+		Objects.requireNonNull(object);
+		Class<?> clazz = object.getClass();
+
+		Collection<Method> methods = new HashSet<>();
+		Collections.addAll(methods, clazz.getMethods());
+		Collections.addAll(methods, clazz.getDeclaredMethods());
+		Collection<TaskHandler> tasks = new ArrayList<>();
+		for (Method method : methods) {
+			TaskHandler task = this.addTask(plugin, object, method);
+			if (task != null) {
+				tasks.add(task);
 			}
-		}, delay);
+		}
+
+		return tasks.toArray(new TaskHandler[tasks.size()]);
 	}
 
-	public Task scheduleTimingTask(Plugin plugin, Task task, long delay) {
-		if (plugin != null && !plugin.isEnabled()) {
+	public TaskHandler addTask(Plugin plugin, Object object, Method method) {
+		Objects.requireNonNull(plugin);
+		Objects.requireNonNull(method);
+
+		if (method.getParameterCount() != 0) {
 			return null;
 		}
 
-		task.setScheduler(this);
-		task.setOwner(plugin);
-		service.schedule(task, delay, TimeUnit.MILLISECONDS);
-		return task;
-	}
-
-	/**
-	 * 新建延迟任务. 该任务会被重复执行直到
-	 *
-	 * @param plugin 插件
-	 * @param task   任务
-	 * @param delay  延迟时间. 单位毫秒
-	 *
-	 * @return 是否成功
-	 */
-	public Task scheduleRepeatingTask(Plugin plugin, Runnable task, long delay, long period) {
-		return scheduleRepeatingTask(plugin, new Task() {
-			@Override
-			public void onRun() {
-				task.run();
-			}
-		}, delay, period);
-	}
-
-	public Task scheduleRepeatingTask(Plugin plugin, Task task, long delay, long period) {
-		if (plugin != null && !plugin.isEnabled()) {
+		TaskInfo annotation;
+		try {
+			annotation = method.getAnnotation(TaskInfo.class);
+		} catch (NullPointerException ignored) {
 			return null;
 		}
-		task.setScheduler(this);
-		task.setOwner(plugin);
-		service.scheduleWithFixedDelay(task, delay, period, TimeUnit.MILLISECONDS);
-		return task;
+
+		if (annotation != null) {
+			return this.addTask(new PluginTask(plugin, annotation) {
+				@Override
+				public void onRun() {
+					method.setAccessible(true);
+					try {
+						method.invoke(object);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+
+		return null;
 	}
 
-	/**
-	 * 新建异步任务. 该任务只会被执行一次
-	 *
-	 * @param plugin 插件
-	 * @param task   任务
-	 *
-	 * @return 是否成功
-	 */
-	public Task scheduleTask(Plugin plugin, Runnable task) {
-		return scheduleTask(plugin, new Task() {
+
+	public TaskHandler addTask(Plugin plugin, Runnable task, TaskInfo info) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(new PluginTask(plugin, info) {
 			@Override
 			public void onRun() {
 				task.run();
@@ -106,26 +99,148 @@ public class Scheduler { // TODO: 2017/5/14  NEW SCHEDULER
 		});
 	}
 
-	public Task scheduleTask(Plugin plugin, Task task) {
-		if (plugin != null && !plugin.isEnabled()) {
-			return null;
+	public TaskHandler addTask(Plugin plugin, Runnable task) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
 		}
-		task.setScheduler(this);
-		task.setOwner(plugin);
-		pool.execute(task);
-		return task;
+		return this.addTask(plugin, task, 0, -1);
+	}
+
+	public TaskHandler addTask(Plugin plugin, Runnable task, long delay) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(plugin, task, delay, -1);
+	}
+
+	public TaskHandler addTask(Plugin plugin, Runnable task, long delay, long period) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(new PluginTask(plugin, delay, period) {
+			@Override
+			public void onRun() {
+				task.run();
+			}
+		});
 	}
 
 
-	/**
-	 * @see Task#cancel()
-	 */
-	public void cancelTask(Task task) {
-		task.cancel();
+	public TaskHandler addTask(int workerId, Plugin plugin, Runnable task, TaskInfo info) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(workerId, plugin, task, info.delay(), info.period());
 	}
 
-	public void shutdown() {
-		service.shutdownNow();
-		pool.shutdownNow();
+	public TaskHandler addTask(int workerId, Plugin plugin, Runnable task) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(workerId, plugin, task, 0, -1);
+	}
+
+	public TaskHandler addTask(int workerId, Plugin plugin, Runnable task, long delay) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(workerId, plugin, task, delay, -1);
+	}
+
+	public TaskHandler addTask(int workerId, Plugin plugin, Runnable task, long delay, long period) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(workerId, new PluginTask(plugin, delay, period) {
+			@Override
+			public void onRun() {
+				task.run();
+			}
+		});
+	}
+
+
+	public TaskHandler addTask(Worker worker, Plugin plugin, Runnable task, TaskInfo info) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(worker, plugin, task, info.delay(), info.period());
+	}
+
+	public TaskHandler addTask(Worker worker, Plugin plugin, Runnable task) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(worker, plugin, task, 0, -1);
+	}
+
+	public TaskHandler addTask(Worker worker, Plugin plugin, Runnable task, long delay) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(worker, plugin, task, delay, -1);
+	}
+
+	public TaskHandler addTask(Worker worker, Plugin plugin, Runnable task, long delay, long period) {
+		if (task instanceof PluginTask) {
+			return this.addTask((Task) task);
+		}
+		return this.addTask(worker, new PluginTask(plugin, delay, period) {
+			@Override
+			public void onRun() {
+				task.run();
+			}
+		});
+	}
+
+
+	public TaskHandler addTask(Runnable task) {
+		return this.addTask(null, task);
+	}
+
+	public TaskHandler addTask(Task task) {
+		Objects.requireNonNull(task, "argument task must not be null");
+
+		Worker minWorker = this.workers.get(0);
+		int minSize = minWorker.getQueue().size();
+		for (Worker worker : this.workers.values()) {
+			if (worker.getQueue().size() < minSize) {
+				minWorker = worker;
+			}
+		}
+
+		return this.addTask(minWorker, task);
+	}
+
+	public TaskHandler addTask(int workerId, Task task) throws IllegalArgumentException {
+		Objects.requireNonNull(task, "argument task must not be null");
+		Worker worker = this.workers.get(workerId);
+		if (worker == null) {
+			throw new IllegalArgumentException("worker#" + workerId + " does not exists");
+		}
+
+		return this.addTask(worker, task);
+	}
+
+	public TaskHandler addTask(Worker worker, Task task) {
+		Objects.requireNonNull(worker, "argument worker must not be null");
+		Objects.requireNonNull(task, "argument task must not be null");
+
+		return worker.joinQueue(new TaskHandler(task));
+	}
+
+	@Override
+	public void run() {
+		try {
+			while (main.isRunning()) {
+				for (Worker worker : this.workers.values()) {
+					worker.setWaiting(false);
+				}
+
+				Thread.sleep(heartbeatDelay);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

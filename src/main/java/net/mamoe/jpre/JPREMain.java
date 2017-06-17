@@ -3,7 +3,7 @@ package net.mamoe.jpre;
 import net.mamoe.jpre.network.Network;
 import net.mamoe.jpre.plugin.Plugin;
 import net.mamoe.jpre.plugin.PluginManager;
-import net.mamoe.jpre.scheduler.ServerScheduler;
+import net.mamoe.jpre.scheduler.Scheduler;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -27,6 +27,9 @@ public final class JPREMain {
     }
 
     private JPREMain() {
+        running = true;
+        serverScheduler = new Scheduler(50, this);
+        serverScheduler.start();
     }
 
     @Override
@@ -35,15 +38,14 @@ public final class JPREMain {
     }
 
     /* Server Scheduler */
-    private static ServerScheduler serverScheduler;
+    private Scheduler serverScheduler;
 
     /**
-     * Server Scheduler 主要用于 {@link net.mamoe.jpre.utils.CommandResults#stringResult(byte)} 的超时处理
-     * 插件请使用 {@link Frame#getScheduler()}
+     * Server Scheduler
      *
-     * @return Server sScheduler
+     * @return Server Scheduler
      */
-    public static ServerScheduler getServerScheduler() {
+    public Scheduler getScheduler() {
         return serverScheduler;
     }
 
@@ -52,9 +54,14 @@ public final class JPREMain {
     public static final String VERSION_TYPE = "EAP";
     public static final String VERSION = "1.0.0";
 
+    private boolean running;
 
-    static {
-        serverScheduler = new ServerScheduler();
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void shutdown() {
+        running = false;
     }
 
     public static void main(String... args) throws Exception {
@@ -82,7 +89,7 @@ public final class JPREMain {
         if (commandLine.hasOption("p")) {
             try {
                 port = Integer.parseInt(commandLine.getOptionValue("p"));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
                 System.out.println("The port you set is invalid. It must be a number in 1~65535");
                 System.exit(0);
             }
@@ -90,11 +97,12 @@ public final class JPREMain {
 
         System.out.println("Starting server...");
         int finalPort = port;
+        instance = new JPREMain();
         new Thread(() -> {
             try {
-                Network.start(instance = new JPREMain(), finalPort);
-            } catch (InterruptedException e) {
-	            System.out.println("Starting server failed. Could not open port " + finalPort);
+                Network.start(instance, finalPort);
+            } catch (InterruptedException ignored) {
+                System.out.println("Starting server failed. Could not open port " + finalPort);
 	            System.exit(0);
             } catch (Throwable e) {
 	            e.printStackTrace();
