@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  *
  * @author Him188 @ JPRE Project
  */
-public class Worker extends Thread implements Interruptible {
+public class Worker extends Thread {
 	private final Queue<TaskHandler> queue = new ConcurrentLinkedDeque<>();
 
 	private final int id;

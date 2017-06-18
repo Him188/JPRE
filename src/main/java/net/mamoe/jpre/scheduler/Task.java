@@ -1,6 +1,9 @@
 package net.mamoe.jpre.scheduler;
 
 /**
+ * 一项 "任务". <br>
+ * 对于插件, 请使用 {@link PluginTask}
+ *
  * @author Him188 @ JPRE Project
  */
 public abstract class Task implements Runnable {

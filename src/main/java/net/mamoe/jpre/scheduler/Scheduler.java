@@ -7,6 +7,14 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * JPRE 的计时器. <br>
+ * 计时器类似线程池, 拥有多个 {@link Worker}. 根据 CPU 可用核心数不同, Worker 数量不同. <br>
+ * 这些 {@link Worker} 继承自 {@link Thread}, 且都拥有一个任务队列. <br>
+ * {@link Worker} 会在计时器构造器内创建并启动 ({@link Thread#start()}). <br>
+ * 启动后线程将不断睡眠 ({@link Thread#sleep(long)}) 直到任务队列有至少一个任务. <br>
+ * <br>
+ * 你可以通过 {@link Scheduler#addTask} 创建任务并得到任务管理器 ({@link TaskHandler}). <br>
+ *
  * @author Him188 @ JPRE Project
  */
 public class Scheduler extends Thread {
@@ -86,7 +94,7 @@ public class Scheduler extends Thread {
 		return null;
 	}
 
-
+	// TODO: 2017/6/18 每个方法的 javadoc
 	public TaskHandler addTask(Plugin plugin, Runnable task, TaskInfo info) {
 		if (task instanceof PluginTask) {
 			return this.addTask((Task) task);

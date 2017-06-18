@@ -1,6 +1,11 @@
 package net.mamoe.jpre.scheduler;
 
 /**
+ * 用来管理一个任务 ({@link Task}). <br>
+ * 可通过 {@link Scheduler#addTask} 来创建任务并得到这个对象 <br>
+ * <br>
+ * 该对象能管理任务的延迟和循环. 你也可以在这里取消任务 ({@link TaskHandler#cancelTask()})
+ *
  * @author Him188 @ JPRE Project
  */
 public class TaskHandler {
@@ -27,6 +32,11 @@ public class TaskHandler {
 		return task;
 	}
 
+	/**
+	 * 取消任务.<br>
+	 * 对于延迟任务和循环任务, 将立即从 {@link Worker} 的任务队列中移除.<br>
+	 * 对于立即运行的任务, 本方法没有任何作用.
+	 */
 	public void cancelTask() {
 		this.task.setCancelled(true);
 	}
