@@ -72,8 +72,8 @@ public class MethodHandler implements Handler {
 			return;
 		}
 
-		if (event.getClass().isAssignableFrom(method.getParameterTypes()[0])) { //is parameter extends event
-			try {
+        if (method.getParameterTypes()[0].isAssignableFrom(event.getClass())) {
+            try {
 				method.setAccessible(true);
 				method.invoke(listener, event);
 			} catch (Exception e) {
