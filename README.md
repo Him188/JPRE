@@ -1,4 +1,4 @@
-### This project is dead. Please go to [Mirai]("github.com/mamoe/mirai")
+### This project is dead. Please go to [Mirai]("https://github.com/mamoe/mirai")
 
 #JPRE  
 ——能让你使用 Java 开发 [MyPCQQ]("http://mypcqq.cc") 机器人插件的公益项目  
